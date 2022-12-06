@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<Robot type="FirstInspires-FTC">
+    <LynxUsbDevice name="Control Hub Portal" serialNumber="(embedded)" parentModuleAddress="173">
+        <LynxModule name="Expansion Hub 2" port="2">
+            <RevRoboticsCoreHexMotor name="Depbelt" port="0" />
+            <NeveRest3.7v1Gearmotor name="duck" port="1" />
+            <RevRoboticsCoreHexMotor name="Collector" port="2" />
+            <NeveRest3.7v1Gearmotor name="duck2" port="3" />
+            <Servo name="CollectorArm" port="0" />
+            <RevTouchSensor name="DS" port="1" />
+        </LynxModule>
+        <LynxModule name="Expansion Hub 173" port="173">
+            <RevRobotics20HDHexMotor name="BL" port="0" />
+            <RevRobotics20HDHexMotor name="BR" port="2" />
+            <Servo name="Deplow" port="0" />
+            <Servo name="Depmid" port="1" />
+            <Servo name="Deptilt" port="2" />
+            <Servo name="Caparm" port="3" />
+            <Servo name="Dephigh" port="4" />
+            <RevTouchSensor name="DC" port="0" />
+            <LynxEmbeddedIMU name="imu" port="0" bus="0" />
+            <REV_VL53L0X_RANGE_SENSOR name="DL" port="2" bus="2" />
+            <REV_VL53L0X_RANGE_SENSOR name="DR" port="1" bus="1" />
+        </LynxModule>
+    </LynxUsbDevice>
+    <Webcam name="MainCam" serialNumber="893CE540" />
+</Robot>
