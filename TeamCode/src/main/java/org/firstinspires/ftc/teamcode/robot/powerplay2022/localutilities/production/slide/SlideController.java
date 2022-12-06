@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AlgorithmicCorrection;
 
 public class SlideController {
 
@@ -15,6 +17,8 @@ public class SlideController {
     private DcMotor left, right;
 
     public int target;
+
+    public AlgorithmicCorrection.BiasedInterpolation BiasMath;
 
     public int leftEncoderPosition = 0;
     public int rightEncoderPosition = 0;
@@ -42,6 +46,8 @@ public class SlideController {
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right.setDirection(invertRight ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        BiasMath = new AlgorithmicCorrection.BiasedInterpolation(0.7);
     }
 
     public SlideController(HardwareMap hardwareMap){}
@@ -66,7 +72,7 @@ public class SlideController {
                 break;
         }
 
-        left.setPower(1);
+        left.setPower(BiasMath.process(EULMathEx.doubleClamp(-1, 1, (target - getLeft().getCurrentPosition())/100d)));
 
         if (Math.abs(rightLastEncoderPosition - right.getTargetPosition()) >= tickTolerance) {
             left.setPower(Math.abs(rightLastEncoderPosition - right.getTargetPosition())/50f);
