@@ -138,9 +138,9 @@ public class ThreeJointArm {
         if(Double.isNaN(B)){B=1;}
         if(Double.isNaN(C)){C=(Math.PI*1.75 - A - B)/(Math.PI*1.5);}
         if(Double.isNaN(C)){C=0;}
-        servoA.setPosition(EULMathEx.doubleClamp(0.001, 0.999, A + 0.244));
-        servoB.setPosition(EULMathEx.doubleClamp(0.001, 0.999, B - 0.07));
-        servoC.setPosition(EULMathEx.doubleClamp(0.05, 0.999, C-0.2));
+        servoA.setPosition(EULMathEx.doubleClamp(0.001, 0.999, 1-A));
+        servoB.setPosition(EULMathEx.doubleClamp(0.001, 0.999, B+0.05));
+        servoC.setPosition(EULMathEx.doubleClamp(0.05, 0.999, C-0.25));
         //servoA.setPosition(1);
         //servoB.setPosition(0.5);
         //servoC.setPosition(0);
