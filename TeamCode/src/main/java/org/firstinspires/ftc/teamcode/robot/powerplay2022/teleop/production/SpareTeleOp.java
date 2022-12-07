@@ -67,7 +67,7 @@ public class SpareTeleOp extends LoopUtil {
     public DcMotor left, right;
 
     public boolean DOpen = false;
-    double DPos = DOpen ? 0.07 : 0.7;
+    double DPos = DOpen ? 0.01 : 0.9;
     public double R = 0.5;
 
     public double RunnableTimer = 0;
@@ -213,7 +213,6 @@ public class SpareTeleOp extends LoopUtil {
 
     @Override
     public void opUpdate(double deltaTime) {
-        handleInput(deltaTime);
         if((savedX[0] == 10 && savedX[1] != 10) || (savedX[0] != 10 && savedX[1] == 10)){
             if(savedX[1] != 10){
                 firstSave1 = true;
@@ -235,7 +234,7 @@ public class SpareTeleOp extends LoopUtil {
         }
         armUpdate(deltaTime);
         outputTelemetry();
-        DPos = DOpen ? 1 : 0.05;
+        DPos = DOpen ? 0.01 : 0.9;
         if(Double.isNaN(DPos)){DPos=0.6;}
         if(Double.isNaN(R)){R=0.5;}
 
@@ -354,7 +353,7 @@ public class SpareTeleOp extends LoopUtil {
         betterCommandedPosition = betterCommandedPosition.plus((new Vector2d(gamepad2.left_stick_y, -gamepad2.right_stick_y*1.5).times(0.5)));
         betterCommandedPosition.x = EULMathEx.doubleClamp(-32, 32, betterCommandedPosition.x);
         betterCommandedPosition.y = EULMathEx.doubleClamp(-20, 32, betterCommandedPosition.y);
-        R = EULMathEx.doubleClamp(0.001, 0.999, R+gamepad2.left_stick_x*0.025);
+        R = EULMathEx.doubleClamp(0.001, 0.999, R+gamepad2.left_stick_x*0.015);
     }
 
 
