@@ -56,8 +56,8 @@ public class TFPipeline {
         return (float) ((absWidth/(2* Math.sin((hFOV*bbPx)/(2*maxSizePX)))) - (absWidth/2));
     }
 
-    public TFPipeline(HardwareMap hardwareMap, String cameraName, String tensorflowModel, String[] tensorflowLabels){
-        this.tfodBase = new TFODBase(hardwareMap, cameraName, tensorflowModel, tensorflowLabels);
+    public TFPipeline(HardwareMap hardwareMap, String cameraName, String[] tensorflowLabels){
+        this.tfodBase = new TFODBase(hardwareMap, cameraName, "powerplay2022junction.tflite", tensorflowLabels);
         this.closestBB = new HashMap<>();
 
         for (String label: tensorflowLabels) {
