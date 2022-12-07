@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.product
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.VirtualServo;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.slide.SlideController;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.statemachine.OpStateList;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.tensorflow.TFPipeline;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoConfig;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
@@ -41,6 +42,7 @@ import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
  */
 @TeleOp(name = "ActualTeleOp", group = "actual")
 public class ActualTeleOp extends LoopUtil {
+    public TFPipeline TFTeleop = new TFPipeline(hardwareMap, "Webcam1", new String[]{"Junction Top"});
     public boolean firstSave1 = false;
     //Save Position Variables
     public double[] savedX = new double[]{10, 10, 10};
@@ -289,8 +291,7 @@ public class ActualTeleOp extends LoopUtil {
             handleInput(deltaTime);
         }
         if (gamepadHandler.up("D2:RT")){
-            autoStack = !autoStack;
-            autoStackTimer = 0d;
+            TFTeleop.scan();
         }
         armUpdate(deltaTime);
         slideUpdate(deltaTime);

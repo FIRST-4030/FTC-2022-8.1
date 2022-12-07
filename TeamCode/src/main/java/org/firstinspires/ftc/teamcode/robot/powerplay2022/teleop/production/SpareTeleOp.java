@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.product
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.ThreeJointArm;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.VirtualServo;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.slide.SlideController;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.tensorflow.TFPipeline;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoConfig;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
@@ -35,6 +36,8 @@ import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
  */
 @TeleOp(name = "SpareTeleOp", group = "actual")
 public class SpareTeleOp extends LoopUtil {
+    public TFPipeline TFTeleop = new TFPipeline(hardwareMap, "Webcam1", new String[]{"Junction Top"});
+
     public boolean firstSave1 = false;
     //Save Position Variables
     public double[] savedX = new double[]{10, 10, 10};
@@ -224,14 +227,12 @@ public class SpareTeleOp extends LoopUtil {
             joystick.y = 0;
             joystick.z = 0;
         }
-//        if(!PickUpRunning && !autoStack) {
-        if(!autoStack) {
-            handleInput(deltaTime);
-        }
-        if (gamepadHandler.up("D2:RT")){
-            autoStack = !autoStack;
-            autoStackTimer = 0d;
-        }
+        handleInput(deltaTime);
+
+        //if (gamepadHandler.up("D2:RT")){
+        //    autoStack = !autoStack;
+        //    autoStackTimer = 0d;
+        //}
         armUpdate(deltaTime);
         outputTelemetry();
         DPos = DOpen ? 0.01 : 0.9;
@@ -330,6 +331,10 @@ public class SpareTeleOp extends LoopUtil {
         }
         if (gamepadHandler.up("D1:LT")){
             wheelLock = !wheelLock;
+        }
+        if (gamepadHandler.up("D2:RT")){
+            TFTeleop.scan();
+            TFTeleop.scoreCone(deltaTime, new Vector2d(0, 0), newPropArm, servoR, servoD);
         }
 
         if (gamepadHandler.up("D2:DPAD_DOWN")){ //decrease outputSpeed by decimalPlace | now wrong comment
