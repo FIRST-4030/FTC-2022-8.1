@@ -20,7 +20,9 @@ dependencies {
 
     implementation 'org.firstinspires.ftc:gameAssets-PowerPlay:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.acmerobotics.dashboard:dashboard:0.4.6'
+    implementation 'com.acmerobotics.dashboard:dashboard:0.4.6'{
+        exclude group: 'org.firstinspires.ftc'
+    }
     implementation 'com.acmerobotics.roadrunner:core:0.5.5'
 }
 
