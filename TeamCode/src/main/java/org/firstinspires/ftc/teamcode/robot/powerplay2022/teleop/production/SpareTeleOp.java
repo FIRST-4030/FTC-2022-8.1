@@ -36,7 +36,7 @@ import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
  */
 @TeleOp(name = "SpareTeleOp", group = "actual")
 public class SpareTeleOp extends LoopUtil {
-    public TFPipeline TFTeleop = new TFPipeline(hardwareMap, "Webcam1", new String[]{"Junction Top"});
+    public TFPipeline TFTeleop;
 
     public boolean firstSave1 = false;
     //Save Position Variables
@@ -78,6 +78,8 @@ public class SpareTeleOp extends LoopUtil {
     public boolean autoStack = false;
     public double autoStackTimer = 0d;
     public boolean wheelLock = false;
+    public double TFsavedTime = 0;
+    public boolean TFTime = false;
 
     //Algorithm-based correction (not PID)
     public static AlgorithmicCorrection correction;
@@ -203,6 +205,10 @@ public class SpareTeleOp extends LoopUtil {
         currentStateRB = false;
 
         correction = new AlgorithmicCorrection(new AlgorithmicCorrection.Polynomial(20));
+
+        TFTeleop = new TFPipeline(hardwareMap, "Webcam1", new String[]{"Junction Top"});
+        TFTeleop.init();
+
     }
 
     @Override
@@ -244,6 +250,11 @@ public class SpareTeleOp extends LoopUtil {
         RunnableTimer += deltaTime;
         autoStackTimer += deltaTime;
         telemetry.addData("Delta Time", deltaTime);
+        if(TFTime){
+            TFsavedTime += deltaTime;
+        } else {
+            TFsavedTime = 0;
+        }
 
 
 
@@ -332,11 +343,14 @@ public class SpareTeleOp extends LoopUtil {
         if (gamepadHandler.up("D1:LT")){
             wheelLock = !wheelLock;
         }
-        if (gamepadHandler.up("D2:RT")){
+        if (gamepadHandler.up("D2:RT")) {
+            TFTime = true;
             TFTeleop.scan();
-            TFTeleop.scoreCone(deltaTime, new Vector2d(0, 0), newPropArm, servoR, servoD);
         }
-
+        if (TFsavedTime > 1000) {
+            TFTeleop.scoreCone(deltaTime, new Vector2d(0, 0), newPropArm, servoR, servoD);
+            TFTime = false;
+        }
         if (gamepadHandler.up("D2:DPAD_DOWN")){ //decrease outputSpeed by decimalPlace | now wrong comment
             saveStateIndex = Math.abs((saveStateIndex-1) % 3);
         }
