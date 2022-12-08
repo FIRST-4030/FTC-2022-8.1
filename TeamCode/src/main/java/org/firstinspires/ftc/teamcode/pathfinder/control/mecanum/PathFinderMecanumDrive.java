@@ -127,6 +127,14 @@ public class PathFinderMecanumDrive extends PathFinderDrive {
     }
 
     @Override
+    public void handleTelemetry(Telemetry telemetry) {
+        telemetry.addData("FL Encoder Pos: ", fl.getCurrentPosition());
+        telemetry.addData("FR Encoder Pos: ", fr.getCurrentPosition());
+        telemetry.addData("BL Encoder Pos: ", bl.getCurrentPosition());
+        telemetry.addData("BR Encoder Pos: ", br.getCurrentPosition());
+    }
+
+    @Override
     public void buildPath(PFPath path){
         Vector<float[]> encoder = new Vector<>(), power = new Vector<>();
         Vector<PFPose2d> poses = path.getPoseLookup();
@@ -247,5 +255,42 @@ public class PathFinderMecanumDrive extends PathFinderDrive {
         br.setPower(out.w); //br
     }
 
+    public PathFinderMecanumDrive setDriveToPosMode(){
+        this.fl.setTargetPosition(0);
+        this.fr.setTargetPosition(0);
+        this.bl.setTargetPosition(0);
+        this.br.setTargetPosition(0);
+
+        this.fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        this.fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        return this;
+    }
+
+    public PathFinderMecanumDrive setDriveToVelocityMode(){
+        this.fl.setTargetPosition(0);
+        this.fr.setTargetPosition(0);
+        this.bl.setTargetPosition(0);
+        this.br.setTargetPosition(0);
+
+        this.fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        this.fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        return this;
+    }
 
 }

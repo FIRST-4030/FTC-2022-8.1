@@ -58,4 +58,6 @@ public abstract class PathFinderDrive{
     }
 
     public abstract PathFinderDrive setFollowingPath(PFPath nPath);
+
+    public abstract void handleTelemetry(Telemetry telemetry);
 }
