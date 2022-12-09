@@ -28,7 +28,7 @@ public class TFODBase{
     public int imgWidth = 1, imgHeight = 1;
 
 
-    public static final String VUFORIA_KEY = "AV9rwXT/////AAABma+8TAirNkVYosxu9qv0Uz051FVEjKU+nkH+MaIvGuHMijrdgoZYBZwCW2aG8P3+eZecZZPq9UKsZiTHAg73h09NT48122Ui10c8DsPe0Tx5Af6VaBklR898w8xCTdOUa7AlBEOa4KfWX6zDngegeZT5hBLfJKE1tiDmYhJezVDlITIh7SHBv0xBvoQuXhemlzL/OmjrnLuWoKVVW0kLanImI7yra+L8eOCLLp1BBD/Iaq2irZCdvgziZPnMLeTUEO9XUbuW8txq9i51anvlwY8yvMXLvIenNC1xg4KFhMmFzZ8xnpx4nWZZtyRBxaDU99aXm7cQgkVP0VD/eBIDYN4AcB0/Pa7V376m6tRJ5UZh";
+    public static final String VUFORIA_KEY = "AXthH7r/////AAABmUBut8RIBEvFrdrtQGl4hdETAg9rhvKSD9a7lhHQzbOJ2Kov3prL1gMb7sjYXb3xJJBicz42tlvrHeBi20f1+vlvbAftlIrNw2W6+f8zcMb+ROLXXv1KIsaS/FL+CZ8NmCDveQTeKHAPWkvnm39dB4TCp7BQZ76edXsacf8S1MnBanG+8M/8HP3yVj1JvQ6yMUGiz2xRfFf53fUJE5Pp9+ePeWDIWgweBnAU+ZaqecvnAywaO0ln5Y/QAF2zAhFJz5d2f350EfeueEbUr7WKxY+EhPUKu0dSth8NJYKpWkre2ybVQVqpF9eqFJLyPi6e2CS1Q0DN362UkGNvyPlYb+J4/74hzzQuSk0sxIFZD5RJ";
     public String tensorflowModel;
     public String cameraName;
     public String[] tensorflowLabels;
