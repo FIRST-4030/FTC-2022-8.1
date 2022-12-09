@@ -61,6 +61,8 @@ public class TFPipeline {
         this.tfodBase = new TFODBase(hardwareMap, cameraName, "powerplay2022junction.tflite", tensorflowLabels);
         this.closestBB = new HashMap<>();
 
+        this.tfodBase.confidenceThreshold = 0.6f;
+
         for (String label: tensorflowLabels) {
             closestBB.put(label, new TFBoundingBox());
         }
