@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.main.TFODBas
 import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.depreciated.tfodohm.ODMain.CameraLens;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class TFPipeline {
 
@@ -87,7 +88,7 @@ public class TFPipeline {
         TFBoundingBox cachedMin = new TFBoundingBox();
         float depth;
 
-        for (TFBoundingBox boundingBox: tfodBase.boundingBoxes.get("Blue Cone")) {
+        /*for (TFBoundingBox boundingBox: Objects.requireNonNull(tfodBase.boundingBoxes.get("Blue Cone"))) {
             if (cachedMin.estimatedDepth > (depth = findDepth(widthCone, boundingBox.width)) || boundingBox.estimatedDepth == -1){
                 boundingBox.setEstimatedDepth(depth);
                 cachedMin = boundingBox;
@@ -97,7 +98,7 @@ public class TFPipeline {
         closestBB.put("Blue Cone", cachedMin);
         cachedMin = new TFBoundingBox();
 
-        for (TFBoundingBox boundingBox: tfodBase.boundingBoxes.get("Red Cone")) {
+        for (TFBoundingBox boundingBox: Objects.requireNonNull(tfodBase.boundingBoxes.get("Red Cone"))) {
             if (cachedMin.estimatedDepth > (depth = findDepth(widthCone, boundingBox.width)) || boundingBox.estimatedDepth == -1){
                 boundingBox.setEstimatedDepth(depth);
                 cachedMin = boundingBox;
@@ -106,23 +107,23 @@ public class TFPipeline {
 
         closestBB.put("Red Cone", cachedMin);
         cachedMin = new TFBoundingBox();
-
-        for (TFBoundingBox boundingBox: tfodBase.boundingBoxes.get("Junction Top")) {
+        */
+        for (TFBoundingBox boundingBox: Objects.requireNonNull(tfodBase.boundingBoxes.get("Junction Top"))) {
             if (cachedMin.estimatedDepth > (depth = findDepth(widthPole, boundingBox.width)) || boundingBox.estimatedDepth == -1){
                 boundingBox.setEstimatedDepth(depth);
                 cachedMin = boundingBox;
             }
         }
-
-        for (TFBoundingBox boundingBox: tfodBase.boundingBoxes.get("JunctionTop")) {
+        /*
+        for (TFBoundingBox boundingBox: Objects.requireNonNull(tfodBase.boundingBoxes.get("JunctionTop"))) {
             if (cachedMin.estimatedDepth > (depth = findDepth(widthPole, boundingBox.width)) || boundingBox.estimatedDepth == -1){
                 boundingBox.setEstimatedDepth(depth);
                 cachedMin = boundingBox;
             }
         }
-
+        */
         closestBB.put("Junction Top", cachedMin);
-
+        /*
         if(closestBB.get("Blue Cone").estimatedDepth > 30){
             //Do a thing
             closestBB.put("Blue Cone", null);
@@ -131,6 +132,7 @@ public class TFPipeline {
             //Do a thing
             closestBB.put("Red Cone", null);
         }
+         */
         if(closestBB.get("Junction Top").estimatedDepth > 30){
             //Do a thing
             closestBB.put("Junction Top", null);
