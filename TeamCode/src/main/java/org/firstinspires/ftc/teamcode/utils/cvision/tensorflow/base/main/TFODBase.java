@@ -74,6 +74,7 @@ public class TFODBase{
     public void opInit() {
         initVuforia();
         initTensorFlow();
+        tensorflow.activate();
         isInitialized = true;
     }
 
