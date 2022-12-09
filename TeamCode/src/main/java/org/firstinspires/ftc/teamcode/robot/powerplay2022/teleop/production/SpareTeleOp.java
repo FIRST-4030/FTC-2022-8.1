@@ -206,7 +206,7 @@ public class SpareTeleOp extends LoopUtil {
 
         correction = new AlgorithmicCorrection(new AlgorithmicCorrection.Polynomial(20));
 
-        TFTeleop = new TFPipeline(hardwareMap, "Webcam1", new String[]{"Junction Top"});
+        TFTeleop = new TFPipeline(hardwareMap, "Webcam 1", new String[]{"Junction Top"});
         TFTeleop.init();
 
     }
