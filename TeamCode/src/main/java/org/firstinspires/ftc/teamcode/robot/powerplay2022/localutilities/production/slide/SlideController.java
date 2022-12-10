@@ -51,7 +51,7 @@ public class SlideController {
     }
 
     public SlideController(HardwareMap hardwareMap){}
-    /*
+
     public void update(double deltaTime, LEVEL level, double slidePower){
 
         leftEncoderPosition = left.getCurrentPosition();
@@ -72,7 +72,7 @@ public class SlideController {
                 break;
         }
 
-        left.setPower(Math.signum(target - getLeft().getCurrentPosition())*BiasMath.process(EULMathEx.doubleClamp(0, 1, 1-(target - getLeft().getCurrentPosition())/300d)));
+        left.setPower(Math.signum(target - leftEncoderPosition)*BiasMath.process(EULMathEx.doubleClamp(0, 1, ((1-Math.abs(target - leftEncoderPosition))/300d))));
         //left.setPower(0);
 
         inUse = !(level == LEVEL.REST);
@@ -82,9 +82,9 @@ public class SlideController {
 
     }
 
-     */
 
 
+/*
     public void update(double deltaTime, LEVEL level, double slidePower){
 
         leftEncoderPosition = left.getCurrentPosition();
@@ -125,6 +125,8 @@ public class SlideController {
         rightLastEncoderPosition = rightEncoderPosition;
 
     }
+
+ */
 
 
     public void setPower(double power){
