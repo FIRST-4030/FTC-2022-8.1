@@ -34,7 +34,7 @@ import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
 import java.io.FileNotFoundException;
 import java.util.Vector;
 
-import javax.xml.bind.JAXBException;
+//import javax.xml.bind.JAXBException;
 
 //Control mapping
 
@@ -284,7 +284,7 @@ public class ActualTeleOp extends LoopUtil {
         Vector2d autoVectorAngleOffsetDir = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
         Vector2d autoVectorAngleOffsetNormal = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_X);
         Vector2d teleVectorAngleOffsetDir = teleAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
-        angleOffset = EULMathEx.safeACOS(autoVectorAngleOffsetDir.times(teleVectorAngleOffsetDir)) * (autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir) == 0 ? 1 : Math.signum(autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir)));
+        angleOffset = -EULMathEx.safeACOS(autoVectorAngleOffsetDir.times(teleVectorAngleOffsetDir)) * (autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir) == 0 ? 1 : Math.signum(autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir)));
     }
 
     @Override
@@ -350,6 +350,7 @@ public class ActualTeleOp extends LoopUtil {
     }
 
     public void slideUpdate(double deltaTime){
+
         controller.update(deltaTime, slideLevel, linearSlideSpeed);
     }
 
@@ -499,6 +500,7 @@ public class ActualTeleOp extends LoopUtil {
         telemetry.addData("Slide is in use?: ", controller.isInUse());
         telemetry.addData("Current State Index", saveStateIndex);
         telemetry.addData("RT Value: ", gamepadHandler.value("D2:RT"));
+        telemetry.addData("Angle Offset: ", angleOffset);
         drive.logMotorPos(telemetry);
         controller.logMotorPos(telemetry);
     }

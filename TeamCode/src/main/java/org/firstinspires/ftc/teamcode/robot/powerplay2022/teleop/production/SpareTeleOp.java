@@ -226,7 +226,7 @@ public class SpareTeleOp extends LoopUtil {
         Vector2d autoVectorAngleOffsetDir = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
         Vector2d autoVectorAngleOffsetNormal = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_X);
         Vector2d teleVectorAngleOffsetDir = teleAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
-        angleOffset = EULMathEx.safeACOS(autoVectorAngleOffsetDir.times(teleVectorAngleOffsetDir)) * (autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir) == 0 ? 1 : Math.signum(autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir)));
+        angleOffset = -EULMathEx.safeACOS(autoVectorAngleOffsetDir.times(teleVectorAngleOffsetDir)) * (autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir) == 0 ? 1 : Math.signum(autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir)));
     }
 
     @Override
@@ -369,19 +369,48 @@ public class SpareTeleOp extends LoopUtil {
             TFTeleop.scoreCone(deltaTime, new Vector2d(0, 0), newPropArm, servoR, servoD);
             TFTime = false;
         }
-        if (gamepadHandler.up("D2:DPAD_DOWN")){ //decrease outputSpeed by decimalPlace | now wrong comment
-            saveStateIndex = Math.abs((saveStateIndex-1) % 3);
-        }
-
-        if (gamepadHandler.up("D2:DPAD_UP")){ //increase outputSpeed by decimalPlace | now wrong comment
-            saveStateIndex = Math.abs((saveStateIndex+1) % 3);
-        }
-        if (gamepadHandler.up("D2:DPAD_LEFT")){ //increase outputSpeed by decimalPlace | now wrong comment
+        if(gamepadHandler.up("D2:DPAD_DOWN") && gamepadHandler.value("D2:RT") > 0.3){
+            saveStateIndex = 3;
             savedX[saveStateIndex] = betterCommandedPosition.x;
             savedY[saveStateIndex] = betterCommandedPosition.y;
             savedR[saveStateIndex] = R;
+        } else if (gamepadHandler.up("D2:DPAD_DOWN") && gamepadHandler.value("D2:RT") < 0.3){ //decrease outputSpeed by decimalPlace | now wrong comment
+            saveStateIndex = 3;
+            betterCommandedPosition.x = savedX[saveStateIndex];
+            betterCommandedPosition.y = savedY[saveStateIndex];
+            R = savedR[saveStateIndex];
         }
-        if (gamepadHandler.up("D2:DPAD_RIGHT")){ //decrease outputSpeed by decimalPlace | now wrong comment
+
+        if(gamepadHandler.up("D2:DPAD_UP") && gamepadHandler.value("D2:RT") > 0.3){
+            saveStateIndex = 1;
+            savedX[saveStateIndex] = betterCommandedPosition.x;
+            savedY[saveStateIndex] = betterCommandedPosition.y;
+            savedR[saveStateIndex] = R;
+        } else if (gamepadHandler.up("D2:DPAD_UP") && gamepadHandler.value("D2:RT") < 0.3){ //increase outputSpeed by decimalPlace | now wrong comment
+            saveStateIndex = 1;
+            betterCommandedPosition.x = savedX[saveStateIndex];
+            betterCommandedPosition.y = savedY[saveStateIndex];
+            R = savedR[saveStateIndex];
+        }
+
+        if(gamepadHandler.up("D2:DPAD_LEFT") && gamepadHandler.value("D2:RT") > 0.3) {
+            saveStateIndex = 0;
+            savedX[saveStateIndex] = betterCommandedPosition.x;
+            savedY[saveStateIndex] = betterCommandedPosition.y;
+            savedR[saveStateIndex] = R;
+        } else if (gamepadHandler.up("D2:DPAD_LEFT") && gamepadHandler.value("D2:RT") < 0.3){ //increase outputSpeed by decimalPlace | now wrong comment
+            saveStateIndex = 0;
+            betterCommandedPosition.x = savedX[saveStateIndex];
+            betterCommandedPosition.y = savedY[saveStateIndex];
+            R = savedR[saveStateIndex];
+        }
+        if(gamepadHandler.up("D2:DPAD_RIGHT") && gamepadHandler.value("D2:RT") > 0.3){
+            saveStateIndex = 2;
+            savedX[saveStateIndex] = betterCommandedPosition.x;
+            savedY[saveStateIndex] = betterCommandedPosition.y;
+            savedR[saveStateIndex] = R;
+        } else if (gamepadHandler.up("D2:DPAD_RIGHT") && gamepadHandler.value("D2:RT") < 0.3){ //decrease outputSpeed by decimalPlace | now wrong comment
+            saveStateIndex = 2;
             betterCommandedPosition.x = savedX[saveStateIndex];
             betterCommandedPosition.y = savedY[saveStateIndex];
             R = savedR[saveStateIndex];

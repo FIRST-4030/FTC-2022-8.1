@@ -36,14 +36,14 @@ public class SlideController {
 
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         left.setTargetPosition(0);
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         left.setDirection(invertLeft ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setTargetPosition(0);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         right.setDirection(invertRight ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -51,7 +51,7 @@ public class SlideController {
     }
 
     public SlideController(HardwareMap hardwareMap){}
-
+    /*
     public void update(double deltaTime, LEVEL level, double slidePower){
 
         leftEncoderPosition = left.getCurrentPosition();
@@ -82,7 +82,9 @@ public class SlideController {
 
     }
 
-    /*
+     */
+
+
     public void update(double deltaTime, LEVEL level, double slidePower){
 
         leftEncoderPosition = left.getCurrentPosition();
@@ -124,7 +126,6 @@ public class SlideController {
 
     }
 
-     */
 
     public void setPower(double power){
         left.setPower(power);
