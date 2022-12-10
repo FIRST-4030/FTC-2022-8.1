@@ -45,9 +45,9 @@ public class ActualTeleOp extends LoopUtil {
     public TFPipeline TFTeleop = new TFPipeline(hardwareMap, "Webcam1", new String[]{"Junction Top"});
     public boolean firstSave1 = false;
     //Save Position Variables
-    public double[] savedX = new double[]{10, 10, 10};
-    public double[] savedY = new double[]{10, 10, 10};
-    public double[] savedR = new double[]{0.5, 0.5, 0.5};
+    public double[] savedX = new double[]{10, 10, 10, 10};
+    public double[] savedY = new double[]{10, 10, 10, 10};
+    public double[] savedR = new double[]{0.5, 0.5, 0.5, 0.5};
     public int saveStateIndex = 0;
 
     public static OpStateList stateList;
@@ -276,11 +276,13 @@ public class ActualTeleOp extends LoopUtil {
     @Override
     public void opUpdate(double deltaTime) {
 
+        /*
         if((savedX[0] == 10 && savedX[1] != 10) || (savedX[0] != 10 && savedX[1] == 10)){
             if(savedX[1] != 10){
                 firstSave1 = true;
             }
         }
+         */
 
         if(wheelLock){
             joystick.x = 0;
@@ -353,9 +355,11 @@ public class ActualTeleOp extends LoopUtil {
             RunnableTimer = 0;
             PickUpRunning = true;
         }
+        /*
         if (gamepadHandler.up("D2:RT")){
             autoStack = !autoStack;
         }
+         */
         if (gamepadHandler.up("D2:LT")){
             setArmToStow.run();
         }
@@ -363,19 +367,48 @@ public class ActualTeleOp extends LoopUtil {
             wheelLock = !wheelLock;
         }
 
-        if (gamepadHandler.up("D2:DPAD_DOWN")){ //decrease outputSpeed by decimalPlace | now wrong comment
-            saveStateIndex = Math.abs((saveStateIndex-1) % 3);
-        }
-
-        if (gamepadHandler.up("D2:DPAD_UP")){ //increase outputSpeed by decimalPlace | now wrong comment
-            saveStateIndex = Math.abs((saveStateIndex+1) % 3);
-        }
-        if (gamepadHandler.up("D2:DPAD_LEFT")){ //increase outputSpeed by decimalPlace | now wrong comment
+        if(gamepadHandler.up("D2:DPAD_DOWN") && gamepadHandler.value("D2:RT") > 0.3){
+            saveStateIndex = 3;
             savedX[saveStateIndex] = betterCommandedPosition.x;
             savedY[saveStateIndex] = betterCommandedPosition.y;
             savedR[saveStateIndex] = R;
+        } else if (gamepadHandler.up("D2:DPAD_DOWN") && gamepadHandler.value("D2:RT") < 0.3){ //decrease outputSpeed by decimalPlace | now wrong comment
+            saveStateIndex = 3;
+            betterCommandedPosition.x = savedX[saveStateIndex];
+            betterCommandedPosition.y = savedY[saveStateIndex];
+            R = savedR[saveStateIndex];
         }
-        if (gamepadHandler.up("D2:DPAD_RIGHT")){ //decrease outputSpeed by decimalPlace | now wrong comment
+
+        if(gamepadHandler.up("D2:DPAD_UP") && gamepadHandler.value("D2:RT") > 0.3){
+            saveStateIndex = 1;
+            savedX[saveStateIndex] = betterCommandedPosition.x;
+            savedY[saveStateIndex] = betterCommandedPosition.y;
+            savedR[saveStateIndex] = R;
+        } else if (gamepadHandler.up("D2:DPAD_UP") && gamepadHandler.value("D2:RT") < 0.3){ //increase outputSpeed by decimalPlace | now wrong comment
+            saveStateIndex = 1;
+            betterCommandedPosition.x = savedX[saveStateIndex];
+            betterCommandedPosition.y = savedY[saveStateIndex];
+            R = savedR[saveStateIndex];
+        }
+
+        if(gamepadHandler.up("D2:DPAD_LEFT") && gamepadHandler.value("D2:RT") > 0.3) {
+            saveStateIndex = 0;
+            savedX[saveStateIndex] = betterCommandedPosition.x;
+            savedY[saveStateIndex] = betterCommandedPosition.y;
+            savedR[saveStateIndex] = R;
+        } else if (gamepadHandler.up("D2:DPAD_LEFT") && gamepadHandler.value("D2:RT") < 0.3){ //increase outputSpeed by decimalPlace | now wrong comment
+            saveStateIndex = 0;
+            betterCommandedPosition.x = savedX[saveStateIndex];
+            betterCommandedPosition.y = savedY[saveStateIndex];
+            R = savedR[saveStateIndex];
+        }
+        if(gamepadHandler.up("D2:DPAD_RIGHT") && gamepadHandler.value("D2:RT") > 0.3){
+            saveStateIndex = 2;
+            savedX[saveStateIndex] = betterCommandedPosition.x;
+            savedY[saveStateIndex] = betterCommandedPosition.y;
+            savedR[saveStateIndex] = R;
+        } else if (gamepadHandler.up("D2:DPAD_RIGHT") && gamepadHandler.value("D2:RT") < 0.3){ //decrease outputSpeed by decimalPlace | now wrong comment
+            saveStateIndex = 2;
             betterCommandedPosition.x = savedX[saveStateIndex];
             betterCommandedPosition.y = savedY[saveStateIndex];
             R = savedR[saveStateIndex];
@@ -441,6 +474,7 @@ public class ActualTeleOp extends LoopUtil {
         telemetry.addData("Servo D Turn Position: ", servoD.getPosition());
         telemetry.addData("Slide is in use?: ", controller.isInUse());
         telemetry.addData("Current State Index", saveStateIndex);
+        telemetry.addData("RT Value: ", gamepadHandler.value("D2:RT"));
         drive.logMotorPos(telemetry);
         controller.logMotorPos(telemetry);
     }
