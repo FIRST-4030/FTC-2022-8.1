@@ -373,7 +373,7 @@ public class MecanumAuto extends LoopUtil {
         //
         gamepadHandler = InputAutoMapper.normal.autoMap(this);
         //Slide
-        slide = new SlideController(hardwareMap, "LSLM", true, "LSRM", false);
+        slide = new SlideController(hardwareMap, "LSRM", false);
         //Velocity Ramps
         forwardRamp = new VelocityRamping(PowerPlayGlobals.MAX_VELOCITY);
         strafeRamp = new VelocityRamping(PowerPlayGlobals.MAX_VELOCITY);
@@ -419,7 +419,7 @@ public class MecanumAuto extends LoopUtil {
 
         //Slide init
         inputHandler = InputAutoMapper.normal.autoMap(this);
-        slide = new SlideController(hardwareMap, "LSLM", true, "LSRM", false);
+        slide = new SlideController(hardwareMap, "LSRM", true);
 
         left = slide.getLeft();
         right = slide.getRight();

@@ -241,7 +241,7 @@ public class ActualTeleOp extends LoopUtil {
 
         //Slide init
         inputHandler = InputAutoMapper.normal.autoMap(this);
-        controller = new SlideController(hardwareMap, "LSLM", true, "LSRM", false);
+        controller = new SlideController(hardwareMap, "LSRM", false);
 
         left = controller.getLeft();
         right = controller.getRight();
@@ -289,7 +289,7 @@ public class ActualTeleOp extends LoopUtil {
 
     @Override
     public void opInitLoop() {
-
+        if (inputHandler.value("D1:RT") >= 0.5) angleOffset = 0;
     }
 
     @Override
@@ -502,7 +502,6 @@ public class ActualTeleOp extends LoopUtil {
         telemetry.addData("Current State Index", saveStateIndex);
         telemetry.addData("RT Value: ", gamepadHandler.value("D2:RT"));
         telemetry.addData("Angle Offset: ", angleOffset);
-        telemetry.addData("TO Slide Velocity: ", this.left.getPower());
         drive.logMotorPos(telemetry);
         controller.logMotorPos(telemetry);
     }

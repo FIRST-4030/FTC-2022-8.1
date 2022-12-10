@@ -25,7 +25,7 @@ public class PowerPlayLinearSlideTest extends LoopUtil {
     @Override
     public void opInit() {
         inputHandler = InputAutoMapper.normal.autoMap(this);
-        controller = new SlideController(hardwareMap, "LSLM", true, "LSRM", false);
+        controller = new SlideController(hardwareMap, "LSRM", false);
 
         left = controller.getLeft();
         right = controller.getRight();

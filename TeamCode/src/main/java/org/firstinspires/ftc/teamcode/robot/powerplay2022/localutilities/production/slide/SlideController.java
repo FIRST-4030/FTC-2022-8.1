@@ -30,17 +30,8 @@ public class SlideController {
 
     private boolean inUse = false;
 
-    public SlideController(HardwareMap hardwareMap, String leftMotorName, boolean invertLeft, String rightMotorName, boolean invertRight){
-        left = hardwareMap.dcMotor.get(leftMotorName);
+    public SlideController(HardwareMap hardwareMap, String rightMotorName, boolean invertRight){
         right = hardwareMap.dcMotor.get(rightMotorName);
-
-
-        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left.setTargetPosition(0);
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        left.setDirection(invertLeft ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
-        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
 
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setTargetPosition(0);
@@ -55,7 +46,6 @@ public class SlideController {
 
     public void update(double deltaTime, LEVEL level, double slidePower){
 
-        leftEncoderPosition = left.getCurrentPosition();
         rightEncoderPosition = right.getCurrentPosition();
 
         switch (level){
@@ -73,12 +63,11 @@ public class SlideController {
                 break;
         }
 
-        powerOutput = Math.signum(target - leftEncoderPosition)*BiasMath.process(EULMathEx.doubleClamp(0, 1, (1-(Math.abs(target - leftEncoderPosition))/300d)));
+        powerOutput = Math.signum(target - rightEncoderPosition)*BiasMath.process(EULMathEx.doubleClamp(0, 1, (1-(Math.abs(target - rightEncoderPosition))/300d)));
         //left.setPower(0);
 
         inUse = !(level == LEVEL.REST);
 
-        leftLastEncoderPosition = leftEncoderPosition;
         rightLastEncoderPosition = rightEncoderPosition;
 
     }
@@ -131,14 +120,11 @@ public class SlideController {
 
 
     public void setPower(double power){
-        left.setPower(power);
         right.setPower(power);
     }
 
     public void logMotorPos(Telemetry telemetry){
         telemetry.addData("LSRM Encoder Position: ", right.getCurrentPosition());
-        telemetry.addData("LSLM Encoder Position: ", left.getCurrentPosition());
-        telemetry.addData("LSLM Encoder Velocity: ", left.getPower());
     }
 
     public boolean isInUse(){

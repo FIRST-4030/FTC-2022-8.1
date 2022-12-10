@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.utils.fileRW.xmlrw;
 
 import android.os.Environment;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -36,6 +37,6 @@ public class XMLRW {
 
     public static <T extends RobotInfoPacket> T unmarshal(T templateClass, String packetName) throws FileNotFoundException, JAXBException {
         JAXBContext context = JAXBContext.newInstance(templateClass.getClass());
-        return (T) context.createUnmarshaller().unmarshal(new FileReader(defaultDir + packetName));
+        return (T) context.createUnmarshaller().unmarshal(new BufferedReader(new FileReader(defaultDir + packetName)));
     }
 }

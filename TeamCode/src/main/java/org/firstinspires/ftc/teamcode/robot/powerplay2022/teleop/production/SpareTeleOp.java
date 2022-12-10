@@ -230,7 +230,9 @@ public class SpareTeleOp extends LoopUtil {
     }
 
     @Override
-    public void opInitLoop() {}
+    public void opInitLoop() {
+        if (inputHandler.value("D1:RT") >= 0.5) angleOffset = 0;
+    }
 
     @Override
     public void opStart() {}
