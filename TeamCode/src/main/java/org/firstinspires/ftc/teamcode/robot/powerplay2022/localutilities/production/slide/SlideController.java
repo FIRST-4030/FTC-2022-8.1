@@ -72,7 +72,7 @@ public class SlideController {
                 break;
         }
 
-        left.setPower(BiasMath.process(EULMathEx.doubleClamp(-1, 1, (target - getLeft().getCurrentPosition())/ (double)target)));
+        left.setPower(BiasMath.process(EULMathEx.doubleClamp(-1, 1, (target - getLeft().getCurrentPosition())/(double) target)));
 
         if (Math.abs(rightLastEncoderPosition - right.getTargetPosition()) >= tickTolerance) {
             left.setPower(Math.abs(rightLastEncoderPosition - right.getTargetPosition())/50f);
