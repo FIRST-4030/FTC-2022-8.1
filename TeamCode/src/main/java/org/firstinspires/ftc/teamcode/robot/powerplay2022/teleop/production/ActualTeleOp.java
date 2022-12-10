@@ -243,7 +243,6 @@ public class ActualTeleOp extends LoopUtil {
         inputHandler = InputAutoMapper.normal.autoMap(this);
         controller = new SlideController(hardwareMap, "LSRM", false);
 
-        left = controller.getLeft();
         right = controller.getRight();
 
         //Drive init

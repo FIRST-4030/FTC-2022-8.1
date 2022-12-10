@@ -14,19 +14,14 @@ public class SlideController {
         REST, LOW, MIDDLE, HIGH
     }
 
-    private DcMotor left, right;
+    private DcMotor right;
 
     public int target;
 
     public AlgorithmicCorrection.BiasedInterpolation BiasMath;
 
-    public int leftEncoderPosition = 0;
     public int rightEncoderPosition = 0;
-    public int tickTolerance = 20;
     public double powerOutput = 0;
-
-    private int leftLastEncoderPosition = 0;
-    private int rightLastEncoderPosition = 0;
 
     private boolean inUse = false;
 
@@ -41,8 +36,6 @@ public class SlideController {
 
         BiasMath = new AlgorithmicCorrection.BiasedInterpolation(0.7);
     }
-
-    public SlideController(HardwareMap hardwareMap){}
 
     public void update(double deltaTime, LEVEL level, double slidePower){
 
@@ -63,13 +56,13 @@ public class SlideController {
                 break;
         }
 
-        powerOutput = Math.signum(target - rightEncoderPosition)*BiasMath.process(EULMathEx.doubleClamp(0, 1, (1-(Math.abs(target - rightEncoderPosition))/300d)));
+        double t = EULMathEx.doubleClamp(0, 1, (1-(Math.abs(target - rightEncoderPosition))/300d));
+        double p = Math.signum(target - rightEncoderPosition)*BiasMath.process(t);
+        double d = BiasMath.derivative(t);
+        powerOutput = 0.7 * p + 0.3 * d;
         //left.setPower(0);
 
         inUse = !(level == LEVEL.REST);
-
-        rightLastEncoderPosition = rightEncoderPosition;
-
     }
 
 
@@ -129,10 +122,6 @@ public class SlideController {
 
     public boolean isInUse(){
         return inUse;
-    }
-
-    public DcMotor getLeft(){
-        return left;
     }
 
     public DcMotor getRight(){
