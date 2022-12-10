@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AlgorithmicCorrection;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.ColorView;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AngleOffsetHandler;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.CustomMecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.InputAutoMapper;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.PowerPlayGlobals;
@@ -34,6 +35,8 @@ import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
 
 import java.util.Objects;
+
+import javax.xml.bind.JAXBException;
 
 @Autonomous(name = "MecanumAuto")
 public class MecanumAuto extends LoopUtil {
@@ -496,6 +499,13 @@ public class MecanumAuto extends LoopUtil {
                 )
         );
 
+        AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
+        offsetHandler.recordAngle(drive.getImu());
+        try {
+            offsetHandler.toXML();
+        } catch (JAXBException e){
+            telemetry.addData("FAILED TO WRITE TO XML: ", e.toString());
+        }
     }
 
     public void shortPreLoad(double deltaTime){

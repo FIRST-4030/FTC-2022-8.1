@@ -7,12 +7,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
+import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
 import org.firstinspires.ftc.teamcode.robot.frieghtfrenzy2021.Globals;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.InputAutoMapper;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AlgorithmicCorrection;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AngleOffsetHandler;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.CustomMecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.AngleConversion;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.ThreeJointArm;
@@ -137,6 +139,7 @@ public class SpareTeleOp extends LoopUtil {
 
 //    public Runnable[] commandList = new Runnable[]{loadPoint, pickUp, setArmToStow, highPlace, index, loadPoint, toggleClaw, setArmToStow, groundPlace, index};
     public int autoStackIndex = 0;
+    private double angleOffset;
 /*
     public void AutoStack() {
         if((autoStackIndex == 0 && autoStackTimer > 0*EULConstants.SEC2MS) || (autoStackIndex == 1 && autoStackTimer > 0*EULConstants.SEC2MS) || (autoStackIndex == 2 && autoStackTimer > 0*EULConstants.SEC2MS) || (autoStackIndex == 3 && autoStackTimer > 0*EULConstants.SEC2MS) || (autoStackIndex == 4 && autoStackTimer > 0*EULConstants.SEC2MS) || (autoStackIndex == 5 && autoStackTimer > 0*EULConstants.SEC2MS) || (autoStackIndex == 6 && autoStackTimer > 0*EULConstants.SEC2MS) || (autoStackIndex == 7 && autoStackTimer > 0*EULConstants.SEC2MS) || (autoStackIndex == 8 && autoStackTimer > 0*EULConstants.SEC2MS) || (autoStackIndex == 9 && autoStackTimer > 0*EULConstants.SEC2MS)){
@@ -209,6 +212,21 @@ public class SpareTeleOp extends LoopUtil {
         TFTeleop = new TFPipeline(hardwareMap, "Webcam 1", new String[]{"Junction Top"});
         TFTeleop.init();
 
+        //Calculate Angle offset
+        AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
+        offsetHandler.recordAngle(drive.getImu());
+        double autoOffsetAngle = 0;
+        try {
+            autoOffsetAngle = offsetHandler.fromXML();
+        } catch (Exception e){
+
+        }
+        Matrix2d autoAngleOffsetRotMatrix = Matrix2d.makeRotation(autoOffsetAngle);
+        Matrix2d teleAngleOffsetRotMatrix = Matrix2d.makeRotation(offsetHandler.rawAngle);
+        Vector2d autoVectorAngleOffsetDir = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
+        Vector2d autoVectorAngleOffsetNormal = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_X);
+        Vector2d teleVectorAngleOffsetDir = teleAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
+        angleOffset = EULMathEx.safeACOS(autoVectorAngleOffsetDir.times(teleVectorAngleOffsetDir)) * (autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir) == 0 ? 1 : Math.signum(autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir)));
     }
 
     @Override
@@ -311,7 +329,7 @@ public class SpareTeleOp extends LoopUtil {
         telemetry.addData("Joystick Y: ", joystick.y);
 
         joystick.z = correction.getOutput() * (controller.isInUse() ? 0.2 : 0.5);
-        drive.update(joystick, true, deltaTime);
+        drive.update(joystick, true, deltaTime, angleOffset);
     }
 
     public void handleInput(double deltaTime){

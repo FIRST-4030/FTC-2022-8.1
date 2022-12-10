@@ -125,6 +125,26 @@ public class CustomMecanumDrive extends CustomDrive{
         Objects.requireNonNull(motorMap.get("FR")).setPower(out.z);
         Objects.requireNonNull(motorMap.get("BR")).setPower(out.w);
     }
+
+    public void update(Vector3d control, boolean fieldCentric, double dt, double angleOffset){
+        virtualRobot.updateHeading();
+        virtualRobot.updateTime(dt);
+
+        //create Vector4d 'in' from the passed in Vector3d(forward, strafe, turn)'s x, y, z, and an arbitrary w value
+        //divide the input by the ratio found by max(|forward| + |strafe| + |turn|, 1)
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
+        Matrix3d rot = fieldCentric ? Matrix3d.makeAffineRotation(-(angles.firstAngle + angleOffset)) : new Matrix3d();
+        Vector3d rotated = rot.times(control.unaryMinus());
+        Vector4d internalControl = new Vector4d(rotated.x, rotated.y, rotated.z, 1);
+        out = mecanumPowerRatioMatrix.times(internalControl).div(Math.max(coefficientSum, 1));
+
+        //set the motor powers as referenced in the hashmap
+        Objects.requireNonNull(motorMap.get("FL")).setPower(out.x);
+        Objects.requireNonNull(motorMap.get("BL")).setPower(out.y);
+        Objects.requireNonNull(motorMap.get("FR")).setPower(out.z);
+        Objects.requireNonNull(motorMap.get("BR")).setPower(out.w);
+    }
+
     public void moveToPos(Vector3d control){
         savedTicks[0] = Objects.requireNonNull(motorMap.get("FL")).getCurrentPosition() + (int)(control.x*0 + control.y*-1739 + control.z*1013/90); //Change in FL ticks
         savedTicks[1] = Objects.requireNonNull(motorMap.get("FR")).getCurrentPosition() + (int)(control.x*0 + control.y*1739 + control.z*1013/90); //Change in FR ticks

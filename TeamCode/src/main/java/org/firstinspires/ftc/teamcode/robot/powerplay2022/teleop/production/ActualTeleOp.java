@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
+import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.depreci
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.ColorView;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.InputAutoMapper;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AlgorithmicCorrection;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AngleOffsetHandler;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.CustomMecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.AngleConversion;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.ThreeJointArm;
@@ -28,6 +30,11 @@ import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
+
+import java.io.FileNotFoundException;
+import java.util.Vector;
+
+import javax.xml.bind.JAXBException;
 
 //Control mapping
 
@@ -94,6 +101,7 @@ public class ActualTeleOp extends LoopUtil {
     public boolean autoStack = false;
     public double autoStackTimer = 0d;
     public boolean wheelLock = false;
+    public double angleOffset = 0;
 
 
 
@@ -261,6 +269,22 @@ public class ActualTeleOp extends LoopUtil {
 
         //D1 = new RevDistance(hardwareMap, telemetry, "range1");
         //D2 = new RevDistance(hardwareMap, telemetry, "range2");
+
+        //Calculate Angle offset
+        AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
+        offsetHandler.recordAngle(drive.getImu());
+        double autoOffsetAngle = 0;
+        try {
+            autoOffsetAngle = offsetHandler.fromXML();
+        } catch (Exception e){
+
+        }
+        Matrix2d autoAngleOffsetRotMatrix = Matrix2d.makeRotation(autoOffsetAngle);
+        Matrix2d teleAngleOffsetRotMatrix = Matrix2d.makeRotation(offsetHandler.rawAngle);
+        Vector2d autoVectorAngleOffsetDir = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
+        Vector2d autoVectorAngleOffsetNormal = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_X);
+        Vector2d teleVectorAngleOffsetDir = teleAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
+        angleOffset = EULMathEx.safeACOS(autoVectorAngleOffsetDir.times(teleVectorAngleOffsetDir)) * (autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir) == 0 ? 1 : Math.signum(autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir)));
     }
 
     @Override
@@ -456,7 +480,7 @@ public class ActualTeleOp extends LoopUtil {
         CV2.update(RCR2.color(), RCR2.distance());
 
         joystick.z = right_stick.x*0.5;
-        drive.update(joystick, false, deltaTime);
+        drive.update(joystick, true, deltaTime, angleOffset);
         AngularVelocity avel = drive.getImu().getAngularVelocity();
     }
 

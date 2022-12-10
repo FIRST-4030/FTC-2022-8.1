@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.xmlrw;
+package org.firstinspires.ftc.teamcode.utils.fileRW.xmlrw;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -18,10 +18,18 @@ public class RobotInfoPacket {
         return this;
     }
 
+    public long getId(){
+        return this.id;
+    }
+
     @XmlElement(name = "RobotName")
     public RobotInfoPacket setRobotName(String nString){
         this.robotName = nString;
         return this;
+    }
+
+    public String getRobotName(){
+        return this.robotName;
     }
 
     @XmlElement(name = "StoredRotation")
@@ -30,4 +38,7 @@ public class RobotInfoPacket {
         return this;
     }
 
+    public double getExtrinsicRotation(){
+        return this.extrinsicRotation;
+    }
 }
