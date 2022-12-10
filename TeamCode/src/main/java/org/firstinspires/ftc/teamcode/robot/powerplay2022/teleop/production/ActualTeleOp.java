@@ -352,6 +352,7 @@ public class ActualTeleOp extends LoopUtil {
     public void slideUpdate(double deltaTime){
 
         controller.update(deltaTime, slideLevel, linearSlideSpeed);
+        controller.setPower(controller.getLeft().getPower());
     }
 
     public void handleInput(double deltaTime){
@@ -501,6 +502,7 @@ public class ActualTeleOp extends LoopUtil {
         telemetry.addData("Current State Index", saveStateIndex);
         telemetry.addData("RT Value: ", gamepadHandler.value("D2:RT"));
         telemetry.addData("Angle Offset: ", angleOffset);
+        telemetry.addData("TO Slide Velocity: ", this.left.getPower());
         drive.logMotorPos(telemetry);
         controller.logMotorPos(telemetry);
     }
