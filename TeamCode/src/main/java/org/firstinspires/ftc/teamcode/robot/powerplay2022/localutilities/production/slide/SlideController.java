@@ -72,17 +72,8 @@ public class SlideController {
                 break;
         }
 
-        left.setPower(BiasMath.process(EULMathEx.doubleClamp(-1, 1, (target - getLeft().getCurrentPosition())/(double) target)));
-
-        if (Math.abs(rightLastEncoderPosition - right.getTargetPosition()) >= tickTolerance) {
-            left.setPower(Math.abs(rightLastEncoderPosition - right.getTargetPosition())/50f);
-            right.setPower(Math.abs(rightLastEncoderPosition - right.getTargetPosition())/50f);
-        } else {
-            left.setPower(0.5);
-            left.setTargetPosition(leftEncoderPosition);
-            right.setPower(0.5);
-            right.setTargetPosition(rightEncoderPosition);
-        }
+        left.setPower(Math.signum(target - getLeft().getCurrentPosition())*BiasMath.process(EULMathEx.doubleClamp(0, 1, 1-(target - getLeft().getCurrentPosition())/300d)));
+        //left.setPower(0);
 
         inUse = !(level == LEVEL.REST);
 
