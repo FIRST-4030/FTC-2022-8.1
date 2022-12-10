@@ -23,6 +23,7 @@ public class SlideController {
     public int leftEncoderPosition = 0;
     public int rightEncoderPosition = 0;
     public int tickTolerance = 20;
+    public double powerOutput = 0;
 
     private int leftLastEncoderPosition = 0;
     private int rightLastEncoderPosition = 0;
@@ -72,7 +73,7 @@ public class SlideController {
                 break;
         }
 
-        left.setPower(Math.signum(target - leftEncoderPosition)*BiasMath.process(EULMathEx.doubleClamp(0, 1, (1-(Math.abs(target - leftEncoderPosition))/300d))));
+        powerOutput = Math.signum(target - leftEncoderPosition)*BiasMath.process(EULMathEx.doubleClamp(0, 1, (1-(Math.abs(target - leftEncoderPosition))/300d)));
         //left.setPower(0);
 
         inUse = !(level == LEVEL.REST);

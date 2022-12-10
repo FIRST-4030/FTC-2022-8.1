@@ -352,7 +352,7 @@ public class ActualTeleOp extends LoopUtil {
     public void slideUpdate(double deltaTime){
 
         controller.update(deltaTime, slideLevel, linearSlideSpeed);
-        controller.setPower(controller.getLeft().getPower());
+        controller.setPower(controller.powerOutput);
     }
 
     public void handleInput(double deltaTime){
