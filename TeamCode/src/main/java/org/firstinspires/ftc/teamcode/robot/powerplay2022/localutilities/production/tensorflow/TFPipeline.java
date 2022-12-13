@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.produc
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.ThreeJointArm;
@@ -10,7 +12,9 @@ import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.ext.TFBoundi
 import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.main.TFODBase;
 import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.depreciated.tfodohm.ODMain.CameraLens;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class TFPipeline {
@@ -69,7 +73,9 @@ public class TFPipeline {
 
         this.armX = 0;
         this.armY = 0;
-        this.chosen = null;
+        this.chosen = new TFBoundingBox();
+
+        chosen.label = "Junction Top";
         this.targetPos = new Vector2d();
 
         this.status = PipelineState.IDLE;
@@ -169,7 +175,6 @@ public class TFPipeline {
 
     public void alignToScore(ServoFTC rotationServo){
         scan();
-        cull();
         correct(CORRECTION.JUNCTION, null, rotationServo);
     }
 
@@ -207,6 +212,11 @@ public class TFPipeline {
         elapsedTime += deltaTime;
     }
 
+    public HashMap<String, ArrayList<Recognition>> checkBox(){
+        tfodBase.scan();
+        return tfodBase.recognitions;
+    }
+
     public void scoreCone(double deltaTime, Vector2d offset, ThreeJointArm arm, ServoFTC rotationServo, ServoFTC clawServo){
         if(!hasScored) {
             if (!hasAligned) {
@@ -239,6 +249,7 @@ public class TFPipeline {
             }
         }
         elapsedTime += deltaTime;
+
     }
 
     public void resetBooleans(){

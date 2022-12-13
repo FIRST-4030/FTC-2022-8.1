@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
@@ -27,11 +28,14 @@ import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.product
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.tensorflow.TFPipeline;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoConfig;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
+import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.ext.TFBoundingBox;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 //import javax.xml.bind.JAXBException;
@@ -49,7 +53,8 @@ import java.util.Vector;
  */
 @TeleOp(name = "ActualTeleOp", group = "actual")
 public class ActualTeleOp extends LoopUtil {
-    public TFPipeline TFTeleop = new TFPipeline(hardwareMap, "Webcam1", new String[]{"Junction Top"});
+    HashMap<String, ArrayList<Recognition>> boxesSize;
+    public TFPipeline TFTeleop = new TFPipeline(hardwareMap, "Webcam 1", new String[]{"Junction Top"});
     public boolean firstSave1 = false;
     //Save Position Variables
     public double[] savedX = new double[]{10, 10, 10, 10};
@@ -103,6 +108,7 @@ public class ActualTeleOp extends LoopUtil {
     public boolean wheelLock = false;
     public double angleOffset = 0;
 
+    public double localElapsedTime = 0;
 
 
     //Algorithm-based correction (not PID)
@@ -206,7 +212,8 @@ public class ActualTeleOp extends LoopUtil {
     public void opInit() {
 
         //Pre-Defined Arm/Slide Movements and Positions
-
+        TFTeleop = new TFPipeline(hardwareMap, "Webcam 1", new String[]{"Junction Top"});
+        TFTeleop.init();
 
         //Arm init
         configA = new ServoConfig("A",false, 0.0001, 0.83);
@@ -298,6 +305,7 @@ public class ActualTeleOp extends LoopUtil {
 
     @Override
     public void opUpdate(double deltaTime) {
+        localElapsedTime += deltaTime;
 
         /*
         if((savedX[0] == 10 && savedX[1] != 10) || (savedX[0] != 10 && savedX[1] == 10)){
@@ -315,8 +323,8 @@ public class ActualTeleOp extends LoopUtil {
         if(!PickUpRunning && !autoStack) {
             handleInput(deltaTime);
         }
-        if (gamepadHandler.up("D2:RT")){
-            TFTeleop.scan();
+        if (gamepadHandler.up("D2:BACK")){
+            TFTeleop.scoreCone(deltaTime, new Vector2d(1,1) ,newPropArm, servoR, servoD);
         }
         armUpdate(deltaTime);
         slideUpdate(deltaTime);
@@ -329,6 +337,14 @@ public class ActualTeleOp extends LoopUtil {
         RunnableTimer += deltaTime;
         autoStackTimer += deltaTime;
         telemetry.addData("Delta Time", deltaTime);
+        telemetry.addData("Junction point: ", this.TFTeleop.chosen.getCenterPoint());
+
+
+        if (localElapsedTime >= 1000){
+            boxesSize = TFTeleop.checkBox();
+            telemetry.addData("boxes: ", boxesSize.get("Junction Top").size());
+            localElapsedTime = 0;
+        }
     }
 
     @Override
@@ -491,17 +507,18 @@ public class ActualTeleOp extends LoopUtil {
     }
 
     public void outputTelemetry(){
-        telemetry.addData("Commanded Multiplier: ", commandedPositionMultiplier);
-        telemetry.addData("Commanded Position: ", betterCommandedPosition);
-        telemetry.addData("Servo A Turn Position: ", servoA.getPosition());
-        telemetry.addData("Servo B Turn Position: ", servoB.getPosition());
-        telemetry.addData("Servo C Turn Position: ", servoC.getPosition());
-        telemetry.addData("Servo D Turn Position: ", servoD.getPosition());
-        telemetry.addData("Slide is in use?: ", controller.isInUse());
-        telemetry.addData("Current State Index", saveStateIndex);
-        telemetry.addData("RT Value: ", gamepadHandler.value("D2:RT"));
-        telemetry.addData("Angle Offset: ", angleOffset);
-        drive.logMotorPos(telemetry);
-        controller.logMotorPos(telemetry);
+        //telemetry.addData("Commanded Multiplier: ", commandedPositionMultiplier);
+        //telemetry.addData("Commanded Position: ", betterCommandedPosition);
+        //telemetry.addData("Servo A Turn Position: ", servoA.getPosition());
+        //telemetry.addData("Servo B Turn Position: ", servoB.getPosition());
+        //telemetry.addData("Servo C Turn Position: ", servoC.getPosition());
+        //telemetry.addData("Servo D Turn Position: ", servoD.getPosition());
+        //telemetry.addData("Slide is in use?: ", controller.isInUse());
+        //telemetry.addData("Current State Index", saveStateIndex);
+        //telemetry.addData("RT Value: ", gamepadHandler.value("D2:RT"));
+        //telemetry.addData("Angle Offset: ", angleOffset);
+        //telemetry.addData("Is Junction Real: ", this.TFTeleop.armX);
+        //drive.logMotorPos(telemetry);
+        //controller.logMotorPos(telemetry);
     }
 }

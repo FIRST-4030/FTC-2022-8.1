@@ -421,7 +421,6 @@ public class MecanumAuto extends LoopUtil {
         inputHandler = InputAutoMapper.normal.autoMap(this);
         slide = new SlideController(hardwareMap, "LSRM", true);
 
-        left = slide.getLeft();
         right = slide.getRight();
 
         slideLevelAuto = SlideController.LEVEL.REST;

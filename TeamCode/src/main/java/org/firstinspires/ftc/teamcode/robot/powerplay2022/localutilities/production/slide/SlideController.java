@@ -49,17 +49,20 @@ public class SlideController {
                 target = (540 / 3 - 50);
                 break;
             case MIDDLE:
-                target = (540 / 3 + 100);
+                target = (540 / 3 + 235);
                 break;
             case HIGH:
-                target = (540 / 3 + 250);
+                target = (540 / 3 + 290);
                 break;
         }
 
         double t = EULMathEx.doubleClamp(0, 1, (1-(Math.abs(target - rightEncoderPosition))/300d));
         double p = Math.signum(target - rightEncoderPosition)*BiasMath.process(t);
         double d = BiasMath.derivative(t);
-        powerOutput = 0.7 * p + 0.3 * d;
+        powerOutput = 0.6 * p + 0.4 * d;
+        if((level == LEVEL.REST && rightEncoderPosition < 5) || Math.abs(powerOutput) < 0.05){
+            powerOutput = 0;
+        }
         //left.setPower(0);
 
         inUse = !(level == LEVEL.REST);
