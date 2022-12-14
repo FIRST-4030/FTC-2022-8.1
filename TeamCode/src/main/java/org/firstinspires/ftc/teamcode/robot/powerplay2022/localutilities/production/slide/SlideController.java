@@ -37,6 +37,8 @@ public class SlideController {
         BiasMath = new AlgorithmicCorrection.BiasedInterpolation(0.7);
     }
 
+    public SlideController(HardwareMap map){}
+
     public void update(double deltaTime, LEVEL level, double slidePower){
 
         rightEncoderPosition = right.getCurrentPosition();
