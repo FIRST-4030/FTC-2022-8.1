@@ -286,17 +286,7 @@ public class ActualTeleOp extends LoopUtil {
         AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
         offsetHandler.recordAngle(drive.getImu());
         double autoOffsetAngle = 0;
-        try {
-            autoOffsetAngle = offsetHandler.fromXML();
-        } catch (Exception e){
 
-        }
-        Matrix2d autoAngleOffsetRotMatrix = Matrix2d.makeRotation(autoOffsetAngle);
-        Matrix2d teleAngleOffsetRotMatrix = Matrix2d.makeRotation(offsetHandler.rawAngle);
-        Vector2d autoVectorAngleOffsetDir = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
-        Vector2d autoVectorAngleOffsetNormal = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_X);
-        Vector2d teleVectorAngleOffsetDir = teleAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
-        angleOffset = -EULMathEx.safeACOS(autoVectorAngleOffsetDir.times(teleVectorAngleOffsetDir)) * (autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir) == 0 ? 1 : Math.signum(autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir)));
     }
 
     @Override
