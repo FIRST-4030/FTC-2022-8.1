@@ -172,12 +172,15 @@ public class MecanumAuto extends LoopUtil {
                 },
                 () -> {
                     movts[6].update();
+                    RCR2.enableLight(false);
                 },
                 () -> {
                     movts[7].update();
+                    RCR2.enableLight(false);
                 },
                 () -> {
                     movts[8].update();
+                    RCR2.enableLight(false);
                 },
                 () -> {
                     movts[9].update();
@@ -317,6 +320,7 @@ public class MecanumAuto extends LoopUtil {
                     @Override
                     public void check() {
                         this.status = STATUS.PASSED;
+                        RCR2.enableLight(true);
                         if (elapsedTime > 27000) {
                             status = STATUS.PASSED;
                         } else {
@@ -381,6 +385,7 @@ public class MecanumAuto extends LoopUtil {
         elapsedTime = 0;
         storedDeltaTime = 0;
         RCR2 = new RevColorRange(hardwareMap, telemetry, "rcr");
+        RCR2.enableLight(false);
         CV2 = new ColorView(RCR2.color(), RCR2.distance());
         checked = false;
         inputHandler = InputAutoMapper.normal.autoMap(this);
@@ -497,13 +502,7 @@ public class MecanumAuto extends LoopUtil {
                 )
         );
 
-        AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
-        offsetHandler.recordAngle(drive.getImu());
-        try {
-            offsetHandler.toXML();
-        } catch (JAXBException e){
-            telemetry.addData("FAILED TO WRITE TO XML: ", e.toString());
-        }
+
     }
 
     public void shortPreLoad(double deltaTime){
@@ -727,6 +726,12 @@ public class MecanumAuto extends LoopUtil {
 
     @Override
     public void opStop() {
-
+        AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
+        offsetHandler.rawAngle = startRight ? Math.PI / 2 : -Math.PI/2;
+        try {
+            offsetHandler.toXML();
+        } catch (JAXBException e){
+            telemetry.addData("FAILED TO WRITE TO XML: ", e.toString());
+        }
     }
 }
