@@ -93,7 +93,7 @@ public class MecanumAuto extends LoopUtil {
             new RunOnce() {
                 @Override
                 public void run() {
-                    drive.moveToPos(new Vector3d(0, 0.52, 0));
+                    drive.moveToPos(new Vector3d(0, 0.55, 0));
                     slideLevelAuto = SlideController.LEVEL.REST;
                     betterCommandedPosition.x = 3;
                     betterCommandedPosition.y = 25;
@@ -105,7 +105,7 @@ public class MecanumAuto extends LoopUtil {
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0.81, 0)); }
+                public void run() { drive.moveToPos(new Vector3d(0, 0.75, 0)); }
             },
             new RunOnce() {
                 @Override
@@ -121,11 +121,11 @@ public class MecanumAuto extends LoopUtil {
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0.35, 0)); }
+                public void run() { drive.moveToPos(new Vector3d(0, 0.4, 0)); }
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0.95, 0)); }
+                public void run() { drive.moveToPos(new Vector3d(0, 1.01, 0)); }
             },
             new RunOnce() {
                 @Override

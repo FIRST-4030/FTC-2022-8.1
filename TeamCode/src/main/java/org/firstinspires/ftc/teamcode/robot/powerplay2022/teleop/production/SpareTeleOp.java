@@ -26,6 +26,10 @@ import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 
+import java.io.FileNotFoundException;
+
+import javax.xml.bind.JAXBException;
+
 //Control mapping
 
 /**
@@ -212,21 +216,12 @@ public class SpareTeleOp extends LoopUtil {
         TFTeleop = new TFPipeline(hardwareMap, "Webcam1", new String[]{"Junction Top"});
         TFTeleop.init();
 
-        //Calculate Angle offset
         AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
-        offsetHandler.recordAngle(drive.getImu());
-        double autoOffsetAngle = 0;
         try {
-            autoOffsetAngle = offsetHandler.fromXML();
-        } catch (Exception e){
-
+            angleOffset = offsetHandler.fromXML();
+        } catch (JAXBException | FileNotFoundException e) {
+            angleOffset = 0;
         }
-        Matrix2d autoAngleOffsetRotMatrix = Matrix2d.makeRotation(autoOffsetAngle);
-        Matrix2d teleAngleOffsetRotMatrix = Matrix2d.makeRotation(offsetHandler.rawAngle);
-        Vector2d autoVectorAngleOffsetDir = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
-        Vector2d autoVectorAngleOffsetNormal = autoAngleOffsetRotMatrix.times(Vector2d.AXIS_X);
-        Vector2d teleVectorAngleOffsetDir = teleAngleOffsetRotMatrix.times(Vector2d.AXIS_Y);
-        angleOffset = -EULMathEx.safeACOS(autoVectorAngleOffsetDir.times(teleVectorAngleOffsetDir)) * (autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir) == 0 ? 1 : Math.signum(autoVectorAngleOffsetNormal.times(teleVectorAngleOffsetDir)));
     }
 
     @Override

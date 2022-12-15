@@ -290,10 +290,8 @@ public class ActualTeleOp extends LoopUtil {
         AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
         try {
             angleOffset = offsetHandler.fromXML();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (JAXBException | FileNotFoundException e) {
+            angleOffset = 0;
         }
 
     }
