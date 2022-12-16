@@ -719,7 +719,7 @@ public class MecanumAuto extends LoopUtil {
     @Override
     public void opStop() {
         AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
-        offsetHandler.rawAngle = -drive.getImu().getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
+        offsetHandler.rawAngle = drive.getImu().getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
         try {
             offsetHandler.toXML();
         } catch (JAXBException e){
