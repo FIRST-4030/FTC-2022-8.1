@@ -93,7 +93,7 @@ public class MecanumAuto extends LoopUtil {
             new RunOnce() {
                 @Override
                 public void run() {
-                    drive.moveToPos(new Vector3d(0, 0.55, 0));
+                    drive.moveToPos(new Vector3d(0, 0.52, 0));
                     slideLevelAuto = SlideController.LEVEL.REST;
                     betterCommandedPosition.x = 3;
                     betterCommandedPosition.y = 25;
@@ -105,7 +105,7 @@ public class MecanumAuto extends LoopUtil {
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0.75, 0)); }
+                public void run() { drive.moveToPos(new Vector3d(0, 0.81, 0)); }
             },
             new RunOnce() {
                 @Override
@@ -121,11 +121,11 @@ public class MecanumAuto extends LoopUtil {
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0.4, 0)); }
+                public void run() { drive.moveToPos(new Vector3d(0, 0.35, 0)); }
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 1.01, 0)); }
+                public void run() { drive.moveToPos(new Vector3d(0, 0.95, 0)); }
             },
             new RunOnce() {
                 @Override
@@ -528,13 +528,13 @@ public class MecanumAuto extends LoopUtil {
     public void cycle(double deltaTime) { //Cycle 4 cones, 24.5 seconds
 
         if (elapsedTimeCycle < 1 * EULConstants.SEC2MS) {
-            slideLevelAuto = SlideController.LEVEL.HIGH;
+            slideLevelAuto = SlideController.LEVEL.MIDDLE;
             betterCommandedPosition.x = 2;
             betterCommandedPosition.y = 25;
             servoR.setPosition(0.3);
             servoD.setPosition(0.6);
         } else if (elapsedTimeCycle < 2.1 * EULConstants.SEC2MS) {
-            servoR.setPosition((startRight ? 0.15 : 0.85));
+            servoR.setPosition((startRight ? 1 : 0));
             betterCommandedPosition.x = 23;
             betterCommandedPosition.y = 15;
         } else if (elapsedTimeCycle < 2.4 * EULConstants.SEC2MS) {
