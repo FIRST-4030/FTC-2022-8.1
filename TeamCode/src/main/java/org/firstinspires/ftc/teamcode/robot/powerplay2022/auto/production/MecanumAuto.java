@@ -40,6 +40,7 @@ import javax.xml.bind.JAXBException;
 
 @Autonomous(name = "MecanumAuto")
 public class MecanumAuto extends LoopUtil {
+    boolean check = false;
     //State Machine
     public TaskManager stateMachine;
 
@@ -117,19 +118,34 @@ public class MecanumAuto extends LoopUtil {
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0, 0)); savedTimeCycle = elapsedTime;}
+                public void run() { drive.moveToPos(new Vector3d(0, 0, 0)); savedTimeCycle = elapsedTime; elapsedTimeCycleAcum = 0; elapsedTimeCycle=0;}
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0.35, 0)); }
+                public void run() {
+                    drive.moveToPos(new Vector3d(0, 0.35, 0));
+                    betterCommandedPosition.x = 1;
+                    betterCommandedPosition.y = 27;
+                    servoR.setPosition(0);
+                }
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0.95, 0)); }
+                public void run() {
+                    drive.moveToPos(new Vector3d(0, 0.95, 0));
+                    betterCommandedPosition.x = 1;
+                    betterCommandedPosition.y = 27;
+                    servoR.setPosition(0);
+                }
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, -0.21, 0)); }
+                public void run() {
+                    drive.moveToPos(new Vector3d(0, -0.21, 0));
+                    betterCommandedPosition.x = 1;
+                    betterCommandedPosition.y = 27;
+                    servoR.setPosition(0);
+                }
             },
             new RunOnce() {
                 @Override
@@ -168,19 +184,16 @@ public class MecanumAuto extends LoopUtil {
                 },
                 () -> {
                     movts[5].update();
-                    //cycle(getDeltaTime());
+                    cycle(getDeltaTime());
                 },
                 () -> {
                     movts[6].update();
-                    RCR2.enableLight(false);
                 },
                 () -> {
                     movts[7].update();
-                    RCR2.enableLight(false);
                 },
                 () -> {
                     movts[8].update();
-                    RCR2.enableLight(false);
                 },
                 () -> {
                     movts[9].update();
@@ -319,12 +332,10 @@ public class MecanumAuto extends LoopUtil {
 
                     @Override
                     public void check() {
-                        this.status = STATUS.PASSED;
-                        RCR2.enableLight(true);
                         if (elapsedTime > 27000) {
                             status = STATUS.PASSED;
                         } else {
-                            //status = STATUS.FAILED;
+                            status = STATUS.FAILED;
                         }
                     }
                 },
@@ -507,7 +518,6 @@ public class MecanumAuto extends LoopUtil {
 
     public void shortPreLoad(double deltaTime){
         if (elapsedTimeCycle < 0.5 * EULConstants.SEC2MS) {
-            slideLevelAuto = SlideController.LEVEL.REST;
             betterCommandedPosition.x = 2;
             betterCommandedPosition.y = 25;
         } else if (elapsedTimeCycle < 1.9 * EULConstants.SEC2MS) {
@@ -527,28 +537,10 @@ public class MecanumAuto extends LoopUtil {
 
     public void cycle(double deltaTime) { //Cycle 4 cones, 24.5 seconds
 
-        if (elapsedTimeCycle < 1 * EULConstants.SEC2MS) {
-            slideLevelAuto = SlideController.LEVEL.MIDDLE;
-            betterCommandedPosition.x = 2;
-            betterCommandedPosition.y = 25;
-            servoR.setPosition(0.3);
-            servoD.setPosition(0.6);
-        } else if (elapsedTimeCycle < 2.1 * EULConstants.SEC2MS) {
-            servoR.setPosition((startRight ? 1 : 0));
-            betterCommandedPosition.x = 23;
-            betterCommandedPosition.y = 15;
-        } else if (elapsedTimeCycle < 2.4 * EULConstants.SEC2MS) {
-            servoD.setPosition(0.07);
-        } else if (elapsedTimeCycle < 5 * EULConstants.SEC2MS) {
 
-            betterCommandedPosition.x = 2;
-            betterCommandedPosition.y = 20;
-            servoR.setPosition(0.3);
-        }
-        /*
         if(elapsedTimeCycleAcum < (((27-(savedTimeCycle * EULConstants.MS2SEC)) - (4 + 1)) * EULConstants.SEC2MS)) { //(Total Time - (Cycle Time + Buffer))
             if (elapsedTimeCycle < 1 * EULConstants.SEC2MS) {
-                slideLevelAuto = SlideController.LEVEL.HIGH;
+                slideLevelAuto = SlideController.LEVEL.MIDDLE;
                 betterCommandedPosition.x = 2;
                 betterCommandedPosition.y = 25;
                 servoR.setPosition(0.3);
@@ -584,7 +576,6 @@ public class MecanumAuto extends LoopUtil {
             betterCommandedPosition.x = 15;
             betterCommandedPosition.y = 15;
         }
-         */
         elapsedTimeCycle += deltaTime;
         elapsedTimeCycleAcum += deltaTime;
     }
@@ -716,6 +707,7 @@ public class MecanumAuto extends LoopUtil {
         telemetry.addData("Saved Red", savedR);
         telemetry.addData("Saved Green", savedG);
         telemetry.addData("Saved Blue", savedB);
+        telemetry.addData("Cycle Check: ", check);
         drive.logMotorPos(telemetry);
     }
 
