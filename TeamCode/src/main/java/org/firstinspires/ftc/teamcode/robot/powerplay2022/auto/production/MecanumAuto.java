@@ -105,7 +105,7 @@ public class MecanumAuto extends LoopUtil {
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0.814, 0)); }
+                public void run() { drive.moveToPos(new Vector3d(0, 0.81, 0)); }
             },
             new RunOnce() {
                 @Override

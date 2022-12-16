@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Vector;
 
+import javax.xml.bind.JAXBException;
+
 //import javax.xml.bind.JAXBException;
 
 //Control mapping
@@ -274,6 +276,7 @@ public class ActualTeleOp extends LoopUtil {
         currentStateRB = false;
 
         RCR2 = new RevColorRange(hardwareMap, telemetry, "rcr");
+        RCR2.enableLight(false);
         CV2 = new ColorView(RCR2.color(), RCR2.distance());
 
         //correction = new AlgorithmicCorrection(new AlgorithmicCorrection.Polynomial(20));
@@ -283,9 +286,13 @@ public class ActualTeleOp extends LoopUtil {
         //D2 = new RevDistance(hardwareMap, telemetry, "range2");
 
         //Calculate Angle offset
+
         AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
-        offsetHandler.recordAngle(drive.getImu());
-        double autoOffsetAngle = 0;
+        try {
+            angleOffset = offsetHandler.fromXML();
+        } catch (JAXBException | FileNotFoundException e) {
+            angleOffset = 0;
+        }
 
     }
 
@@ -505,7 +512,6 @@ public class ActualTeleOp extends LoopUtil {
 
         joystick.z = right_stick.x*0.5;
         drive.update(joystick, true, deltaTime, angleOffset);
-        AngularVelocity avel = drive.getImu().getAngularVelocity();
     }
 
     @Override
