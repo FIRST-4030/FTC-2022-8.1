@@ -40,6 +40,7 @@ import javax.xml.bind.JAXBException;
 
 @Autonomous(name = "MecanumAuto")
 public class MecanumAuto extends LoopUtil {
+    boolean check = false;
     //State Machine
     public TaskManager stateMachine;
 
@@ -117,19 +118,34 @@ public class MecanumAuto extends LoopUtil {
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0, 0)); savedTimeCycle = elapsedTime;}
+                public void run() { drive.moveToPos(new Vector3d(0, 0, 0)); savedTimeCycle = elapsedTime; elapsedTimeCycleAcum = 0; elapsedTimeCycle=0;}
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0.35, 0)); }
+                public void run() {
+                    drive.moveToPos(new Vector3d(0, 0.35, 0));
+                    betterCommandedPosition.x = 1;
+                    betterCommandedPosition.y = 27;
+                    servoR.setPosition(0);
+                }
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, 0.95, 0)); }
+                public void run() {
+                    drive.moveToPos(new Vector3d(0, 0.95, 0));
+                    betterCommandedPosition.x = 1;
+                    betterCommandedPosition.y = 27;
+                    servoR.setPosition(0);
+                }
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, -0.21, 0)); }
+                public void run() {
+                    drive.moveToPos(new Vector3d(0, -0.21, 0));
+                    betterCommandedPosition.x = 1;
+                    betterCommandedPosition.y = 27;
+                    servoR.setPosition(0);
+                }
             },
             new RunOnce() {
                 @Override
@@ -168,7 +184,7 @@ public class MecanumAuto extends LoopUtil {
                 },
                 () -> {
                     movts[5].update();
-                    //cycle(getDeltaTime());
+                    cycle(getDeltaTime());
                 },
                 () -> {
                     movts[6].update();
@@ -316,11 +332,10 @@ public class MecanumAuto extends LoopUtil {
 
                     @Override
                     public void check() {
-                        this.status = STATUS.PASSED;
                         if (elapsedTime > 27000) {
                             status = STATUS.PASSED;
                         } else {
-                            //status = STATUS.FAILED;
+                            status = STATUS.FAILED;
                         }
                     }
                 },
@@ -381,6 +396,7 @@ public class MecanumAuto extends LoopUtil {
         elapsedTime = 0;
         storedDeltaTime = 0;
         RCR2 = new RevColorRange(hardwareMap, telemetry, "rcr");
+        RCR2.enableLight(false);
         CV2 = new ColorView(RCR2.color(), RCR2.distance());
         checked = false;
         inputHandler = InputAutoMapper.normal.autoMap(this);
@@ -497,18 +513,11 @@ public class MecanumAuto extends LoopUtil {
                 )
         );
 
-        AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
-        offsetHandler.recordAngle(drive.getImu());
-        try {
-            offsetHandler.toXML();
-        } catch (JAXBException e){
-            telemetry.addData("FAILED TO WRITE TO XML: ", e.toString());
-        }
+
     }
 
     public void shortPreLoad(double deltaTime){
         if (elapsedTimeCycle < 0.5 * EULConstants.SEC2MS) {
-            slideLevelAuto = SlideController.LEVEL.REST;
             betterCommandedPosition.x = 2;
             betterCommandedPosition.y = 25;
         } else if (elapsedTimeCycle < 1.9 * EULConstants.SEC2MS) {
@@ -528,28 +537,10 @@ public class MecanumAuto extends LoopUtil {
 
     public void cycle(double deltaTime) { //Cycle 4 cones, 24.5 seconds
 
-        if (elapsedTimeCycle < 1 * EULConstants.SEC2MS) {
-            slideLevelAuto = SlideController.LEVEL.MIDDLE;
-            betterCommandedPosition.x = 2;
-            betterCommandedPosition.y = 25;
-            servoR.setPosition(0.3);
-            servoD.setPosition(0.6);
-        } else if (elapsedTimeCycle < 2.1 * EULConstants.SEC2MS) {
-            servoR.setPosition((startRight ? 1 : 0));
-            betterCommandedPosition.x = 23;
-            betterCommandedPosition.y = 15;
-        } else if (elapsedTimeCycle < 2.4 * EULConstants.SEC2MS) {
-            servoD.setPosition(0.07);
-        } else if (elapsedTimeCycle < 5 * EULConstants.SEC2MS) {
 
-            betterCommandedPosition.x = 2;
-            betterCommandedPosition.y = 20;
-            servoR.setPosition(0.3);
-        }
-        /*
         if(elapsedTimeCycleAcum < (((27-(savedTimeCycle * EULConstants.MS2SEC)) - (4 + 1)) * EULConstants.SEC2MS)) { //(Total Time - (Cycle Time + Buffer))
             if (elapsedTimeCycle < 1 * EULConstants.SEC2MS) {
-                slideLevelAuto = SlideController.LEVEL.HIGH;
+                slideLevelAuto = SlideController.LEVEL.MIDDLE;
                 betterCommandedPosition.x = 2;
                 betterCommandedPosition.y = 25;
                 servoR.setPosition(0.3);
@@ -585,7 +576,6 @@ public class MecanumAuto extends LoopUtil {
             betterCommandedPosition.x = 15;
             betterCommandedPosition.y = 15;
         }
-         */
         elapsedTimeCycle += deltaTime;
         elapsedTimeCycleAcum += deltaTime;
     }
@@ -717,6 +707,7 @@ public class MecanumAuto extends LoopUtil {
         telemetry.addData("Saved Red", savedR);
         telemetry.addData("Saved Green", savedG);
         telemetry.addData("Saved Blue", savedB);
+        telemetry.addData("Cycle Check: ", check);
         drive.logMotorPos(telemetry);
     }
 
@@ -727,6 +718,12 @@ public class MecanumAuto extends LoopUtil {
 
     @Override
     public void opStop() {
-
+        AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
+        offsetHandler.rawAngle = -drive.getImu().getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
+        try {
+            offsetHandler.toXML();
+        } catch (JAXBException e){
+            telemetry.addData("FAILED TO WRITE TO XML: ", e.toString());
+        }
     }
 }
