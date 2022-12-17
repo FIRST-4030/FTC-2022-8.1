@@ -30,6 +30,7 @@ import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.general.misc.RunOnce;
 import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.Conditional;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.RepeatableConditional;
 import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.TaskManager;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
@@ -160,7 +161,16 @@ public class MecanumAuto extends LoopUtil {
                     topConeY -= 3.4;
                     elapsedTimeCycle = 0;
                 }
-            }
+            }, new Runnable() {
+        @Override
+        public void run() {
+            servoD.setPosition(0.6);
+            slideLevelAuto = SlideController.LEVEL.REST;
+            servoR.setPosition(0.5);
+            betterCommandedPosition.x = 15;
+            betterCommandedPosition.y = 15;
+        }
+    }
 
     };
     public RunOnce[] movts = new RunOnce[]{
@@ -234,7 +244,7 @@ public class MecanumAuto extends LoopUtil {
     public void opInit() {
         //State Machine
         stateMachine = new TaskManager();
-        stateMachine.alwaysRun = () -> {inputHandler.loop();};
+        stateMachine.alwaysRun = () -> inputHandler.loop();
         stateMachine.addStates(
                 () -> {
                     movts[0].update();
@@ -460,6 +470,174 @@ public class MecanumAuto extends LoopUtil {
                 }
         );
         //Cycle State Machine
+
+        cycleMachine = new TaskManager();
+        cycleMachine.addStates(cycleMovts);
+        cycleMachine.addConditions(new RepeatableConditional(4,
+                new Conditional() {
+                    @Override
+                    public void init() {
+                        this.linkedStates = new int[]{0};
+                    }
+
+                    @Override
+                    public void check() {
+                        if (elapsedTimeCycle < 0.7 * EULConstants.SEC2MS) {
+                            this.status = STATUS.FAILED;
+                        } else {
+                            this.status = STATUS.PASSED;
+                        }
+                    }
+                }, new Conditional() {
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{1};
+            }
+
+            @Override
+            public void check() {
+                if (elapsedTimeCycle < 1.5 * EULConstants.SEC2MS) {
+                    this.status = STATUS.FAILED;
+                } else {
+                    this.status = STATUS.PASSED;
+                }
+            }
+        }, new Conditional() {
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{2};
+            }
+
+            @Override
+            public void check() {
+                if (elapsedTimeCycle < 2 * EULConstants.SEC2MS) {
+                    this.status = STATUS.FAILED;
+                } else {
+                    this.status = STATUS.PASSED;
+                }
+            }
+        }, new Conditional() {
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{3};
+            }
+
+            @Override
+            public void check() {
+                if (elapsedTimeCycle < 2.4 * EULConstants.SEC2MS) {
+                    this.status = STATUS.FAILED;
+                } else {
+                    this.status = STATUS.PASSED;
+                }
+            }
+        }, new Conditional() {
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{4};
+            }
+
+            @Override
+            public void check() {
+                if (elapsedTimeCycle < 3.2 * EULConstants.SEC2MS) {
+                    this.status = STATUS.FAILED;
+                } else {
+                    this.status = STATUS.PASSED;
+                }
+            }
+        }, new Conditional() {
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{5};
+            }
+
+            @Override
+            public void check() {
+                if (elapsedTimeCycle < 3.8 * EULConstants.SEC2MS) {
+                    this.status = STATUS.FAILED;
+                } else {
+                    this.status = STATUS.PASSED;
+                }
+            }
+        }, new Conditional() {
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{6};
+            }
+
+            @Override
+            public void check() {
+                if (elapsedTimeCycle < 4.2 * EULConstants.SEC2MS) {
+                    this.status = STATUS.FAILED;
+                } else {
+                    this.status = STATUS.PASSED;
+                }
+            }
+        }, new Conditional() {
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{7};
+            }
+
+            @Override
+            public void check() {
+                if (elapsedTimeCycle < 4.6 * EULConstants.SEC2MS) {
+                    this.status = STATUS.FAILED;
+                } else {
+                    this.status = STATUS.PASSED;
+                }
+            }
+        }, new Conditional() {
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{8};
+            }
+
+            @Override
+            public void check() {
+                if (elapsedTimeCycle < 5.5 * EULConstants.SEC2MS) {
+                    this.status = STATUS.FAILED;
+                } else {
+                    this.status = STATUS.PASSED;
+                }
+            }
+        }, new Conditional() {
+            final boolean ranOnce = false;
+
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{9};
+            }
+
+            @Override
+            public void check() {
+                if (!ranOnce) {
+                    this.status = STATUS.FAILED;
+                } else {
+                    this.status = STATUS.PASSED;
+                }
+            }
+        }) {
+            @Override
+            public void init() {
+
+            }
+        }, new Conditional() {
+
+            final boolean ranOnce = false;
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{10};
+            }
+
+            @Override
+            public void check() {
+                if (!ranOnce) {
+                    this.status = STATUS.FAILED;
+                } else {
+                    this.status = STATUS.PASSED;
+                }
+            }
+        });
         //
         gamepadHandler = InputAutoMapper.normal.autoMap(this);
         //Velocity Ramps
@@ -606,6 +784,12 @@ public class MecanumAuto extends LoopUtil {
             servoD.setPosition(0.7);
         }
         elapsedTimeCycle += deltaTime;
+    }
+
+    public void cycleBetter(double deltaTime){
+        cycleMachine.execute();
+        elapsedTimeCycle += deltaTime;
+        elapsedTimeCycleAcum += deltaTime;
     }
 
     public void cycle(double deltaTime) { //Cycle 4 cones, 24.5 seconds
