@@ -56,9 +56,6 @@ import javax.xml.bind.JAXBException;
  */
 @TeleOp(name = "ActualTeleOp", group = "actual")
 public class ActualTeleOp extends LoopUtil {
-    public HashMap<String, ArrayList<TFBoundingBox>> SCOutput;
-    HashMap<String, ArrayList<Recognition>> boxesSize;
-    public TFPipeline TFTeleop;
     public boolean firstSave1 = false;
     //Save Position Variables
     public double[] savedX = new double[]{10, 10, 10, 10};
@@ -215,14 +212,6 @@ public class ActualTeleOp extends LoopUtil {
     @Override
     public void opInit() {
 
-        SCOutput = new HashMap<String, ArrayList<TFBoundingBox>>(1);
-        SCOutput.put("Junction Top", new ArrayList<>());
-        SCOutput.get("Junction Top").add(new TFBoundingBox());
-
-        //Pre-Defined Arm/Slide Movements and Positions
-        TFTeleop = new TFPipeline(hardwareMap, "Webcam 1", new String[]{"Junction Top"});
-        TFTeleop.init();
-
         //Arm init
         configA = new ServoConfig("A",false, 0.0001, 0.83);
         configB = new ServoConfig("B",true, 0.0001, 0.9999);
@@ -326,9 +315,6 @@ public class ActualTeleOp extends LoopUtil {
         if(!PickUpRunning && !autoStack) {
             handleInput(deltaTime);
         }
-        if (gamepadHandler.up("D2:BACK")){
-            TFTeleop.scoreCone(deltaTime, new Vector2d(1,1) ,newPropArm, servoR, servoD);
-        }
         armUpdate(deltaTime);
         slideUpdate(deltaTime);
         outputTelemetry();
@@ -340,7 +326,6 @@ public class ActualTeleOp extends LoopUtil {
         RunnableTimer += deltaTime;
         autoStackTimer += deltaTime;
         telemetry.addData("Delta Time", deltaTime);
-        telemetry.addData("Junction point: ", this.TFTeleop.chosen.getCenterPoint());
 
 /*
         if (localElapsedTime >= 1000){
@@ -410,16 +395,6 @@ public class ActualTeleOp extends LoopUtil {
         }
         if (gamepadHandler.up("D1:LT")){
             wheelLock = !wheelLock;
-        }
-
-        if (gamepadHandler.up("D1:DPAD_DOWN")){
-            TFTeleop.tfodBase.scan();
-        }
-
-        if (gamepadHandler.up("D1:DPAD_UP")){
-            if (TFTeleop.tfodBase.boundingBoxes != null) {
-                SCOutput = TFTeleop.tfodBase.boundingBoxes;
-            }
         }
 
         if(gamepadHandler.up("D2:DPAD_DOWN") && gamepadHandler.value("D2:RT") > 0.3){
@@ -533,9 +508,5 @@ public class ActualTeleOp extends LoopUtil {
         //telemetry.addData("Is Junction Real: ", this.TFTeleop.armX);
         //drive.logMotorPos(telemetry);
         //controller.logMotorPos(telemetry);
-        if(!Objects.equals(SCOutput.get("Junction Top"), null)){
-            telemetry.addData("Bounding Boxes: ", SCOutput.get("Junction Top").size());
-            telemetry.addData("Center Point: ", SCOutput.get("Junction Top").get(0).getCenterPoint());
-        }
     }
 }

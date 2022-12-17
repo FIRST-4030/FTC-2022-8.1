@@ -78,7 +78,7 @@ public class MecanumAuto extends LoopUtil {
     double elapsedTimeCycle = 0;
     double elapsedTimeCycleAcum = 0;
     double savedTimeCycle;
-    double topConeY = 0;
+    double topConeY = -3;
 
     public InputHandler inputHandler;
     public static InputHandler gamepadHandler;
@@ -197,7 +197,7 @@ public class MecanumAuto extends LoopUtil {
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, -0.37, 0)); }
+                public void run() { drive.moveToPos(new Vector3d(0, -0.33, 0)); }
             },
             new RunOnce() {
                 @Override
@@ -206,7 +206,7 @@ public class MecanumAuto extends LoopUtil {
             new RunOnce() {
                 @Override
                 public void run() {
-                    drive.moveToPos(new Vector3d(0, 0.43, 0));
+                    drive.moveToPos(new Vector3d(0, 0.37, 0));
                     betterCommandedPosition.x = 1;
                     betterCommandedPosition.y = 27;
                     servoR.setPosition(0);
@@ -215,7 +215,7 @@ public class MecanumAuto extends LoopUtil {
             new RunOnce() {
                 @Override
                 public void run() {
-                    drive.moveToPos(new Vector3d(0, 1.02, 0));
+                    drive.moveToPos(new Vector3d(0, 0.99, 0));
                     betterCommandedPosition.x = 1;
                     betterCommandedPosition.y = 27;
                     servoR.setPosition(0);
@@ -224,7 +224,7 @@ public class MecanumAuto extends LoopUtil {
             new RunOnce() {
                 @Override
                 public void run() {
-                    drive.moveToPos(new Vector3d(0, -0.18, 0));
+                    drive.moveToPos(new Vector3d(0, -0.28, 0));
                     betterCommandedPosition.x = 1;
                     betterCommandedPosition.y = 27;
                     servoR.setPosition(0);
@@ -795,40 +795,40 @@ public class MecanumAuto extends LoopUtil {
     public void cycle(double deltaTime) { //Cycle 4 cones, 24.5 seconds
 
 
-        if(elapsedTimeCycleAcum < (((26-(savedTimeCycle * EULConstants.MS2SEC)) - (5.5 + 1)) * EULConstants.SEC2MS)) { //(Total Time - (Cycle Time + Buffer))
+        if(elapsedTimeCycleAcum < (((26-(savedTimeCycle * EULConstants.MS2SEC)) - (6.9 + 1)) * EULConstants.SEC2MS)) { //(Total Time - (Cycle Time + Buffer))
             if (elapsedTimeCycle < 0.7 * EULConstants.SEC2MS) {
-                betterCommandedPosition.x = 17;
+                betterCommandedPosition.x = 25;
                 betterCommandedPosition.y = 10;
                 servoR.setPosition(0.5);
                 servoD.setPosition(0.07);
             } else if (elapsedTimeCycle < 1.7 * EULConstants.SEC2MS) {
                 betterCommandedPosition.y = topConeY;
-            } else if (elapsedTimeCycle < 2 * EULConstants.SEC2MS) {
-                servoD.setPosition(0.6);
             } else if (elapsedTimeCycle < 2.4 * EULConstants.SEC2MS) {
+                servoD.setPosition(0.6);
+            } else if (elapsedTimeCycle < 2.9 * EULConstants.SEC2MS) {
                 betterCommandedPosition.y = 25;
-            } else if (elapsedTimeCycle < 3.2 * EULConstants.SEC2MS) {
+            } else if (elapsedTimeCycle < 4.3 * EULConstants.SEC2MS) {
                 slideLevelAuto = SlideController.LEVEL.MIDDLE;
                 betterCommandedPosition.x = 2;
                 betterCommandedPosition.y = 20;
-            } else if (elapsedTimeCycle < 3.8 * EULConstants.SEC2MS) {
+            } else if (elapsedTimeCycle < 5.4 * EULConstants.SEC2MS) {
                 betterCommandedPosition.y = 0;
-                betterCommandedPosition.x = 5;
+                betterCommandedPosition.x = 25;
                 servoR.setPosition(startRight ? 1 : 0);
-            } else if (elapsedTimeCycle < 4.2 * EULConstants.SEC2MS) {
+            } else if (elapsedTimeCycle < 5.8 * EULConstants.SEC2MS) {
                 servoD.setPosition(0.07);
-            } else if (elapsedTimeCycle < 4.6 * EULConstants.SEC2MS) {
+            } else if (elapsedTimeCycle < 6.2 * EULConstants.SEC2MS) {
                 betterCommandedPosition.x = 2;
                 betterCommandedPosition.y = 20;
                 servoR.setPosition(0.5);
-            } else if (elapsedTimeCycle < 5.5 * EULConstants.SEC2MS) {
+            } else if (elapsedTimeCycle < 6.9 * EULConstants.SEC2MS) {
                 slideLevelAuto = SlideController.LEVEL.REST;
             } else {
                 topConeY -= 3.4;
                 elapsedTimeCycle = 0;
             }
         } else {
-            servoD.setPosition(0.6);
+            servoD.setPosition(0.07);
             slideLevelAuto = SlideController.LEVEL.REST;
             servoR.setPosition(0.5);
             betterCommandedPosition.x = 15;

@@ -20,7 +20,7 @@ public class ServoFTC implements Available {
     private double min = ABS_MIN;
     private double max = ABS_MAX;
 
-    public double gearReduction = 1;
+
     public double currentAngle = 0, angleIncr = 2, angleRange = (3 * Math.PI) / 2;
 
     private boolean generation = false;
@@ -94,7 +94,7 @@ public class ServoFTC implements Available {
                 * (deltaTime * EULConstants.MS2SEC) //cast the angle increment to angle per second
                 * Math.signum(targetAngle - currentAngle); //find direction to target angle
 
-        this.setPosition(this.currentAngle / angleRange + offset); //set position based on the scalar
+        servo.setPosition(this.currentAngle / angleRange + offset); //set position based on the scalar
     }
 
     public void min() {

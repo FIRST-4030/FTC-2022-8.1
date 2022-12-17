@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
@@ -13,7 +12,6 @@ import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 
-@Disabled
 @TeleOp(name = "Arm Servo Testing", group = "Tester")
 public class ServoTestOpMode extends LoopUtil {
     public ThreeJointArm newPropArm;
@@ -30,7 +28,7 @@ public class ServoTestOpMode extends LoopUtil {
     @Override
     public void opInit() {
 
-        configA = new ServoConfig("A",false, 0, 0.83);
+        configA = new ServoConfig("A",false, 0, 1);
         configB = new ServoConfig("B",true, 0, 1);
         configC = new ServoConfig("C",true, 0, 1);
 
@@ -45,7 +43,7 @@ public class ServoTestOpMode extends LoopUtil {
         gamepadHandler = InputAutoMapper.normal.autoMap(this);
         enableJoystick = false;
         commandedPosition = 0.0;
-        betterCommandedPosition = new Vector2d(20,4);
+        betterCommandedPosition = new Vector2d(3,25);
         commandedPositionMultiplier = 1;
 
         newPropArm = new ThreeJointArm(
@@ -70,24 +68,8 @@ public class ServoTestOpMode extends LoopUtil {
     public void handleInput(double deltaTime){
 
         gamepadHandler.loop();
-        if (gamepadHandler.up("D1:LT")){
-            enableJoystick = !enableJoystick;
-        }
 
-        if (gamepadHandler.up("D1:DPAD_UP")){ //increase outputSpeed by decimalPlace | now wrong comment
-            betterCommandedPosition.y += 0.1 * deltaTime;
-        }
-        if (gamepadHandler.up("D1:DPAD_DOWN")){ //decrease outputSpeed by decimalPlace | now wrong comment
-            betterCommandedPosition.y -= 0.1 * deltaTime;
-        }
-
-        if (gamepadHandler.up("D1:DPAD_LEFT")){ //increase outputSpeed by decimalPlace | now wrong comment
-            betterCommandedPosition.x -= 0.1 * deltaTime;
-        }
-        if (gamepadHandler.up("D1:DPAD_RIGHT")){ //decrease outputSpeed by decimalPlace | now wrong comment
-            betterCommandedPosition.x += 0.1 * deltaTime;
-        }
-        betterCommandedPosition = betterCommandedPosition.plus((new Vector2d(gamepad1.left_stick_x, -gamepad1.left_stick_y).times(0.005)));
+        betterCommandedPosition = betterCommandedPosition.plus((new Vector2d(gamepad1.left_stick_x, -gamepad1.left_stick_y).times(1)));
     }
 
     @Override

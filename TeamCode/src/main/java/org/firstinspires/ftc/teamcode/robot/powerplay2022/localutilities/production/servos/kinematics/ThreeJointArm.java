@@ -61,6 +61,14 @@ public class ThreeJointArm {
         this.conversionB = conversions[1];
         this.conversionC = conversions[2];
 
+        this.servoA.angleIncr = 1;
+        this.servoB.angleIncr = 1;
+        this.servoC.angleIncr = 1;
+
+        this.servoA.angleRange = EULConstants.TAU;
+        this.servoB.angleRange = EULConstants.TAU;
+        this.servoC.angleRange = (3 * Math.PI) / 2;
+
         //assign hardware servos
         this.servoC = servo;
 
