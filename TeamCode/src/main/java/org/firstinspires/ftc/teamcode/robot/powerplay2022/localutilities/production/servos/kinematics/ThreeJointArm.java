@@ -35,6 +35,14 @@ public class ThreeJointArm {
         this.servoB = servos[1];
         this.servoC = servos[2];
 
+        this.servoA.angleIncr = 1;
+        this.servoB.angleIncr = 1;
+        this.servoC.angleIncr = 1;
+
+        this.servoA.angleRange = EULConstants.TAU;
+        this.servoB.angleRange = EULConstants.TAU;
+        this.servoC.angleRange = (3 * Math.PI) / 2;
+
         //assign virtual servos
         this.virtualServoA = virtualCore;
         this.virtualServoB = new VirtualServo(this.virtualServoA, new Vector2d(), armLengthB);
@@ -144,6 +152,54 @@ public class ThreeJointArm {
         //servoA.setPosition(1);
         //servoB.setPosition(0.5);
         //servoC.setPosition(0);
+        telemetry.addData("Restricted Target: ", restrictedTarget);
+        telemetry.addData("A: ", A*2);
+        telemetry.addData("B: ", B*2);
+        telemetry.addData("A Real: ", servoA.getPosition());
+        telemetry.addData("B Real: ", servoB.getPosition());
+    }
+
+    public void circleFindSynced(Vector2d target, double deltaTime){
+        Vector2d restrictedTarget = target.length() <= (totalArmLength-0.5) ? target : target.normalized().times(totalArmLength);
+        double b = (armLengthA*armLengthA - armLengthB*armLengthB - restrictedTarget.length()*restrictedTarget.length())/(-2*restrictedTarget.length());
+        double angleToTarget = EULMathEx.safeACOS(-1 * restrictedTarget.x/restrictedTarget.length());
+        double a = restrictedTarget.length() - b;
+        double h = Math.sqrt(armLengthB*armLengthB - b*b);
+        //Why is A this and not: double A = EULMathEx.safeASIN(h/armLengthA);
+        double A = EULMathEx.safeASIN(restrictedTarget.y/restrictedTarget.length()) + EULMathEx.safeASIN(h/armLengthA);
+        double B = EULMathEx.safeASIN(a/armLengthA) + EULMathEx.safeASIN(b/armLengthB);
+        double C = (Math.PI*1.75 - A - B)/(Math.PI*1.5);
+        telemetry.addData("Angle A Pi Rad: ", A/Math.PI);
+        telemetry.addData("Angle B Pi Rad: ", B/Math.PI);
+        //A=A/(Math.PI);
+        //B=B/(Math.PI);
+        telemetry.addData("Angle B Output Raw: ", B);
+        telemetry.addData("Angle A Output Raw: ", A);
+        telemetry.addData("Angle A Output: ", EULMathEx.doubleClamp(0.001, 0.999, A));
+        //servoB.setPosition(EULMathEx.doubleClamp(0.001, 0.999, B));
+        //servoC.setPosition(EULMathEx.doubleClamp(0.001, 0.999, C-0.3));
+        /*
+        if(A>=1){
+            A=0.99;
+        }
+        if(B>=0.99){
+            B=EULMathEx.doubleClamp(0.001, 0.999, B);
+        }
+        if(Double.isNaN(A)){A=0.5;}
+        if(Double.isNaN(B)){B=1;}
+        if(Double.isNaN(C)){C=(Math.PI*1.75 - A - B)/(Math.PI*1.5);}
+        if(Double.isNaN(C)){C=0;}
+        servoA.setPosition(EULMathEx.doubleClamp(0.001, 0.999, A + 0.244));
+        servoB.setPosition(EULMathEx.doubleClamp(0.001, 0.999, B - 0.07));
+        servoC.setPosition(EULMathEx.doubleClamp(0.001, 0.999, C-0.4));
+         */
+
+        servoA.syncedSetPos(A, deltaTime, 0.244);
+        servoB.syncedSetPos(B, deltaTime, -0.07);
+        servoC.syncedSetPos(C, deltaTime, -0.4);
+        //servoA.setPosition(0.5);
+        //servoB.setPosition(1);
+        //servoC.setPosition(0.5);
         telemetry.addData("Restricted Target: ", restrictedTarget);
         telemetry.addData("A: ", A*2);
         telemetry.addData("B: ", B*2);

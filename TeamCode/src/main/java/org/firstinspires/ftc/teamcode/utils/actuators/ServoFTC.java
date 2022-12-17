@@ -85,12 +85,16 @@ public class ServoFTC implements Available {
     }
 
     public void syncedSetPos(double targetAngle, double deltaTime){
+        syncedSetPos(targetAngle, deltaTime, 0);
+    }
+
+    public void syncedSetPos(double targetAngle, double deltaTime, double offset){
         this.currentAngle += angleIncr //angle increment
                 * EULMathEx.doubleClamp(0, 1, Math.abs((targetAngle - currentAngle)/angleIncr)) //how far it should increment (multiplier for original increment)
                 * (deltaTime * EULConstants.MS2SEC) //cast the angle increment to angle per second
                 * Math.signum(targetAngle - currentAngle); //find direction to target angle
 
-        this.setPosition(this.currentAngle / angleRange); //set position based on the scalar
+        this.setPosition(this.currentAngle / angleRange + offset); //set position based on the scalar
     }
 
     public void min() {

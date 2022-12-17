@@ -93,7 +93,7 @@ public class ServoTestOpMode extends LoopUtil {
     @Override
     public void opUpdate(double deltaTime) {
         //newPropArm.propagate(betterCommandedPosition, new Vector2d( 1, 0),true);
-        newPropArm.circleFind(betterCommandedPosition);
+        newPropArm.circleFindSynced(betterCommandedPosition, deltaTime);
 
         telemetry.addData("Commanded Multiplier: ", commandedPositionMultiplier);
         telemetry.addData("Commanded Position: ", betterCommandedPosition);
