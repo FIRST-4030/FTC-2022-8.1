@@ -10,6 +10,8 @@ public abstract class RepeatableConditional extends Conditional{
     protected int loopCount = 0;
     protected int loopLimit = 0;
 
+    protected int currentCondition = 0;
+
     public ArrayList<Conditional> conditionals;
     public STATUS currentConditionStatus = STATUS.FAILED;
 
@@ -22,12 +24,18 @@ public abstract class RepeatableConditional extends Conditional{
 
     @Override
     public void check() {
-        conditionals.get(loopCount).check();
-        currentConditionStatus = conditionals.get(loopCount).status;
-
         if (currentConditionStatus == STATUS.PASSED){
-            loopCount++;
+            currentCondition++;
         }
+
+        if (currentCondition >= conditionals.size()){
+            loopCount++;
+            currentCondition = 0;
+        }
+
+        conditionals.get(currentCondition).check();
+        currentConditionStatus = conditionals.get(currentCondition).status;
+        this.linkedStates = conditionals.get(currentCondition).linkedStates;
 
         if ((loopLimit - 1) <= loopCount){
             this.status = STATUS.PASSED;
