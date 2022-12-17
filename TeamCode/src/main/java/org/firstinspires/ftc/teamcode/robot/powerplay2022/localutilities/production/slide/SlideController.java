@@ -24,6 +24,7 @@ public class SlideController {
     public double powerOutput = 0;
 
     private boolean inUse = false;
+    public LEVEL currentLevel = LEVEL.REST;
 
     public SlideController(HardwareMap hardwareMap, String rightMotorName, boolean invertRight){
         right = hardwareMap.dcMotor.get(rightMotorName);
@@ -42,6 +43,7 @@ public class SlideController {
     public void update(double deltaTime, LEVEL level, double slidePower){
 
         rightEncoderPosition = right.getCurrentPosition();
+        currentLevel = level;
 
         switch (level){
             case REST:
