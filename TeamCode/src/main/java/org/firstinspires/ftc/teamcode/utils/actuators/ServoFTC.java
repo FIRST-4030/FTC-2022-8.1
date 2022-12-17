@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
+import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.customDriver.CustomServoDriver;
 import org.firstinspires.ftc.teamcode.utils.general.misc.Available;
 import org.firstinspires.ftc.teamcode.utils.general.misc.RunOnce;
@@ -12,79 +14,14 @@ import java.util.Stack;
 
 public class ServoFTC implements Available {
 
-    public enum TYPE{
-        D180,
-        D270,
-        D360
-    }
-
-    private class Gen implements Runnable{
-
-        public TYPE type;
-
-        public double startAngle = 0.00001 * 2*Math.PI, endAngle = 0.99999 * 2*Math.PI;
-
-        public Stack<Double> output;
-
-        public Gen(TYPE type){
-            this.type = type;
-        }
-
-        @Override
-        public void run() {
-            switch (type){
-                case D180:
-                    output = CustomServoDriver.SERVO180.generateServoPath(startAngle, endAngle, CustomServoDriver.METHOD.LERP);
-                    break;
-                case D270:
-                    output = CustomServoDriver.SERVO270.generateServoPath(startAngle, endAngle, CustomServoDriver.METHOD.LERP);
-
-                    break;
-                case D360:
-                    output = CustomServoDriver.SERVO360.generateServoPath(startAngle, endAngle, CustomServoDriver.METHOD.LERP);
-
-                    break;
-            }
-        }
-
-        public double getStartAngle() {
-            return startAngle;
-        }
-
-        public void setStartAngle(double startAngle) {
-            this.startAngle = startAngle;
-        }
-
-        public double getEndAngle() {
-            return endAngle;
-        }
-
-        public void setEndAngle(double endAngle) {
-            this.endAngle = endAngle;
-        }
-
-        public Stack<Double> getOutput() {
-            return output;
-        }
-
-        public void setOutput(Stack<Double> output) {
-            this.output = output;
-        }
-    }
-
     private Servo servo;
     private static final double ABS_MIN = 0.0001d;
     private final static double ABS_MAX = 0.9999d;
     private double min = ABS_MIN;
     private double max = ABS_MAX;
-    private Stack<Double> sta;
-    private Gen pathGeneration;
-    private RunOnce gen = new RunOnce() {
-        @Override
-        public void run() {
-            pathGeneration.run();
-        }
-    };
+
+    public double gearReduction = 1;
+    public double currentAngle = 0, angleIncr = 2, angleRange = (3 * Math.PI) / 2;
 
     private boolean generation = false;
 
@@ -111,11 +48,6 @@ public class ServoFTC implements Available {
 
     }
 
-    public void initalizeGeneration(TYPE type){
-        pathGeneration = new Gen(type);
-        generation = true;
-    }
-
     public boolean isAvailable() {
         return servo != null;
     }
@@ -127,15 +59,6 @@ public class ServoFTC implements Available {
             position = max;
         }
         setPositionRaw(position);
-        /*
-        if(Math.abs(getPosition() - position) < 0.5 || !generation){
-            setPositionRaw(position);
-        }else{
-            gen.run();
-            follow(pathGeneration.output, position);
-        }
-         */
-
     }
 
     public void setPositionRaw(double position) {
@@ -159,6 +82,15 @@ public class ServoFTC implements Available {
             return ABS_MIN;
         }
         return servo.getPosition();
+    }
+
+    public void syncedSetPos(double targetAngle, double deltaTime){
+        this.currentAngle += angleIncr //angle increment
+                * EULMathEx.doubleClamp(0, 1, Math.abs((targetAngle - currentAngle)/angleIncr)) //how far it should increment (multiplier for original increment)
+                * (deltaTime * EULConstants.MS2SEC) //cast the angle increment to angle per second
+                * Math.signum(targetAngle - currentAngle); //find direction to target angle
+
+        this.setPosition(this.currentAngle / angleRange); //set position based on the scalar
     }
 
     public void min() {
