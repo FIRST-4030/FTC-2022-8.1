@@ -114,7 +114,7 @@ public class MecanumAuto extends LoopUtil {
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, -0.38, 0)); }
+                public void run() { drive.moveToPos(new Vector3d(0, -0.3, 0)); }
             },
             new RunOnce() {
                 @Override
@@ -141,7 +141,7 @@ public class MecanumAuto extends LoopUtil {
             new RunOnce() {
                 @Override
                 public void run() {
-                    drive.moveToPos(new Vector3d(0, -0.21, 0));
+                    drive.moveToPos(new Vector3d(0, -0.25, 0));
                     betterCommandedPosition.x = 1;
                     betterCommandedPosition.y = 27;
                     servoR.setPosition(0);
@@ -332,7 +332,7 @@ public class MecanumAuto extends LoopUtil {
 
                     @Override
                     public void check() {
-                        if (elapsedTime > 27000) {
+                        if (elapsedTime > 26000) {
                             status = STATUS.PASSED;
                         } else {
                             status = STATUS.FAILED;
@@ -387,8 +387,6 @@ public class MecanumAuto extends LoopUtil {
         );
         //
         gamepadHandler = InputAutoMapper.normal.autoMap(this);
-        //Slide
-        slide = new SlideController(hardwareMap, "LSRM", false);
         //Velocity Ramps
         forwardRamp = new VelocityRamping(PowerPlayGlobals.MAX_VELOCITY);
         strafeRamp = new VelocityRamping(PowerPlayGlobals.MAX_VELOCITY);
@@ -435,7 +433,7 @@ public class MecanumAuto extends LoopUtil {
 
         //Slide init
         inputHandler = InputAutoMapper.normal.autoMap(this);
-        slide = new SlideController(hardwareMap, "LSRM", true);
+        slide = new SlideController(hardwareMap, "LSRM", false);
         right = slide.getRight();
 
         slideLevelAuto = SlideController.LEVEL.REST;
@@ -538,33 +536,34 @@ public class MecanumAuto extends LoopUtil {
     public void cycle(double deltaTime) { //Cycle 4 cones, 24.5 seconds
 
 
-        if(elapsedTimeCycleAcum < (((27-(savedTimeCycle * EULConstants.MS2SEC)) - (4 + 1)) * EULConstants.SEC2MS)) { //(Total Time - (Cycle Time + Buffer))
-            if (elapsedTimeCycle < 1 * EULConstants.SEC2MS) {
-                slideLevelAuto = SlideController.LEVEL.MIDDLE;
-                betterCommandedPosition.x = 2;
-                betterCommandedPosition.y = 25;
-                servoR.setPosition(0.3);
-                servoD.setPosition(0.6);
-            } else if (elapsedTimeCycle < 1.6 * EULConstants.SEC2MS) {
-                servoR.setPosition((startRight ? 0 : 1));
-                betterCommandedPosition.x = 17;
-                betterCommandedPosition.y = 20;
-            } else if (elapsedTimeCycle < 1.8 * EULConstants.SEC2MS) {
-                servoD.setPosition(0.07);
-            } else if (elapsedTimeCycle < 2.2 * EULConstants.SEC2MS) {
-                betterCommandedPosition.x = 2;
+        if(elapsedTimeCycleAcum < (((26-(savedTimeCycle * EULConstants.MS2SEC)) - (5.5 + 1)) * EULConstants.SEC2MS)) { //(Total Time - (Cycle Time + Buffer))
+            if (elapsedTimeCycle < 0.7 * EULConstants.SEC2MS) {
+                betterCommandedPosition.x = 5;
                 betterCommandedPosition.y = 25;
                 servoR.setPosition(0.5);
-            } else if (elapsedTimeCycle < 3.2 * EULConstants.SEC2MS) {
-                slideLevelAuto = SlideController.LEVEL.REST;
-                betterCommandedPosition.x = 3;
-                betterCommandedPosition.y = 25;
-            } else if (elapsedTimeCycle < 3.4 * EULConstants.SEC2MS) {
+                servoD.setPosition(0.07);
+            } else if (elapsedTimeCycle < 1.5 * EULConstants.SEC2MS) {
                 betterCommandedPosition.y = topConeY;
-            } else if (elapsedTimeCycle < 3.8 * EULConstants.SEC2MS) {
+            } else if (elapsedTimeCycle < 2 * EULConstants.SEC2MS) {
                 servoD.setPosition(0.6);
-            } else if (elapsedTimeCycle < 4 * EULConstants.SEC2MS) {
+            } else if (elapsedTimeCycle < 2.4 * EULConstants.SEC2MS) {
+                betterCommandedPosition.y = 25;
+            } else if (elapsedTimeCycle < 3.2 * EULConstants.SEC2MS) {
+                slideLevelAuto = SlideController.LEVEL.MIDDLE;
+                betterCommandedPosition.x = 2;
                 betterCommandedPosition.y = 20;
+            } else if (elapsedTimeCycle < 3.8 * EULConstants.SEC2MS) {
+                betterCommandedPosition.y = 0;
+                betterCommandedPosition.x = 5;
+                servoR.setPosition(startRight ? 1 : 0);
+            } else if (elapsedTimeCycle < 4.2 * EULConstants.SEC2MS) {
+                servoD.setPosition(0.07);
+            } else if (elapsedTimeCycle < 4.6 * EULConstants.SEC2MS) {
+                betterCommandedPosition.x = 2;
+                betterCommandedPosition.y = 20;
+                servoR.setPosition(0.5);
+            } else if (elapsedTimeCycle < 5.5 * EULConstants.SEC2MS) {
+                slideLevelAuto = SlideController.LEVEL.REST;
             } else {
                 topConeY -= 3.4;
                 elapsedTimeCycle = 0;
@@ -606,6 +605,7 @@ public class MecanumAuto extends LoopUtil {
             newPropArm.circleFind(betterCommandedPosition);
         }
         slide.update(deltaTime, slideLevelAuto, 1);
+        slide.setPower(slide.powerOutput);
         stateMachine.execute();
         drive.posUpdate(0.25);
         //STATELOOP IS OUTDATED
@@ -708,6 +708,7 @@ public class MecanumAuto extends LoopUtil {
         telemetry.addData("Saved Green", savedG);
         telemetry.addData("Saved Blue", savedB);
         telemetry.addData("Cycle Check: ", check);
+        telemetry.addData("Given Slide Position: ", slide.currentLevel);
         drive.logMotorPos(telemetry);
     }
 
