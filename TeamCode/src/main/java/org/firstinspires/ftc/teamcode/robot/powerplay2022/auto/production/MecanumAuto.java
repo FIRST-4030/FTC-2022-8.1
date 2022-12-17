@@ -197,7 +197,7 @@ public class MecanumAuto extends LoopUtil {
             },
             new RunOnce() {
                 @Override
-                public void run() { drive.moveToPos(new Vector3d(0, -0.3, 0)); }
+                public void run() { drive.moveToPos(new Vector3d(0, -0.37, 0)); }
             },
             new RunOnce() {
                 @Override
@@ -206,7 +206,7 @@ public class MecanumAuto extends LoopUtil {
             new RunOnce() {
                 @Override
                 public void run() {
-                    drive.moveToPos(new Vector3d(0, 0.35, 0));
+                    drive.moveToPos(new Vector3d(0, 0.43, 0));
                     betterCommandedPosition.x = 1;
                     betterCommandedPosition.y = 27;
                     servoR.setPosition(0);
@@ -215,7 +215,7 @@ public class MecanumAuto extends LoopUtil {
             new RunOnce() {
                 @Override
                 public void run() {
-                    drive.moveToPos(new Vector3d(0, 0.95, 0));
+                    drive.moveToPos(new Vector3d(0, 1.02, 0));
                     betterCommandedPosition.x = 1;
                     betterCommandedPosition.y = 27;
                     servoR.setPosition(0);
@@ -224,7 +224,7 @@ public class MecanumAuto extends LoopUtil {
             new RunOnce() {
                 @Override
                 public void run() {
-                    drive.moveToPos(new Vector3d(0, -0.25, 0));
+                    drive.moveToPos(new Vector3d(0, -0.18, 0));
                     betterCommandedPosition.x = 1;
                     betterCommandedPosition.y = 27;
                     servoR.setPosition(0);
@@ -797,11 +797,11 @@ public class MecanumAuto extends LoopUtil {
 
         if(elapsedTimeCycleAcum < (((26-(savedTimeCycle * EULConstants.MS2SEC)) - (5.5 + 1)) * EULConstants.SEC2MS)) { //(Total Time - (Cycle Time + Buffer))
             if (elapsedTimeCycle < 0.7 * EULConstants.SEC2MS) {
-                betterCommandedPosition.x = 5;
-                betterCommandedPosition.y = 25;
+                betterCommandedPosition.x = 17;
+                betterCommandedPosition.y = 10;
                 servoR.setPosition(0.5);
                 servoD.setPosition(0.07);
-            } else if (elapsedTimeCycle < 1.5 * EULConstants.SEC2MS) {
+            } else if (elapsedTimeCycle < 1.7 * EULConstants.SEC2MS) {
                 betterCommandedPosition.y = topConeY;
             } else if (elapsedTimeCycle < 2 * EULConstants.SEC2MS) {
                 servoD.setPosition(0.6);

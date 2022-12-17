@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class RepeatableConditional extends Conditional{
 
@@ -17,7 +14,12 @@ public abstract class RepeatableConditional extends Conditional{
 
     public RepeatableConditional(int loopLimit, Conditional... conditionals){
         this.loopLimit = loopLimit;
-        Collections.addAll(this.conditionals, conditionals);
+        this.conditionals = new ArrayList<>();
+        if (conditionals != null){
+            for (int i = 0; i < conditionals.length; i++){
+                this.conditionals.add(conditionals[i]);
+            }
+        }
     }
 
     public abstract void init();
