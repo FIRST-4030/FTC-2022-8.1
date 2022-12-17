@@ -43,6 +43,7 @@ public class MecanumAuto extends LoopUtil {
     boolean check = false;
     //State Machine
     public TaskManager stateMachine;
+    public TaskManager cycleMachine;
 
     //Controls Declaration for Arm and Slide
     public ThreeJointArm newPropArm;
@@ -89,7 +90,79 @@ public class MecanumAuto extends LoopUtil {
         motion.x = 0;
         motion.y = 0;
     };
+    public Runnable[] cycleMovts = new Runnable[]{
+            new Runnable() {
+                @Override
+                public void run() {
+                    betterCommandedPosition.x = 5;
+                    betterCommandedPosition.y = 25;
+                    servoR.setPosition(0.5);
+                    servoD.setPosition(0.07);
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    betterCommandedPosition.y = topConeY;
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    servoD.setPosition(0.6);
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    betterCommandedPosition.y = 25;
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    slideLevelAuto = SlideController.LEVEL.MIDDLE;
+                    betterCommandedPosition.x = 2;
+                    betterCommandedPosition.y = 20;
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    betterCommandedPosition.y = 0;
+                    betterCommandedPosition.x = 5;
+                    servoR.setPosition(startRight ? 1 : 0);
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    servoD.setPosition(0.07);
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    betterCommandedPosition.x = 2;
+                    betterCommandedPosition.y = 20;
+                    servoR.setPosition(0.5);
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    slideLevelAuto = SlideController.LEVEL.REST;
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    topConeY -= 3.4;
+                    elapsedTimeCycle = 0;
+                }
+            }
 
+    };
     public RunOnce[] movts = new RunOnce[]{
             new RunOnce() {
                 @Override
@@ -203,6 +276,7 @@ public class MecanumAuto extends LoopUtil {
                     shortPreLoad(getDeltaTime());
                 }
         );
+
         stateMachine.addConditions(
                 new Conditional() {
                     @Override
@@ -385,6 +459,7 @@ public class MecanumAuto extends LoopUtil {
                     }
                 }
         );
+        //Cycle State Machine
         //
         gamepadHandler = InputAutoMapper.normal.autoMap(this);
         //Velocity Ramps
