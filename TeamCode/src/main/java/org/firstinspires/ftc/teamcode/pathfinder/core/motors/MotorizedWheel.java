@@ -59,9 +59,12 @@ public class MotorizedWheel {
     private PowerModulator powerModulator;
     private double powerLimit = 1;
     private int tickReverse = 1;
+    private int targetTickTolerance = 3;
     private double storedIntegral = 0;
 
     private double kP = 1, kI = 0, kD = 0;
+
+    private boolean hasReachedTarget = true;
 
     public MotorizedWheel(HardwareMap hardwareMap, String motorName){
         this.motor = (DcMotorEx) hardwareMap.dcMotor.get(motorName);
@@ -79,9 +82,10 @@ public class MotorizedWheel {
         //Don't worry about the I term as if set to zero, the JIT will do it's optimization magic
     }
 
-    public void setOptions(boolean reverseDir, boolean reverseTick, double powerLimit, int reactionBand, double functionalBias){
+    public void setOptions(boolean reverseDir, boolean reverseTick, int targetTickTolerance, double powerLimit, int reactionBand, double functionalBias){
         this.motor.setDirection(reverseDir ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
         this.tickReverse = reverseTick ? -1 : 1;
+        this.targetTickTolerance = targetTickTolerance;
         this.powerLimit = EULMathEx.doubleClamp(0, 1, Math.abs(powerLimit));
         this.powerModulator.updateReactionBand(reactionBand);
         this.powerModulator.updateBias(functionalBias);
@@ -107,5 +111,11 @@ public class MotorizedWheel {
         //The D term is using the actual function's derivative
         double powerOutput = kP * delta + kI * storedIntegral + kD * powerModulator.derivative(absDelta) * sign;
         setPower(powerOutput);
+
+        hasReachedTarget = absDelta * powerModulator.reactionBand <= targetTickTolerance;
+    }
+
+    public boolean hasReachedTarget(){
+        return hasReachedTarget;
     }
 }
