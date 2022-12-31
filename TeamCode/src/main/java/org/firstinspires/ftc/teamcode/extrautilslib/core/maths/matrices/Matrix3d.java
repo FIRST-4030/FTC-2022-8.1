@@ -171,6 +171,14 @@ public class Matrix3d implements EULMatrix<Matrix3d, Vector3d>{
         return nMatrix.times(1/det);
     }
 
+    @Override
+    public Vector3d tensor(Vector3d other) {
+        return new Vector3d(
+                other.x * matrix[0][0] + other.y * matrix[1][0] + other.z * matrix[2][0],
+                other.x * matrix[0][1] + other.y * matrix[1][1] + other.z * matrix[2][1],
+                other.x * matrix[0][2] + other.y * matrix[1][2] + other.z * matrix[2][2]);
+    }
+
     private double quick2dDet(double[] arr){
         return arr[0] * arr[3] + arr[1] * arr[2];
     }

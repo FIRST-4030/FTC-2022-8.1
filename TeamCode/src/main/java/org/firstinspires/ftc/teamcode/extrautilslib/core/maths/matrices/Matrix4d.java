@@ -181,6 +181,15 @@ public class Matrix4d implements EULMatrix<Matrix4d, Vector4d>{
         return nMatrix.times(1/det);
     }
 
+    @Override
+    public Vector4d tensor(Vector4d other) {
+        return new Vector4d(
+                other.x * matrix[0][0] + other.y * matrix[1][0] + other.z * matrix[2][0] + other.w * matrix[3][0],
+                other.x * matrix[0][1] + other.y * matrix[1][1] + other.z * matrix[2][1] + other.w * matrix[3][1],
+                other.x * matrix[0][2] + other.y * matrix[1][2] + other.z * matrix[2][2] + other.w * matrix[3][2],
+                other.x * matrix[0][3] + other.y * matrix[1][3] + other.z * matrix[2][3] + other.w * matrix[3][3]);
+    }
+
     private double quick3dDet(double[] arr){
         return arr[0] * (arr[4] * arr[8] - arr[5] * arr[7]) - arr[1] * (arr[3] * arr[8] - arr[5] * arr[6]) + arr[3] * (arr[3] * arr[7] - arr[4] * arr[6]);
     }

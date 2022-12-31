@@ -132,6 +132,13 @@ public class Matrix2d implements EULMatrix<Matrix2d, Vector2d>{
         return new Matrix2d(m);
     }
 
+    @Override
+    public Vector2d tensor(Vector2d other) {
+        return new Vector2d(
+                other.x * matrix[0][0] + other.y * matrix[1][0],
+                other.x * matrix[0][1] + other.y * matrix[1][1]);
+    }
+
     public static Matrix2d makeRotation(double angle){
         double rs = Math.sin(angle); double rc = Math.cos(angle);
         return new Matrix2d(new double[][]{

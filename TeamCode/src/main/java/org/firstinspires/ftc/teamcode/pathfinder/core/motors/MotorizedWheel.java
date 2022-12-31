@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
-
+//TODO: Add documentation
 public class MotorizedWheel {
 
     //This is the intermediate function that converts tick deltas into power
@@ -85,7 +85,7 @@ public class MotorizedWheel {
     public void setOptions(boolean reverseDir, boolean reverseTick, int targetTickTolerance, double powerLimit, int reactionBand, double functionalBias){
         this.motor.setDirection(reverseDir ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
         this.tickReverse = reverseTick ? -1 : 1;
-        this.targetTickTolerance = targetTickTolerance;
+        this.targetTickTolerance = targetTickTolerance / reactionBand;
         this.powerLimit = EULMathEx.doubleClamp(0, 1, Math.abs(powerLimit));
         this.powerModulator.updateReactionBand(reactionBand);
         this.powerModulator.updateBias(functionalBias);
@@ -112,10 +112,14 @@ public class MotorizedWheel {
         double powerOutput = kP * delta + kI * storedIntegral + kD * powerModulator.derivative(absDelta) * sign;
         setPower(powerOutput);
 
-        hasReachedTarget = absDelta * powerModulator.reactionBand <= targetTickTolerance;
+        hasReachedTarget = absDelta <= targetTickTolerance;
     }
 
     public boolean hasReachedTarget(){
         return hasReachedTarget;
+    }
+
+    public boolean isBusy(){
+        return Math.abs(motor.getPower()) >= 0.05;
     }
 }
