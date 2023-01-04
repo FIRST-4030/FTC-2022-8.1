@@ -60,6 +60,7 @@ public class MotorizedWheel {
     private int tickReverse = 1;
     private int targetTickTolerance = 3;
     private double storedIntegral = 0;
+    private double storedInput = 0;
 
     private double kP = 1, kI = 0, kD = 0;
 
@@ -100,9 +101,9 @@ public class MotorizedWheel {
     public void seek(int target){
         double delta = EULMathEx.doubleClamp(0, 1, (target - getCurrentEncoderTicks()) / powerModulator.reactionBand);
         double sign = Math.signum(delta);
-        double absDelta = Math.abs(delta);
+        double absDelta = 1 - Math.abs(delta);
 
-        storedIntegral += powerModulator.integral(absDelta, 1) * sign; //sums the integrals of the past with the 'present' integral
+        storedIntegral += powerModulator.integral(Math.min(absDelta, storedInput), Math.max(absDelta, storedInput)) * sign; //sums the integrals of the past with the 'present' integral
 
         //The P term is self-explanatory
         //The I term is using the actual integral and will always seek 0 (meaning that the target has been reached) so we get rid of the trapezoidal rule entirely though we still use a summation
@@ -110,15 +111,16 @@ public class MotorizedWheel {
         double powerOutput = kP * delta + kI * storedIntegral + kD * powerModulator.derivative(absDelta) * sign;
         setPower(powerOutput);
 
-        hasReachedTarget = absDelta <= targetTickTolerance;
+        hasReachedTarget = Math.abs(delta) <= targetTickTolerance;
+        storedInput = absDelta;
     }
 
     public void seek(int target, double powerLimit){
         double delta = EULMathEx.doubleClamp(0, 1, (target - getCurrentEncoderTicks()) / powerModulator.reactionBand);
         double sign = Math.signum(delta);
-        double absDelta = Math.abs(delta);
+        double absDelta = 1 - Math.abs(delta);
 
-        storedIntegral += powerModulator.integral(absDelta, 1) * sign; //sums the integrals of the past with the 'present' integral
+        storedIntegral += powerModulator.integral(Math.min(absDelta, storedInput), Math.max(absDelta, storedInput)) * sign; //sums the integrals of the past with the 'present' integral
 
         //The P term is self-explanatory
         //The I term is using the actual integral and will always seek 0 (meaning that the target has been reached) so we get rid of the trapezoidal rule entirely though we still use a summation
@@ -126,7 +128,8 @@ public class MotorizedWheel {
         double powerOutput = kP * delta + kI * storedIntegral + kD * powerModulator.derivative(absDelta) * sign;
         setPower(EULMathEx.doubleClamp(-powerLimit, powerLimit, powerOutput));
 
-        hasReachedTarget = absDelta <= targetTickTolerance;
+        hasReachedTarget = Math.abs(delta) <= targetTickTolerance;
+        storedInput = absDelta;
     }
 
     public boolean hasReachedTarget(){
