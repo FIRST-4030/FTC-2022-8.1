@@ -89,8 +89,8 @@ public class Matrix4d implements EULMatrix<Matrix4d, Vector4d>{
 
         double[][] nMatrix = new double[4][4];
 
-        for (int m = 0; m < 3; m++){
-            for (int n = 0; n < 3; n++){
+        for (int m = 0; m < 4; m++){
+            for (int n = 0; n < 4; n++){
                 nMatrix[m][n] = matrix[m][0] * other.matrix[0][n] + matrix[m][1] * other.matrix[1][n] + matrix[m][2] * other.matrix[2][n] + matrix[m][3] * other.matrix[3][n];
             }
         }

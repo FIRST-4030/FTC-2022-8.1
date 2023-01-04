@@ -16,6 +16,14 @@ public class EncoderTickBuffer {
         approxValues.add(0);
         tickError = 0;
     }
+    public EncoderTickBuffer(ArrayList<Double> existingRaw){
+        this.rawValues = existingRaw;
+        this.approxValues = new ArrayList<>();
+
+        rawValues.add(0d);
+        approxValues.add(0);
+        tickError = 0;
+    }
 
     public EncoderTickBuffer addRawValue(double tick){
         this.rawValues.add(tick);
@@ -24,15 +32,28 @@ public class EncoderTickBuffer {
 
     public void buildApprox(){
         double currentValue;
+        int approxValue, sign;
         for (int i = 0; i < rawValues.size(); i++){ //literally a piece of Bresenham's line drawing algorithm
             currentValue = rawValues.get(i);
-            tickError += currentValue - ((int) currentValue);
+            approxValue = (int) currentValue;
+            sign = (int) Math.signum(currentValue - approxValue);
+            tickError += currentValue - approxValue;
             if (tickError >= 0.5){
-                approxValues.add((int) currentValue + 1);
-                tickError--;
+                approxValues.add(approxValue + sign);
+                tickError += sign;
             } else {
-                approxValues.add((int) currentValue);
+                approxValues.add(approxValue);
             }
         }
+    }
+
+    public EncoderTickBuffer makeReverse(){
+        EncoderTickBuffer outputBuffer = new EncoderTickBuffer();
+        for (int i = 0; i < rawValues.size(); i++) {
+            outputBuffer.addRawValue(rawValues.get(rawValues.size() - 1 - i));
+        }
+        outputBuffer.buildApprox();
+
+        return outputBuffer;
     }
 }
