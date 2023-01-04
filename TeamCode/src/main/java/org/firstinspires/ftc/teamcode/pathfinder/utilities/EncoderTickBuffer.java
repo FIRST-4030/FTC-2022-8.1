@@ -6,27 +6,31 @@ public class EncoderTickBuffer {
 
     public ArrayList<Double> rawValues;
     public ArrayList<Integer> approxValues;
+    public ArrayList<Double> powerPartition;
     protected double tickError;
 
     public EncoderTickBuffer(){
         this.rawValues = new ArrayList<>();
         this.approxValues = new ArrayList<>();
+        this.powerPartition = new ArrayList<>();
 
         rawValues.add(0d);
         approxValues.add(0);
         tickError = 0;
     }
-    public EncoderTickBuffer(ArrayList<Double> existingRaw){
-        this.rawValues = existingRaw;
+    public EncoderTickBuffer(ArrayList<Double> existingRaws, ArrayList<Double> existingPowerPartitions){
+        this.rawValues = existingRaws;
         this.approxValues = new ArrayList<>();
+        this.powerPartition = existingPowerPartitions;
 
         rawValues.add(0d);
         approxValues.add(0);
         tickError = 0;
     }
 
-    public EncoderTickBuffer addRawValue(double tick){
+    public EncoderTickBuffer addRawValue(double tick, double power){
         this.rawValues.add(tick);
+        this.powerPartition.add(power);
         return this;
     }
 
@@ -50,7 +54,7 @@ public class EncoderTickBuffer {
     public EncoderTickBuffer makeReverse(){
         EncoderTickBuffer outputBuffer = new EncoderTickBuffer();
         for (int i = 0; i < rawValues.size(); i++) {
-            outputBuffer.addRawValue(rawValues.get(rawValues.size() - 1 - i));
+            outputBuffer.addRawValue(rawValues.get(rawValues.size() - 1 - i), powerPartition.get(rawValues.size() - 1 - i));
         }
         outputBuffer.buildApprox();
 

@@ -62,19 +62,19 @@ public class PathfinderMecanumDrive extends DriveTemplate {
         return this;
     }
 
-    public PathfinderMecanumDrive configureWheel(WHEEL wheel, boolean reverseDir, boolean reverseTick, int targetTickTolerance, double powerLimit, int reactionBand, double functionalBias){
+    public PathfinderMecanumDrive configureWheel(WHEEL wheel, boolean reverseDir, boolean reverseTick, int targetTickTolerance, int reactionBand, double functionalBias){
         switch (wheel){
             case FRONT_LEFT:
-                fl.setOptions(reverseDir, reverseTick, targetTickTolerance, powerLimit, reactionBand, functionalBias);
+                fl.setOptions(reverseDir, reverseTick, targetTickTolerance, reactionBand, functionalBias);
                 break;
             case FRONT_RIGHT:
-                fr.setOptions(reverseDir, reverseTick, targetTickTolerance, powerLimit, reactionBand, functionalBias);
+                fr.setOptions(reverseDir, reverseTick, targetTickTolerance, reactionBand, functionalBias);
                 break;
             case BACK_LEFT:
-                bl.setOptions(reverseDir, reverseTick, targetTickTolerance, powerLimit, reactionBand, functionalBias);
+                bl.setOptions(reverseDir, reverseTick, targetTickTolerance, reactionBand, functionalBias);
                 break;
             case BACK_RIGHT:
-                br.setOptions(reverseDir, reverseTick, targetTickTolerance, powerLimit, reactionBand, functionalBias);
+                br.setOptions(reverseDir, reverseTick, targetTickTolerance, reactionBand, functionalBias);
                 break;
         }
 

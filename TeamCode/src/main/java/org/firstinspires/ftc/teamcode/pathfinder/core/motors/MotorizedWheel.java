@@ -57,7 +57,6 @@ public class MotorizedWheel {
 
     private DcMotorEx motor;
     private PowerModulator powerModulator;
-    private double powerLimit = 1;
     private int tickReverse = 1;
     private int targetTickTolerance = 3;
     private double storedIntegral = 0;
@@ -82,11 +81,10 @@ public class MotorizedWheel {
         //Don't worry about the I term as if set to zero, the JIT will do it's optimization magic
     }
 
-    public void setOptions(boolean reverseDir, boolean reverseTick, int targetTickTolerance, double powerLimit, int reactionBand, double functionalBias){
+    public void setOptions(boolean reverseDir, boolean reverseTick, int targetTickTolerance, int reactionBand, double functionalBias){
         this.motor.setDirection(reverseDir ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
         this.tickReverse = reverseTick ? -1 : 1;
         this.targetTickTolerance = targetTickTolerance / reactionBand;
-        this.powerLimit = EULMathEx.doubleClamp(0, 1, Math.abs(powerLimit));
         this.powerModulator.updateReactionBand(reactionBand);
         this.powerModulator.updateBias(functionalBias);
     }
@@ -111,6 +109,22 @@ public class MotorizedWheel {
         //The D term is using the actual function's derivative
         double powerOutput = kP * delta + kI * storedIntegral + kD * powerModulator.derivative(absDelta) * sign;
         setPower(powerOutput);
+
+        hasReachedTarget = absDelta <= targetTickTolerance;
+    }
+
+    public void seek(int target, double powerLimit){
+        double delta = EULMathEx.doubleClamp(0, 1, (target - getCurrentEncoderTicks()) / powerModulator.reactionBand);
+        double sign = Math.signum(delta);
+        double absDelta = Math.abs(delta);
+
+        storedIntegral += powerModulator.integral(absDelta, 1) * sign; //sums the integrals of the past with the 'present' integral
+
+        //The P term is self-explanatory
+        //The I term is using the actual integral and will always seek 0 (meaning that the target has been reached) so we get rid of the trapezoidal rule entirely though we still use a summation
+        //The D term is using the actual function's derivative
+        double powerOutput = kP * delta + kI * storedIntegral + kD * powerModulator.derivative(absDelta) * sign;
+        setPower(EULMathEx.doubleClamp(-powerLimit, powerLimit, powerOutput));
 
         hasReachedTarget = absDelta <= targetTickTolerance;
     }
