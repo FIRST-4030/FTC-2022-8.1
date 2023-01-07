@@ -36,11 +36,23 @@ public class PathfinderPath {
         return this;
     }
 
+    public PathfinderPath turnTo(double radians){
+        PathfinderPose poseToAdd = poseHistory.get(poseHistory.size() - 1).copy();
+        poseHistory.add(new PathfinderPose(poseToAdd.pos, radians));
+        return this;
+    }
+
     public PathfinderPath translate(Vector2d nPos){
         PathfinderPose poseToAdd = poseHistory.get(poseHistory.size() - 1).copy();
         poseToAdd.pos.plus(poseToAdd.normal.times(nPos.x));
         poseToAdd.pos.plus(poseToAdd.dir.times(nPos.y));
         poseHistory.add(poseToAdd);
+        return this;
+    }
+
+    public PathfinderPath translateTo(Vector2d nPos){
+        PathfinderPose poseToAdd = poseHistory.get(poseHistory.size() - 1).copy();
+        poseHistory.add(new PathfinderPose(nPos, poseToAdd.dir, poseToAdd.normal));
         return this;
     }
 }

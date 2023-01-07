@@ -99,11 +99,12 @@ public class MotorizedWheel {
     }
 
     public void seek(int target){
-        double delta = EULMathEx.doubleClamp(0, 1, (target - getCurrentEncoderTicks()) / powerModulator.reactionBand);
+        double delta = EULMathEx.doubleClamp(0, 1, (double) (target - getCurrentEncoderTicks()) / powerModulator.reactionBand);
         double sign = Math.signum(delta);
         double absDelta = 1 - Math.abs(delta);
 
-        storedIntegral += powerModulator.integral(Math.min(absDelta, storedInput), Math.max(absDelta, storedInput)) * sign; //sums the integrals of the past with the 'present' integral
+        //storedIntegral += powerModulator.integral(Math.min(absDelta, storedInput), Math.max(absDelta, storedInput)) * sign; //sums the integrals of the past with the 'present' integral
+        storedIntegral += powerModulator.integral(absDelta, 1) * sign;
 
         //The P term is self-explanatory
         //The I term is using the actual integral and will always seek 0 (meaning that the target has been reached) so we get rid of the trapezoidal rule entirely though we still use a summation
@@ -116,11 +117,12 @@ public class MotorizedWheel {
     }
 
     public void seek(int target, double powerLimit){
-        double delta = EULMathEx.doubleClamp(0, 1, (target - getCurrentEncoderTicks()) / powerModulator.reactionBand);
+        double delta = EULMathEx.doubleClamp(0, 1, (double) (target - getCurrentEncoderTicks()) / powerModulator.reactionBand);
         double sign = Math.signum(delta);
         double absDelta = 1 - Math.abs(delta);
 
-        storedIntegral += powerModulator.integral(Math.min(absDelta, storedInput), Math.max(absDelta, storedInput)) * sign; //sums the integrals of the past with the 'present' integral
+        //storedIntegral += powerModulator.integral(Math.min(absDelta, storedInput), Math.max(absDelta, storedInput)) * sign; //sums the integrals of the past with the 'present' integral
+        storedIntegral += powerModulator.integral(absDelta, 1) * sign;
 
         //The P term is self-explanatory
         //The I term is using the actual integral and will always seek 0 (meaning that the target has been reached) so we get rid of the trapezoidal rule entirely though we still use a summation

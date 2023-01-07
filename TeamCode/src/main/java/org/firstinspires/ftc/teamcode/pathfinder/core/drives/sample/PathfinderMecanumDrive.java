@@ -3,9 +3,13 @@ package org.firstinspires.ftc.teamcode.pathfinder.core.drives.sample;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
+import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix4d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
+import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector4d;
 import org.firstinspires.ftc.teamcode.pathfinder.core.drives.DriveTemplate;
 import org.firstinspires.ftc.teamcode.pathfinder.core.motors.MotorizedWheel;
+import org.firstinspires.ftc.teamcode.pathfinder.utilities.PathfinderJoystickControlModule;
 import org.firstinspires.ftc.teamcode.pathfinder.utilities.PathfinderPath;
 //TODO: Add documentation
 public class PathfinderMecanumDrive extends DriveTemplate {
@@ -19,9 +23,31 @@ public class PathfinderMecanumDrive extends DriveTemplate {
 
     protected MotorizedWheel fl, fr, bl, br;
     protected PathfinderPath activePath = null;
+    protected PathfinderJoystickControlModule joystickControlModule;
 
-    public PathfinderMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry, double advancementTickPerMeasurementUnit, double lateralTickPerMeasurementUnit){
-        super(hardwareMap, telemetry, advancementTickPerMeasurementUnit, lateralTickPerMeasurementUnit);
+    protected Matrix4d powerPartitionMatrix, identityPartitionMatrix;
+    protected double biasCoefficientSum = 1;
+
+    public PathfinderMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry, double advancementTickPerMeasurementUnit, double lateralTickPerMeasurementUnit, double ticksPerTurn){
+        super(hardwareMap, telemetry, advancementTickPerMeasurementUnit, lateralTickPerMeasurementUnit, ticksPerTurn);
+    }
+
+    public void initPowerMatrices(double advancementBias, double lateralBias, double turnBias){
+        this.identityPartitionMatrix = new Matrix4d(new double[][]{
+                {1,  1,  1,  0},
+                {1, -1, -1,  0},
+                {1, -1,  1,  0},
+                {1,  1, -1,  0}
+        });
+
+        biasCoefficientSum = Math.abs(advancementBias) + Math.abs(lateralBias) + Math.abs(turnBias);
+
+        this.powerPartitionMatrix = new Matrix4d(new double[][]{
+                {lateralBias,  advancementBias,  turnBias,  0},
+                {lateralBias, -advancementBias, -turnBias,  0},
+                {lateralBias, -advancementBias,  turnBias,  0},
+                {lateralBias,  advancementBias, -turnBias,  0}
+        }).times(1 / biasCoefficientSum);
     }
 
     public PathfinderMecanumDrive tweakMotorPID(WHEEL wheel, double p, double i, double d){
@@ -83,7 +109,13 @@ public class PathfinderMecanumDrive extends DriveTemplate {
 
     @Override
     public void manualDrive() {
+        Matrix4d rotMatrix = joystickControlModule.fieldCentric ? Matrix4d.makeAffineRotation(EULMathEx.Axis.AXIS_Z, -joystickControlModule.currentAngle) : new Matrix4d();
+        Vector4d powerVectorOutput = powerPartitionMatrix.times(rotMatrix.times(joystickControlModule.getAsVector())).div(Math.max(biasCoefficientSum, 1));
 
+        fl.setPower(powerVectorOutput.x);
+        fr.setPower(powerVectorOutput.z);
+        bl.setPower(powerVectorOutput.y);
+        br.setPower(powerVectorOutput.w);
     }
 
     @Override
