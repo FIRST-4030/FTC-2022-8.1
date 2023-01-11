@@ -6,11 +6,17 @@ import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import java.util.ArrayList;
 //TODO: Add documentation & more features
 public class PathfinderPath {
+    public enum TransitionType{
+        GenericTo,
+        AsyncTo
+    }
     public ArrayList<PathfinderPose> poseHistory;
+    public ArrayList<TransitionType> transitionHistory;
 
     public PathfinderPath(PathfinderPose initialPose){
         this.poseHistory = new ArrayList<>();
         this.poseHistory.add(initialPose);
+        this.transitionHistory.add(TransitionType.GenericTo);
     }
 
     public PathfinderPath advance(double measurement){
