@@ -18,4 +18,5 @@ public interface EULMatrix<M extends EULMatrix, V extends EULVector> {
     M transposed();
     void invert();
     M inverted();
+    V tensor(V other);
 }

@@ -89,8 +89,8 @@ public class Matrix4d implements EULMatrix<Matrix4d, Vector4d>{
 
         double[][] nMatrix = new double[4][4];
 
-        for (int m = 0; m < 3; m++){
-            for (int n = 0; n < 3; n++){
+        for (int m = 0; m < 4; m++){
+            for (int n = 0; n < 4; n++){
                 nMatrix[m][n] = matrix[m][0] * other.matrix[0][n] + matrix[m][1] * other.matrix[1][n] + matrix[m][2] * other.matrix[2][n] + matrix[m][3] * other.matrix[3][n];
             }
         }
@@ -179,6 +179,15 @@ public class Matrix4d implements EULMatrix<Matrix4d, Vector4d>{
 
         //multiply by 1 over the original matrix's determinant to get the inverse and return it
         return nMatrix.times(1/det);
+    }
+
+    @Override
+    public Vector4d tensor(Vector4d other) {
+        return new Vector4d(
+                other.x * matrix[0][0] + other.y * matrix[1][0] + other.z * matrix[2][0] + other.w * matrix[3][0],
+                other.x * matrix[0][1] + other.y * matrix[1][1] + other.z * matrix[2][1] + other.w * matrix[3][1],
+                other.x * matrix[0][2] + other.y * matrix[1][2] + other.z * matrix[2][2] + other.w * matrix[3][2],
+                other.x * matrix[0][3] + other.y * matrix[1][3] + other.z * matrix[2][3] + other.w * matrix[3][3]);
     }
 
     private double quick3dDet(double[] arr){
