@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector4d;
 import org.firstinspires.ftc.teamcode.pathfinder.core.drives.DriveTemplate;
 import org.firstinspires.ftc.teamcode.pathfinder.core.motors.MotorizedWheel;
+import org.firstinspires.ftc.teamcode.pathfinder.utilities.DriveSpec;
 import org.firstinspires.ftc.teamcode.pathfinder.utilities.PathfinderJoystickControlModule;
 import org.firstinspires.ftc.teamcode.pathfinder.utilities.PathfinderPath;
 //TODO: Add documentation
@@ -27,18 +28,21 @@ public class PathfinderMecanumDrive extends DriveTemplate {
 
     protected Matrix4d powerPartitionMatrix, identityPartitionMatrix;
     protected double biasCoefficientSum = 1;
+    protected PathfinderMecanumMotionMaker motionMaker;
 
-    public PathfinderMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry, double advancementTickPerMeasurementUnit, double lateralTickPerMeasurementUnit, double ticksPerTurn){
-        super(hardwareMap, telemetry, advancementTickPerMeasurementUnit, lateralTickPerMeasurementUnit, ticksPerTurn);
+    public PathfinderMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry, DriveSpec spec){
+        super(hardwareMap, telemetry, spec);
+        this.motionMaker = new PathfinderMecanumMotionMaker();
+        this.motionMaker.bindDrive(spec);
     }
 
     public void initPowerMatrices(double advancementBias, double lateralBias, double turnBias){
-        this.identityPartitionMatrix = new Matrix4d(new double[][]{
+        this.identityPartitionMatrix = (new Matrix4d(new double[][]{
                 {1,  1,  1,  0},
                 {1, -1, -1,  0},
                 {1, -1,  1,  0},
                 {1,  1, -1,  0}
-        });
+        })).times(1/3d);
 
         biasCoefficientSum = Math.abs(advancementBias) + Math.abs(lateralBias) + Math.abs(turnBias);
 
@@ -126,11 +130,5 @@ public class PathfinderMecanumDrive extends DriveTemplate {
     @Override
     public void buildPath(PathfinderPath path) {
         this.activePath = path;
-    }
-
-    protected double calcRate(Vector2d dir){
-        return (advancementTickPerMeasurementUnit * lateralTickPerMeasurementUnit) /
-                (Math.sqrt(dir.y * lateralTickPerMeasurementUnit * dir.y * lateralTickPerMeasurementUnit +
-                        dir.x * advancementTickPerMeasurementUnit * dir.x * advancementTickPerMeasurementUnit));
     }
 }

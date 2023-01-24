@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.pathfinder.core.drives;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.pathfinder.utilities.DriveSpec;
 import org.firstinspires.ftc.teamcode.pathfinder.utilities.PathfinderJoystickControlModule;
 import org.firstinspires.ftc.teamcode.pathfinder.utilities.PathfinderPath;
 
@@ -14,13 +15,13 @@ public abstract class DriveTemplate {
     protected double advancementTickPerMeasurementUnit, lateralTickPerMeasurementUnit, ticksPerTurn;
     protected PathfinderJoystickControlModule joystickControlModule;
 
-    public DriveTemplate(HardwareMap hardwareMap, Telemetry telemetry, double advancementTickPerMeasurementUnit, double lateralTickPerMeasurementUnit, double ticksPerTurn){
+    public DriveTemplate(HardwareMap hardwareMap, Telemetry telemetry, DriveSpec spec){
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        this.advancementTickPerMeasurementUnit = advancementTickPerMeasurementUnit;
-        this.lateralTickPerMeasurementUnit = lateralTickPerMeasurementUnit;
-        this.ticksPerTurn = ticksPerTurn;
+        this.advancementTickPerMeasurementUnit = spec.advancementTickPerMeasurementUnit;
+        this.lateralTickPerMeasurementUnit = spec.lateralTickPerMeasurementUnit;
+        this.ticksPerTurn = spec.ticksPerTurn;
     }
 
     public void setJoystickControlModule(PathfinderJoystickControlModule module){
@@ -30,4 +31,16 @@ public abstract class DriveTemplate {
     public abstract void manualDrive();
     public abstract void followPath();
     public abstract void buildPath(PathfinderPath path);
+
+    public double getAdvancementTickPerMeasurementUnit() {
+        return advancementTickPerMeasurementUnit;
+    }
+
+    public double getLateralTickPerMeasurementUnit() {
+        return lateralTickPerMeasurementUnit;
+    }
+
+    public double getTicksPerTurn() {
+        return ticksPerTurn;
+    }
 }

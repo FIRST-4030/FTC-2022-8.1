@@ -23,6 +23,7 @@ public class PathfinderPath {
         PathfinderPose poseToAdd = poseHistory.get(poseHistory.size() - 1).copy();
         poseToAdd.pos.plus(poseToAdd.dir.times(measurement));
         poseHistory.add(poseToAdd);
+        transitionHistory.add(TransitionType.GenericTo);
         return this;
     }
 
@@ -30,6 +31,7 @@ public class PathfinderPath {
         PathfinderPose poseToAdd = poseHistory.get(poseHistory.size() - 1).copy();
         poseToAdd.pos.plus(poseToAdd.normal.times(measurement));
         poseHistory.add(poseToAdd);
+        transitionHistory.add(TransitionType.GenericTo);
         return this;
     }
 
@@ -39,12 +41,14 @@ public class PathfinderPath {
         poseToAdd.dir = rot.times(poseToAdd.dir);
         poseToAdd.normal = new Vector2d(+poseToAdd.dir.y, -poseToAdd.dir.x);
         poseHistory.add(poseToAdd);
+        transitionHistory.add(TransitionType.GenericTo);
         return this;
     }
 
     public PathfinderPath turnTo(double radians){
         PathfinderPose poseToAdd = poseHistory.get(poseHistory.size() - 1).copy();
         poseHistory.add(new PathfinderPose(poseToAdd.pos, radians));
+        transitionHistory.add(TransitionType.GenericTo);
         return this;
     }
 
@@ -53,12 +57,20 @@ public class PathfinderPath {
         poseToAdd.pos.plus(poseToAdd.normal.times(nPos.x));
         poseToAdd.pos.plus(poseToAdd.dir.times(nPos.y));
         poseHistory.add(poseToAdd);
+        transitionHistory.add(TransitionType.GenericTo);
         return this;
     }
 
     public PathfinderPath translateTo(Vector2d nPos){
         PathfinderPose poseToAdd = poseHistory.get(poseHistory.size() - 1).copy();
         poseHistory.add(new PathfinderPose(nPos, poseToAdd.dir, poseToAdd.normal));
+        transitionHistory.add(TransitionType.GenericTo);
+        return this;
+    }
+
+    public PathfinderPath transformTo(Vector2d pos, int angle){
+        poseHistory.add(new PathfinderPose(pos, angle));
+        transitionHistory.add(TransitionType.AsyncTo);
         return this;
     }
 }

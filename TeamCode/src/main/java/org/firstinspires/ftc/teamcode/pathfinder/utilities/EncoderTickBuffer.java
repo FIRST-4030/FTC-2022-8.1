@@ -8,6 +8,7 @@ public class EncoderTickBuffer {
     public ArrayList<Integer> approxValues;
     public ArrayList<Double> powerPartition;
     protected double tickError;
+    protected int cursor;
 
     public EncoderTickBuffer(){
         this.rawValues = new ArrayList<>();
@@ -17,6 +18,7 @@ public class EncoderTickBuffer {
         rawValues.add(0d);
         approxValues.add(0);
         tickError = 0;
+        cursor = 0;
     }
     public EncoderTickBuffer(ArrayList<Double> existingRaws, ArrayList<Double> existingPowerPartitions){
         this.rawValues = existingRaws;
@@ -26,6 +28,7 @@ public class EncoderTickBuffer {
         rawValues.add(0d);
         approxValues.add(0);
         tickError = 0;
+        cursor = 0;
     }
 
     public EncoderTickBuffer addRawValue(double tick, double power){
@@ -37,7 +40,7 @@ public class EncoderTickBuffer {
     public void buildApprox(){
         double currentValue;
         int approxValue, sign;
-        for (int i = 0; i < rawValues.size(); i++){ //literally a piece of Bresenham's line drawing algorithm
+        for (int i = 0; i < rawValues.size(); i++){ //literally a piece of Bresenham's line drawing algorithm for plotting pixels
             currentValue = rawValues.get(i);
             approxValue = (int) currentValue;
             sign = (int) Math.signum(currentValue - approxValue);
