@@ -524,7 +524,7 @@ public class ActualTeleOp extends LoopUtil {
         inputHandler.loop();
         //Cycle Control
         if (inputHandler.up("D2:R3")){
-            isCycling = true;
+            isCycling = !isCycling;
         }
         //D Control
         if (inputHandler.up("D2:RB")){
