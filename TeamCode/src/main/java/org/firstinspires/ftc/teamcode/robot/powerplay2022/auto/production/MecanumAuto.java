@@ -91,6 +91,7 @@ public class MecanumAuto extends LoopUtil {
         motion.x = 0;
         motion.y = 0;
     };
+
     public Runnable[] cycleMovts = new Runnable[]{
             new Runnable() {
                 @Override

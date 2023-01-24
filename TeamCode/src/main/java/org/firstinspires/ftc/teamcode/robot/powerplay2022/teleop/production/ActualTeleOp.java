@@ -30,6 +30,9 @@ import org.firstinspires.ftc.teamcode.utils.actuators.ServoConfig;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.ext.TFBoundingBox;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.Conditional;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.RepeatableConditional;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.TaskManager;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
 
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Vector;
+import java.util.concurrent.locks.Condition;
 
 import javax.xml.bind.JAXBException;
 
@@ -56,7 +60,15 @@ import javax.xml.bind.JAXBException;
  */
 @TeleOp(name = "ActualTeleOp", group = "actual")
 public class ActualTeleOp extends LoopUtil {
+    public TaskManager teleOpCycle;
+    public double cycleTimer;
+    public boolean isCycling = false;
     public boolean firstSave1 = false;
+    public boolean firstSave2 = false;
+    public boolean firstSave3 = false;
+    public boolean firstSave4 = false;
+    public int firstSave;
+    public int firstSaveInt;
     //Save Position Variables
     public double[] savedX = new double[]{10, 10, 10, 10};
     public double[] savedY = new double[]{10, 10, 10, 10};
@@ -117,6 +129,47 @@ public class ActualTeleOp extends LoopUtil {
 
     RevColorRange RCR2;
     ColorView CV2;
+
+    public Runnable[] teleOpCycleMovts = new Runnable[]{
+            new Runnable() {
+                @Override
+                public void run() {
+                    setArmToStow.run();
+                    slideLevel = SlideController.LEVEL.REST;
+                }
+            },
+            new Runnable(){
+                @Override
+                public void run() {
+                    saveStateIndex = firstSave;
+                    betterCommandedPosition.x = savedX[saveStateIndex];
+                    betterCommandedPosition.y = savedY[saveStateIndex];
+                    R = savedR[saveStateIndex];
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    pickUp.run();
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    saveStateIndex = 0;
+                    betterCommandedPosition.x = savedX[saveStateIndex];
+                    betterCommandedPosition.y = savedY[saveStateIndex];
+                    R = savedR[saveStateIndex];
+                    slideLevel = SlideController.LEVEL.HIGH;
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    DOpen = true;
+                }
+            }
+    };
 
     Runnable setArmToPlace = () -> {
         betterCommandedPosition.x = 26;
@@ -211,6 +264,93 @@ public class ActualTeleOp extends LoopUtil {
 
     @Override
     public void opInit() {
+        //State Machine
+        teleOpCycle = new TaskManager();
+        teleOpCycle.alwaysRun = () -> inputHandler.loop();
+        teleOpCycle.addStates(teleOpCycleMovts);
+        teleOpCycle.addConditions(new RepeatableConditional(99,
+                new Conditional() {
+                    @Override
+                    public void init() {
+                        this.linkedStates = new int[]{0};
+                    }
+
+                    @Override
+                    public void check() {
+                        if (controller.rightEncoderPosition < 5) {
+                            this.status = STATUS.PASSED;
+                            cycleTimer = 0;
+                        } else {
+                            this.status = STATUS.FAILED;
+                        }
+                    }
+            }, new Conditional() {
+                    @Override
+                    public void init() {
+                        this.linkedStates = new int[]{1};
+                    }
+
+                    @Override
+                    public void check() {
+                        if (cycleTimer > 400) {
+                            this.status = STATUS.PASSED;
+                            cycleTimer = 0;
+                        } else {
+                            this.status = STATUS.FAILED;
+                        }
+                    }
+            }, new Conditional() {
+                    @Override
+                    public void init() {
+                        this.linkedStates = new int[]{2};
+                    }
+
+                    @Override
+                    public void check() {
+                        if (!PickUpRunning == true) {
+                            this.status = STATUS.PASSED;
+                            cycleTimer = 0;
+                        } else {
+                            this.status = STATUS.FAILED;
+                        }
+                    }
+            }, new Conditional() {
+                    @Override
+                    public void init() {
+                        this.linkedStates = new int[]{3};
+                    }
+
+                    @Override
+                    public void check() {
+                        if (controller.rightEncoderPosition > 460) {
+                            this.status = STATUS.PASSED;
+                            cycleTimer = 0;
+                        } else {
+                            this.status = STATUS.FAILED;
+                        }
+                    }
+        }, new Conditional() {
+            @Override
+            public void init() {
+                this.linkedStates = new int[]{4};
+            }
+
+            @Override
+            public void check() {
+                if (cycleTimer > 500){
+                    this.status = STATUS.PASSED;
+                    cycleTimer = 0;
+                } else {
+                    this.status = STATUS.FAILED;
+                }
+            }
+        }) {
+            @Override
+            public void init() {
+
+            }
+        });
+
 
         //Arm init
         configA = new ServoConfig("A",false, 0.0001, 0.83);
@@ -298,14 +438,27 @@ public class ActualTeleOp extends LoopUtil {
     @Override
     public void opUpdate(double deltaTime) {
         localElapsedTime += deltaTime;
+        cycleTimer += deltaTime;
 
-        /*
-        if((savedX[0] == 10 && savedX[1] != 10) || (savedX[0] != 10 && savedX[1] == 10)){
+
+        /*if((savedX[0] == 10 && savedX[1] != 10) && savedX[2] || (savedX[0] != 10 && savedX[1] == 10)){
             if(savedX[1] != 10){
                 firstSave1 = true;
             }
+        }*/
+
+        if((savedX[0] == 10 && savedX[1] == 10 && savedX[2] == 10) && savedX[3] != 10){
+            firstSave = 3;
         }
-         */
+        if((savedX[0] == 10 && savedX[1] == 10 && savedX[3] == 10) && savedX[2] != 10){
+            firstSave = 2;
+        }
+        if((savedX[0] == 10 && savedX[2] == 10 && savedX[3] == 10) && savedX[1] != 10){
+            firstSave = 1;
+        }
+        if((savedX[1] == 10 && savedX[2] == 10 && savedX[3] == 10) && savedX[0] != 10){
+            firstSave = 0;
+        }
 
         if(wheelLock){
             joystick.x = 0;
@@ -334,6 +487,9 @@ public class ActualTeleOp extends LoopUtil {
             localElapsedTime = 0;
         }
         */
+        if(isCycling){
+            TeleOpCycle(deltaTime);
+        }
     }
 
     @Override
@@ -359,8 +515,17 @@ public class ActualTeleOp extends LoopUtil {
         controller.setPower(controller.powerOutput);
     }
 
+    public void TeleOpCycle(double deltaTime) {
+        teleOpCycle.execute();
+        cycleTimer += deltaTime;
+    }
+
     public void handleInput(double deltaTime){
         inputHandler.loop();
+        //Cycle Control
+        if (inputHandler.up("D2:R3")){
+            isCycling = true;
+        }
         //D Control
         if (inputHandler.up("D2:RB")){
             DOpen = !DOpen;
@@ -449,6 +614,15 @@ public class ActualTeleOp extends LoopUtil {
         betterCommandedPosition.x = EULMathEx.doubleClamp(-32, 32, betterCommandedPosition.x);
         betterCommandedPosition.y = EULMathEx.doubleClamp(-32, 32, betterCommandedPosition.y);
         R = EULMathEx.doubleClamp(0.001, 0.999, R+gamepad2.left_stick_x*0.025);
+        //Auto Teleop
+        if(gamepadHandler.up("D2:L3")){
+            setArmToStow.run();
+            slideLevel = SlideController.LEVEL.REST;
+            saveStateIndex = firstSave;
+                betterCommandedPosition.x = savedX[saveStateIndex];
+                betterCommandedPosition.y = savedY[saveStateIndex];
+                R = savedR[saveStateIndex];
+        }
     }
 
     public void driveFixedUpdate(double deltaTime){
