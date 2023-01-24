@@ -329,7 +329,7 @@ public class ActualTeleOp extends LoopUtil {
                             this.status = STATUS.FAILED;
                         }
                     }
-        }, new Conditional() {
+            }, new Conditional() {
             @Override
             public void init() {
                 this.linkedStates = new int[]{4};
@@ -524,6 +524,7 @@ public class ActualTeleOp extends LoopUtil {
         inputHandler.loop();
         //Cycle Control
         if (inputHandler.up("D2:R3")){
+            teleOpCycle.resetIdx();
             isCycling = !isCycling;
         }
         //D Control
