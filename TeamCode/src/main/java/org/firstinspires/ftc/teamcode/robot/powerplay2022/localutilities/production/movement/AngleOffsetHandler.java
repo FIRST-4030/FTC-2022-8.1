@@ -6,13 +6,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.utils.fileRW.ConfigFileUtil;
-import org.firstinspires.ftc.teamcode.utils.fileRW.xmlrw.RobotInfoPacket;
 import org.firstinspires.ftc.teamcode.utils.fileRW.xmlrw.XMLRW;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import javax.xml.bind.JAXBException;
 
 public class AngleOffsetHandler {
 
@@ -28,7 +26,7 @@ public class AngleOffsetHandler {
         return this;
     }
 
-    public AngleOffsetHandler toXML() throws JAXBException {
+    public AngleOffsetHandler toXML() {
         /*
         RobotInfoPacket packet = new RobotInfoPacket();
         packet.setExtrinsicRotation(rawAngle);
@@ -41,7 +39,7 @@ public class AngleOffsetHandler {
         return this;
     }
 
-    public double fromXML() throws JAXBException, FileNotFoundException {
+    public double fromXML() throws FileNotFoundException {
         Object[][] d = new Object[1][1];
         ConfigFileUtil.readConfig("ROBOT_ANGLE", d, ConfigFileUtil.ConfigDataType.DOUBLE);
         return (double) d[0][0];
