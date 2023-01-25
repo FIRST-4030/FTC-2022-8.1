@@ -3,13 +3,7 @@ package org.firstinspires.ftc.teamcode.robot.powerplay2022.teleop.production;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
@@ -25,10 +19,8 @@ import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.product
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.VirtualServo;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.slide.SlideController;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.statemachine.OpStateList;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.tensorflow.TFPipeline;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoConfig;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
-import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.ext.TFBoundingBox;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.Conditional;
 import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.RepeatableConditional;
@@ -37,13 +29,6 @@ import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Vector;
-import java.util.concurrent.locks.Condition;
-
-import javax.xml.bind.JAXBException;
 
 //import javax.xml.bind.JAXBException;
 
@@ -346,7 +331,7 @@ public class ActualTeleOp extends LoopUtil {
             }
         }) {
             @Override
-            public void init() {
+            public void uInit() {
 
             }
         });
@@ -419,7 +404,7 @@ public class ActualTeleOp extends LoopUtil {
         AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
         try {
             angleOffset = offsetHandler.fromXML();
-        } catch (JAXBException | FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             angleOffset = 0;
         }
 
@@ -524,7 +509,7 @@ public class ActualTeleOp extends LoopUtil {
         inputHandler.loop();
         //Cycle Control
         if (inputHandler.up("D2:R3")){
-            teleOpCycle.resetIdx();
+            teleOpCycle.reset();
             isCycling = !isCycling;
         }
         //D Control

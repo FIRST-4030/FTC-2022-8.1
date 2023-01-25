@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public abstract class RepeatableConditional extends Conditional{
 
     protected int loopCount = 0;
-    protected int loopLimit = 0;
+    protected int loopLimit;
 
     protected int currentCondition = 0;
 
@@ -22,7 +22,15 @@ public abstract class RepeatableConditional extends Conditional{
         }
     }
 
-    public abstract void init();
+    public void init(){
+        loopCount = 0;
+        for (Conditional c: conditionals) {
+            c.init();
+        }
+        uInit();
+    }
+
+    public abstract void uInit();
 
     @Override
     public void check() {

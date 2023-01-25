@@ -83,7 +83,10 @@ public class TaskManager {
         }
     }
 
-    public void resetIdx(){
+    public void reset(){
         currentConditional = 0;
+        for (Conditional c: endConditions) {
+            c.init();
+        }
     }
 }

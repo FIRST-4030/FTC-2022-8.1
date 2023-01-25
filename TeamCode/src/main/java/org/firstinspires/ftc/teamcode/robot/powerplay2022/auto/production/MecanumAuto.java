@@ -6,25 +6,23 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AlgorithmicCorrection;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.ColorView;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AngleOffsetHandler;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.CustomMecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.InputAutoMapper;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.PowerPlayGlobals;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AlgorithmicCorrection;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AngleOffsetHandler;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.CustomMecanumDrive;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.velocityramping.VelocityRampStepper;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.velocityramping.VelocityRamping;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.AngleConversion;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.ThreeJointArm;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.VirtualServo;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.slide.SlideController;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.statemachine.OpState;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.statemachine.OpStateList;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.velocityramping.VelocityRampStepper;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.velocityramping.VelocityRamping;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.teleop.production.TaskManagerStateMachineDemo;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoConfig;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
@@ -35,9 +33,8 @@ import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.TaskManager
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
 
+import java.io.FileNotFoundException;
 import java.util.Objects;
-
-import javax.xml.bind.JAXBException;
 
 @Autonomous(name = "MecanumAuto")
 public class MecanumAuto extends LoopUtil {
@@ -619,7 +616,7 @@ public class MecanumAuto extends LoopUtil {
             }
         }) {
             @Override
-            public void init() {
+            public void uInit() {
 
             }
         }, new Conditional() {
@@ -981,10 +978,6 @@ public class MecanumAuto extends LoopUtil {
     public void opStop() {
         AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
         offsetHandler.rawAngle = drive.getImu().getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
-        try {
-            offsetHandler.toXML();
-        } catch (JAXBException e){
-            telemetry.addData("FAILED TO WRITE TO XML: ", e.toString());
-        }
+        offsetHandler.toXML();
     }
 }
