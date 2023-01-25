@@ -7,7 +7,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
@@ -27,8 +26,6 @@ import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 
 import java.io.FileNotFoundException;
-
-import javax.xml.bind.JAXBException;
 
 //Control mapping
 
@@ -219,7 +216,7 @@ public class SpareTeleOp extends LoopUtil {
         AngleOffsetHandler offsetHandler = new AngleOffsetHandler();
         try {
             angleOffset = offsetHandler.fromXML();
-        } catch (JAXBException | FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             angleOffset = 0;
         }
     }
