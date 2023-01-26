@@ -263,8 +263,8 @@ public class ActualTeleOp extends LoopUtil {
                     @Override
                     public void check() {
                         if (controller.rightEncoderPosition < 5) {
-                            this.status = STATUS.PASSED;
                             cycleTimer = 0;
+                            this.status = STATUS.PASSED;
                         } else {
                             this.status = STATUS.FAILED;
                         }
@@ -277,7 +277,7 @@ public class ActualTeleOp extends LoopUtil {
 
                     @Override
                     public void check() {
-                        if (cycleTimer > 400) {
+                        if (cycleTimer > 1000) {
                             this.status = STATUS.PASSED;
                             cycleTimer = 0;
                         } else {
@@ -307,7 +307,7 @@ public class ActualTeleOp extends LoopUtil {
 
                     @Override
                     public void check() {
-                        if (controller.rightEncoderPosition > 460) {
+                        if (controller.rightEncoderPosition > 420) {
                             this.status = STATUS.PASSED;
                             cycleTimer = 0;
                         } else {
@@ -322,7 +322,7 @@ public class ActualTeleOp extends LoopUtil {
 
             @Override
             public void check() {
-                if (cycleTimer > 500){
+                if (cycleTimer > 1000){
                     this.status = STATUS.PASSED;
                     cycleTimer = 0;
                 } else {
@@ -423,7 +423,6 @@ public class ActualTeleOp extends LoopUtil {
     @Override
     public void opUpdate(double deltaTime) {
         localElapsedTime += deltaTime;
-        cycleTimer += deltaTime;
 
 
         /*if((savedX[0] == 10 && savedX[1] != 10) && savedX[2] || (savedX[0] != 10 && savedX[1] == 10)){
@@ -508,7 +507,7 @@ public class ActualTeleOp extends LoopUtil {
     public void handleInput(double deltaTime){
         inputHandler.loop();
         //Cycle Control
-        if (inputHandler.up("D2:R3")){
+        if (inputHandler.up("D2:LB")){
             teleOpCycle.reset();
             isCycling = !isCycling;
         }
@@ -532,18 +531,19 @@ public class ActualTeleOp extends LoopUtil {
 
         //arm controls
         gamepadHandler.loop();
-        if (gamepadHandler.up("D2:LB")){
+       if (gamepadHandler.up("D2:LT")){
             RunnableTimer = 0;
             PickUpRunning = true;
         }
+
         /*
         if (gamepadHandler.up("D2:RT")){
             autoStack = !autoStack;
         }
          */
-        if (gamepadHandler.up("D2:LT")){
+        /*if (gamepadHandler.up("D2:LT")){
             setArmToStow.run();
-        }
+        }*/
         if (gamepadHandler.up("D1:LT")){
             wheelLock = !wheelLock;
         }
@@ -668,5 +668,8 @@ public class ActualTeleOp extends LoopUtil {
         //telemetry.addData("Is Junction Real: ", this.TFTeleop.armX);
         //drive.logMotorPos(telemetry);
         //controller.logMotorPos(telemetry);
+        telemetry.addData("Is Cycling: ", isCycling);
+        telemetry.addData("cycle Timer: ", cycleTimer);
+        telemetry.addData("Slide Pos: ", controller.rightEncoderPosition);
     }
 }
