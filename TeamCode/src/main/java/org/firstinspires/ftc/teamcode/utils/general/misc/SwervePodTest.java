@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.utils.general.misc;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.InputAutoMapper;
@@ -7,18 +10,25 @@ import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.product
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 
+@Config
+@TeleOp(name = "Swerve Pod Test", group = "Tester")
 public class SwervePodTest extends LoopUtil {
     public static InputHandler gamepadHandler;
-    public static Vector2d joystick;
-    public static SwervePodGeneral drive;
+    public static Vector2d joystickLeft;
+    public static SwervePodGeneral driveLeft;
+    public static Vector2d joystickRight;
+    public static SwervePodGeneral driveRight;
 
 
     @Override
     public void opInit() {
         gamepadHandler = InputAutoMapper.normal.autoMap(this);
-        joystick = new Vector2d();
-        drive = new SwervePodGeneral(hardwareMap, 1, 1);
-        drive.mapMotors("Spin", false, "Turn", true, false);
+        joystickLeft = new Vector2d();
+        driveLeft = new SwervePodGeneral(hardwareMap, 1, 1);
+        driveLeft.mapMotors("p1m1", true, "p1m2", false, false);
+        joystickRight = new Vector2d();
+        driveRight = new SwervePodGeneral(hardwareMap, 1, 1);
+        driveRight.mapMotors("p2m1", true, "p2m2", false, false);
 
     }
 
@@ -36,12 +46,15 @@ public class SwervePodTest extends LoopUtil {
     public void opUpdate(double deltaTime) {
         gamepadHandler.loop(); //update gamepads
 
-        joystick.x = gamepadHandler.value("D1:LS_X");
-        joystick.y = -gamepadHandler.value("D1:LS_Y");
+        joystickLeft.x = gamepadHandler.value("D1:LS_X");
+        joystickLeft.y = -gamepadHandler.value("D1:LS_Y");
+        joystickRight.x = gamepadHandler.value("D1:RS_X");
+        joystickRight.y = -gamepadHandler.value("D1:RS_Y");
 
         //I don't use drive.setOutputMultiplier because there is no way I waste CPU cycles on rebuilding the matrix
 
-        drive.update(joystick, false, deltaTime);
+        driveLeft.update(joystickLeft, false, deltaTime);
+        driveRight.update(joystickRight, false, deltaTime);
     }
 
     @Override

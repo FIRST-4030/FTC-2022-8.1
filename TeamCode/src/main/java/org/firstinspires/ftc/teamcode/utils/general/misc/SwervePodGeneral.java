@@ -86,8 +86,11 @@ public class SwervePodGeneral extends CustomDrive {
     private void initMatrix(){
         wheelPowerMatrix = (new Matrix2d(new double[][]{
                 {0.5,  0.5},
-                {0.5, -0.5}
+                {-0.5, 0.5}
         }));
+    }
+    public void calibrateTick(){
+
     }
 
     public void update(Vector2d control, boolean fieldCentric, double dt){
