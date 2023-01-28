@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.utils.general.misc;
+package org.firstinspires.ftc.teamcode.utils.general.misc.generalSwerve;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -15,27 +16,47 @@ import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector4d;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.CustomDrive;
+import org.firstinspires.ftc.teamcode.utils.fileRW.main.FileRW;
+import org.firstinspires.ftc.teamcode.utils.fileRW.main.lexer.csv.CSVLexer;
+import org.firstinspires.ftc.teamcode.utils.fileRW.main.parser.csv.CSVParser;
+import org.firstinspires.ftc.teamcode.utils.fileRW.main.writer.csv.CSVWriter;
+import org.firstinspires.ftc.teamcode.utils.sensors.pot.BasicPotentiometer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
 public class SwervePodGeneral extends CustomDrive {
 
+    private HashMap<String, BasicPotentiometer> potentiometerMap;
     protected Matrix2d wheelPowerMatrix;
     protected Vector2d out;
     protected double turnCoefficient;
     protected double spinCoefficient;
     protected double coefficientSum;
+    protected ArrayList<Double> potentiometerArray1;
+    protected ArrayList<Double> potentiometerArray2;
+    protected ArrayList<Integer> motorTicks;
+    protected FileRW dataFile;
 
     public SwervePodGeneral(HardwareMap hardwareMap, double turnCoefficient, double spinCoefficient){
         this.hardwareMap = hardwareMap;
         initImu();
 
+        this.potentiometerMap = new HashMap<>();
         this.motorMap = new HashMap<>();
         this.turnCoefficient = turnCoefficient;
         this.spinCoefficient = spinCoefficient;
 
         this.coefficientSum = Math.abs(turnCoefficient) + Math.abs(spinCoefficient);
+
+        this.dataFile = new FileRW(new CSVLexer(), new CSVParser(), new CSVWriter());
+        dataFile.init();
+
+        this.potentiometerArray1 = new ArrayList<>();
+        this.potentiometerArray2 = new ArrayList<>();
+        this.motorTicks = new ArrayList<>();
 
         initMatrix();
         initVirtualRobot();
@@ -53,6 +74,12 @@ public class SwervePodGeneral extends CustomDrive {
         //pass those parameters to 'imu' when the hardware map fetches the IMU
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(imuParams);
+    }
+
+    public void mapPotentiometers(String p1, String p2, Telemetry telemetry){
+        potentiometerMap.clear();
+        potentiometerMap.put("P1", new BasicPotentiometer(hardwareMap, telemetry, p1, new double[] {0,1}, new double[] {0,1}));
+        potentiometerMap.put("P2", new BasicPotentiometer(hardwareMap, telemetry, p2, new double[] {0,1}, new double[] {0,1}));
     }
 
     public void mapMotors(String spin, boolean reverseS, String turn, boolean reverseT, boolean driveToPosition){
@@ -89,13 +116,25 @@ public class SwervePodGeneral extends CustomDrive {
                 {-0.5, 0.5}
         }));
     }
-    public void calibrateTick(){
 
+    public void calibrateTick(){
+        Objects.requireNonNull(motorMap.get("T")).setPower(-0.5);
+        Objects.requireNonNull(motorMap.get("S")).setPower(0.5);
+        potentiometerArray1.add(potentiometerMap.get("P1").getMV());
+        potentiometerArray2.add(potentiometerMap.get("P2").getMV());
+        motorTicks.add(motorMap.get("S").getCurrentPosition());
+    }
+
+    public void writeToFile(String name){
+        for(int i = 0; i<motorTicks.size(); i++){
+            dataFile.writeToRow(i,  dataFile.translateToRow(Arrays.asList(motorTicks.get(i), potentiometerArray1.get(i), potentiometerArray2.get(i))));
+        }
+        dataFile.finalizeWriteTo(name);
     }
 
     public void update(Vector2d control, boolean fieldCentric, double dt){
-        virtualRobot.updateHeading();
-        virtualRobot.updateTime(dt);
+        //virtualRobot.updateHeading();
+        //virtualRobot.updateTime(dt);
 
         //create Vector4d 'in' from the passed in Vector3d(forward, strafe, turn)'s x, y, z, and an arbitrary w value
         //divide the input by the ratio found by max(|forward| + |strafe| + |turn|, 1)

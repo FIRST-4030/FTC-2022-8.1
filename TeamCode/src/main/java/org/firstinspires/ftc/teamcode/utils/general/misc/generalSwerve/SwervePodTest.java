@@ -1,12 +1,10 @@
-package org.firstinspires.ftc.teamcode.utils.general.misc;
+package org.firstinspires.ftc.teamcode.utils.general.misc.generalSwerve;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.InputAutoMapper;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.CustomMecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 
@@ -18,6 +16,7 @@ public class SwervePodTest extends LoopUtil {
     public static SwervePodGeneral driveLeft;
     public static Vector2d joystickRight;
     public static SwervePodGeneral driveRight;
+    public double startTimeInit;
 
 
     @Override
@@ -26,20 +25,25 @@ public class SwervePodTest extends LoopUtil {
         joystickLeft = new Vector2d();
         driveLeft = new SwervePodGeneral(hardwareMap, 1, 1);
         driveLeft.mapMotors("p1m1", true, "p1m2", false, false);
+        driveLeft.mapPotentiometers("pot1a", "pot1b", telemetry);
         joystickRight = new Vector2d();
         driveRight = new SwervePodGeneral(hardwareMap, 1, 1);
         driveRight.mapMotors("p2m1", true, "p2m2", false, false);
-
+        startTimeInit = System.currentTimeMillis();
     }
 
     @Override
     public void opInitLoop() {
-
+        if(System.currentTimeMillis() - startTimeInit < 3000){
+            driveLeft.calibrateTick();
+        }else{
+            driveLeft.update(new Vector2d(0, 0), false, 1);
+        }
     }
 
     @Override
     public void opStart() {
-
+        driveLeft.writeToFile("test.test");
     }
 
     @Override
