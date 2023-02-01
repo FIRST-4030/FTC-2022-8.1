@@ -2,19 +2,16 @@ package org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.produc
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics.ThreeJointArm;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.ext.TFBoundingBox;
 import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.main.TFODBase;
-import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.depreciated.tfodohm.ODMain.CameraLens;
+import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.deprecated.tfodohm.ODMain.CameraLens;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 public class TFPipeline {

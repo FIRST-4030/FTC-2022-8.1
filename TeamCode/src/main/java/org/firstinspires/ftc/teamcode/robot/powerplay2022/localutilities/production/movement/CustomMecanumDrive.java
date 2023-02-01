@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix3d
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix4d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector4d;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.depreciated.movement.MecanumDriveState;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.depreciated.movement.MecanumDriveTrajectory;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.deprecated.movement.MecanumDriveState;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.deprecated.movement.MecanumDriveTrajectory;
 
 import java.util.HashMap;
 import java.util.Objects;

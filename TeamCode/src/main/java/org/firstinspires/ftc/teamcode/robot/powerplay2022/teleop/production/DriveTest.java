@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
 import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
 import org.firstinspires.ftc.teamcode.robot.frieghtfrenzy2021.Globals;
-import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.depreciated.movement.AnglePID;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.deprecated.movement.AnglePID;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.ColorView;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.AlgorithmicCorrection;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.movement.CustomMecanumDrive;

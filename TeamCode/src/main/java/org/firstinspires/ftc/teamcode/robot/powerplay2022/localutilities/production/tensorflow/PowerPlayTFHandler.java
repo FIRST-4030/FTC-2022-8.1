@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.produc
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.main.TFODBase;
-import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.depreciated.tfodohm.ODMain.CameraLens;
+import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.deprecated.tfodohm.ODMain.CameraLens;
 import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.TaskManager;
 
 public class PowerPlayTFHandler {
