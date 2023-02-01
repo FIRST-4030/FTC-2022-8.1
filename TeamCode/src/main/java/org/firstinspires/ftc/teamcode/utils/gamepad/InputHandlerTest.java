@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.robot.frieghtfrenzy2021.Globals;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.Globals;
 
 @Disabled
 @TeleOp(name = "InputHandlerTest", group = "Test")

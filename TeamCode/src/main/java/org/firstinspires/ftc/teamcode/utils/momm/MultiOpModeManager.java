@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.utils.momm;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
-import org.firstinspires.ftc.teamcode.robot.frieghtfrenzy2021.Globals;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.Globals;
 
 import java.util.Vector;
 

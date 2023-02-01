@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
-import org.firstinspires.ftc.teamcode.robot.frieghtfrenzy2021.Globals;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.Globals;
 
 import java.util.Vector;
 

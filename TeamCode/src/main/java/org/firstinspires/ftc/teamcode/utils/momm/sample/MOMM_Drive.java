@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.utils.gamepad.GAMEPAD;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.gamepad.PAD_KEY;
-import org.firstinspires.ftc.teamcode.robot.frieghtfrenzy2021.Globals;
+import org.firstinspires.ftc.teamcode.robot.powerplay2022.Globals;
 
 // Extend OpMode as usual
 // If you must extend MultiOpModeManger be sure to @override all of the standard methods (or else)
