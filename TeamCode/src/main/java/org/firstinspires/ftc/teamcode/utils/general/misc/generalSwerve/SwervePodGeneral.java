@@ -29,15 +29,15 @@ import java.util.Objects;
 
 public class SwervePodGeneral extends CustomDrive {
 
-    private HashMap<String, BasicPotentiometer> potentiometerMap;
+    public HashMap<String, BasicPotentiometer> potentiometerMap;
     protected Matrix2d wheelPowerMatrix;
     protected Vector2d out;
     protected double turnCoefficient;
     protected double spinCoefficient;
     protected double coefficientSum;
-    protected ArrayList<Double> potentiometerArray1;
-    protected ArrayList<Double> potentiometerArray2;
-    protected ArrayList<Integer> motorTicks;
+    public ArrayList<Double> potentiometerArray1;
+    public ArrayList<Double> potentiometerArray2;
+    public ArrayList<Integer> motorTicks;
     protected FileRW dataFile;
 
     public SwervePodGeneral(HardwareMap hardwareMap, double turnCoefficient, double spinCoefficient){
@@ -126,6 +126,7 @@ public class SwervePodGeneral extends CustomDrive {
     }
 
     public void writeToFile(String name){
+        dataFile.init();
         for(int i = 0; i<motorTicks.size(); i++){
             dataFile.writeToRow(i,  dataFile.translateToRow(Arrays.asList(motorTicks.get(i), potentiometerArray1.get(i), potentiometerArray2.get(i))));
         }

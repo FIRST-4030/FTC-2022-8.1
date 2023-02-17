@@ -39,11 +39,15 @@ public class SwervePodTest extends LoopUtil {
         }else{
             driveLeft.update(new Vector2d(0, 0), false, 1);
         }
+        telemetry.addData("MotorTickArray", driveLeft.motorTicks);
+        telemetry.addData("P1 Voltage", driveLeft.potentiometerMap.get("P1").getMV());
+        telemetry.addData("P1 Voltage", driveLeft.potentiometerMap.get("P2").getMV());
     }
 
     @Override
     public void opStart() {
         driveLeft.writeToFile("test.test");
+
     }
 
     @Override
