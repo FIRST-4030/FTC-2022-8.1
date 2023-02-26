@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.InputAutoMapper;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.Conditional;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.TaskManager;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.conditions.Conditional;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.managers.TaskManager;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 
 @TeleOp(name = "TaskManagerStateMachineDemo", group = "testers")
@@ -94,46 +94,79 @@ public class TaskManagerStateMachineDemo extends LoopUtil {
 
         taskManager.addConditions(
                    new Conditional() {
-                    @Override
-                    public void init() {
-                        linkedStates = new int[]{ANIMAL.BEAR.ordinal(), ANIMAL.DOLPHIN.ordinal()};
+                       @Override
+                       public void init() {
+
+                       }
+
+                       @Override
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{ANIMAL.BEAR.ordinal(), ANIMAL.DOLPHIN.ordinal()};
                     }
 
                     @Override
-                    public void check() {
-                        if (TaskManagerStateMachineDemo.inputHandler.held("D1:RT") && TaskManagerStateMachineDemo.elapsedTime >= 1000) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void execute() {
+
+                    }
+
+                       @Override
+                       public void end() {
+
+                       }
+
+                       @Override
+                       public boolean isFinished() {
+                           return TaskManagerStateMachineDemo.inputHandler.held("D1:RT") && TaskManagerStateMachineDemo.elapsedTime >= 1000;
+                       }
+                   }, new Conditional() {
+                    @Override
+                    public void init() {
+
+                    }
+
+                    @Override
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{ANIMAL.AMOEBA.ordinal()};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return TaskManagerStateMachineDemo.inputHandler.held("D1:LT") && TaskManagerStateMachineDemo.elapsedTime >= 2000;
                     }
                 }, new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{ANIMAL.AMOEBA.ordinal()};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (TaskManagerStateMachineDemo.inputHandler.held("D1:LT") && TaskManagerStateMachineDemo.elapsedTime >= 2000) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
-                    }
-                }, new Conditional() {
-                    @Override
-                    public void init() {
-                        linkedStates = new int[]{ANIMAL.BUNNY.ordinal(), ANIMAL.DOLPHIN.ordinal()};
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{ANIMAL.BUNNY.ordinal(), ANIMAL.DOLPHIN.ordinal()};
                     }
 
                     @Override
-                    public void check() {
-                        if (gamepad1.a && TaskManagerStateMachineDemo.elapsedTime >= 2500) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return gamepad1.a && TaskManagerStateMachineDemo.elapsedTime >= 2500;
                     }
                 });
     }

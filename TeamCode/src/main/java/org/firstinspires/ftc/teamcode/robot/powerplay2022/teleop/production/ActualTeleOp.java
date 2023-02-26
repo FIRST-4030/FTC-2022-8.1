@@ -22,9 +22,9 @@ import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.product
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoConfig;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.Conditional;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.RepeatableConditional;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.TaskManager;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.conditions.Conditional;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.conditions.RepeatableConditional;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.managers.TaskManager;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
 
@@ -254,84 +254,139 @@ public class ActualTeleOp extends LoopUtil {
         teleOpCycle.alwaysRun = () -> inputHandler.loop();
         teleOpCycle.addStates(teleOpCycleMovts);
         teleOpCycle.addConditions(new RepeatableConditional(99,
-                new Conditional() {
-                    @Override
-                    public void init() {
-                        this.linkedStates = new int[]{0};
-                    }
+            new Conditional() {
+                @Override
+                public void init() {
 
-                    @Override
-                    public void check() {
-                        if (controller.rightEncoderPosition < 5) {
-                            cycleTimer = 0;
-                            this.status = STATUS.PASSED;
-                        } else {
-                            this.status = STATUS.FAILED;
-                        }
-                    }
-            }, new Conditional() {
-                    @Override
-                    public void init() {
-                        this.linkedStates = new int[]{1};
-                    }
+                }
 
-                    @Override
-                    public void check() {
-                        if (cycleTimer > 1000) {
-                            this.status = STATUS.PASSED;
-                            cycleTimer = 0;
-                        } else {
-                            this.status = STATUS.FAILED;
-                        }
-                    }
-            }, new Conditional() {
-                    @Override
-                    public void init() {
-                        this.linkedStates = new int[]{2};
-                    }
+                @Override
+                public void setupStates(int[] linkedStates) {
+                    this.linkedStates = new int[]{0};
+                }
 
-                    @Override
-                    public void check() {
-                        if (!PickUpRunning == true) {
-                            this.status = STATUS.PASSED;
-                            cycleTimer = 0;
-                        } else {
-                            this.status = STATUS.FAILED;
-                        }
-                    }
-            }, new Conditional() {
-                    @Override
-                    public void init() {
-                        this.linkedStates = new int[]{3};
-                    }
+                @Override
+                public void execute() {
 
-                    @Override
-                    public void check() {
-                        if (controller.rightEncoderPosition > 420) {
-                            this.status = STATUS.PASSED;
-                            cycleTimer = 0;
-                        } else {
-                            this.status = STATUS.FAILED;
-                        }
-                    }
+                }
+
+                @Override
+                public void end() {
+                    cycleTimer = 0;
+                }
+
+                @Override
+                public boolean isFinished() {
+                    return controller.rightEncoderPosition < 5;
+                }
             }, new Conditional() {
             @Override
             public void init() {
-                this.linkedStates = new int[]{4};
+
             }
 
             @Override
-            public void check() {
-                if (cycleTimer > 1000){
-                    this.status = STATUS.PASSED;
-                    cycleTimer = 0;
-                } else {
-                    this.status = STATUS.FAILED;
+                public void setupStates(int[] linkedStates) {
+                    this.linkedStates = new int[]{1};
                 }
+
+                @Override
+                public void execute() {
+
+                }
+
+                @Override
+                public void end() {
+                    cycleTimer = 0;
+                }
+
+                @Override
+                public boolean isFinished() {
+                    return cycleTimer > 1000;
+                }
+            }, new Conditional() {
+            @Override
+            public void init() {
+
             }
+
+            @Override
+                public void setupStates(int[] linkedStates) {
+                    this.linkedStates = new int[]{2};
+                }
+
+                @Override
+                public void execute() {
+
+                }
+
+                @Override
+                public void end() {
+                    cycleTimer = 0;
+                }
+
+                @Override
+                public boolean isFinished() {
+                    return !PickUpRunning;
+                }
+            }, new Conditional() {
+            @Override
+            public void init() {
+
+            }
+
+            @Override
+                public void setupStates(int[] linkedStates) {
+                    this.linkedStates = new int[]{3};
+                }
+
+                @Override
+                public void execute() {
+
+                }
+
+                @Override
+                public void end() {
+                    cycleTimer = 0;
+                }
+
+                @Override
+                public boolean isFinished() {
+                    return controller.rightEncoderPosition > 420;
+                }
+            }, new Conditional() {
+            @Override
+            public void init() {
+
+            }
+
+            @Override
+                public void setupStates(int[] linkedStates) {
+                    this.linkedStates = new int[]{4};
+                }
+
+                @Override
+                public void execute() {
+
+                }
+
+                @Override
+                public void end() {
+                    cycleTimer = 0;
+                }
+
+                @Override
+                public boolean isFinished() {
+                    return cycleTimer > 1000;
+                }
         }) {
             @Override
-            public void uInit() {
+            public void init() {
+
+            }
+
+            @Override
+            public void loopInit() {
 
             }
         });

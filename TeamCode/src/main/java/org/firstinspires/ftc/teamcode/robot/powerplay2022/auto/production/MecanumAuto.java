@@ -27,13 +27,12 @@ import org.firstinspires.ftc.teamcode.utils.actuators.ServoConfig;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.general.misc.RunOnce;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.Conditional;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.RepeatableConditional;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.TaskManager;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.conditions.Conditional;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.conditions.RepeatableConditional;
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.managers.TaskManager;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
 
-import java.io.FileNotFoundException;
 import java.util.Objects;
 
 @Autonomous(name = "MecanumAuto")
@@ -289,181 +288,313 @@ public class MecanumAuto extends LoopUtil {
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{0};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (Objects.requireNonNull(drive.getMotorMap().get("FR")).getCurrentPosition() < 900 && Objects.requireNonNull(drive.getMotorMap().get("FR")).getCurrentPosition() > 750) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{0};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return Objects.requireNonNull(drive.getMotorMap().get("FR")).getCurrentPosition() < 900 && Objects.requireNonNull(drive.getMotorMap().get("FR")).getCurrentPosition() > 750;
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{10};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (startTime+5000<elapsedTime) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{10};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return startTime+5000<elapsedTime;
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{1};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (startTime+1200<elapsedTime) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{1};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return startTime+1200<elapsedTime;
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{2};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (Objects.requireNonNull(!Objects.requireNonNull(drive.getMotorMap().get("FR")).isBusy())){
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{2};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return Objects.requireNonNull(!Objects.requireNonNull(drive.getMotorMap().get("FR")).isBusy());
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{9};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (startTime+1000<elapsedTime) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{9};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return startTime+1000<elapsedTime;
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{3};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (!Objects.requireNonNull(drive.getMotorMap().get("FR")).isBusy()) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{3};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return !Objects.requireNonNull(drive.getMotorMap().get("FR")).isBusy();
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{9};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (startTime+1500<elapsedTime) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{9};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return startTime+1500<elapsedTime;
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{4};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (!Objects.requireNonNull(drive.getMotorMap().get("FR")).isBusy()) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{4};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return !Objects.requireNonNull(drive.getMotorMap().get("FR")).isBusy();
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{5};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (elapsedTime > 26000) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{5};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return elapsedTime > 26000;
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{6};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (SeenColor != ColorView.CMYcolors.GREEN) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{6};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return SeenColor != ColorView.CMYcolors.GREEN;
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{8};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (SeenColor != ColorView.CMYcolors.BLUE && startRight || SeenColor != ColorView.CMYcolors.RED && !startRight) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{8};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return SeenColor != ColorView.CMYcolors.BLUE && startRight || SeenColor != ColorView.CMYcolors.RED && !startRight;
                     }
                 },
                 new Conditional() {
                     @Override
                     public void init() {
-                        linkedStates = new int[]{7};
+
                     }
 
                     @Override
-                    public void check() {
-                        if (SeenColor != ColorView.CMYcolors.RED && startRight || SeenColor != ColorView.CMYcolors.BLUE && !startRight) {
-                            status = STATUS.PASSED;
-                        } else {
-                            status = STATUS.FAILED;
-                        }
+                    public void setupStates(int[] linkedStates) {
+                        this.linkedStates = new int[]{7};
+                    }
+
+                    @Override
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return SeenColor != ColorView.CMYcolors.RED && startRight || SeenColor != ColorView.CMYcolors.BLUE && !startRight;
                     }
                 }
         );
@@ -475,165 +606,297 @@ public class MecanumAuto extends LoopUtil {
                 new Conditional() {
                     @Override
                     public void init() {
+
+                    }
+
+                    @Override
+                    public void setupStates(int[] linkedStates) {
                         this.linkedStates = new int[]{0};
                     }
 
                     @Override
-                    public void check() {
-                        if (elapsedTimeCycle < 0.7 * EULConstants.SEC2MS) {
-                            this.status = STATUS.FAILED;
-                        } else {
-                            this.status = STATUS.PASSED;
-                        }
+                    public void execute() {
+
+                    }
+
+                    @Override
+                    public void end() {
+
+                    }
+
+                    @Override
+                    public boolean isFinished() {
+                        return elapsedTimeCycle < 0.7 * EULConstants.SEC2MS;
                     }
                 }, new Conditional() {
             @Override
             public void init() {
+
+            }
+
+            @Override
+            public void setupStates(int[] linkedStates) {
                 this.linkedStates = new int[]{1};
             }
 
             @Override
-            public void check() {
-                if (elapsedTimeCycle < 1.5 * EULConstants.SEC2MS) {
-                    this.status = STATUS.FAILED;
-                } else {
-                    this.status = STATUS.PASSED;
-                }
+            public void execute() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return elapsedTimeCycle < 1.5 * EULConstants.SEC2MS;
             }
         }, new Conditional() {
             @Override
             public void init() {
+
+            }
+
+            @Override
+            public void setupStates(int[] linkedStates) {
                 this.linkedStates = new int[]{2};
             }
 
             @Override
-            public void check() {
-                if (elapsedTimeCycle < 2 * EULConstants.SEC2MS) {
-                    this.status = STATUS.FAILED;
-                } else {
-                    this.status = STATUS.PASSED;
-                }
+            public void execute() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return elapsedTimeCycle < 2 * EULConstants.SEC2MS;
             }
         }, new Conditional() {
             @Override
             public void init() {
+
+            }
+
+            @Override
+            public void setupStates(int[] linkedStates) {
                 this.linkedStates = new int[]{3};
             }
 
             @Override
-            public void check() {
-                if (elapsedTimeCycle < 2.4 * EULConstants.SEC2MS) {
-                    this.status = STATUS.FAILED;
-                } else {
-                    this.status = STATUS.PASSED;
-                }
+            public void execute() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return elapsedTimeCycle < 2.4 * EULConstants.SEC2MS;
             }
         }, new Conditional() {
             @Override
             public void init() {
+
+            }
+
+            @Override
+            public void setupStates(int[] linkedStates) {
                 this.linkedStates = new int[]{4};
             }
 
             @Override
-            public void check() {
-                if (elapsedTimeCycle < 3.2 * EULConstants.SEC2MS) {
-                    this.status = STATUS.FAILED;
-                } else {
-                    this.status = STATUS.PASSED;
-                }
+            public void execute() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return elapsedTimeCycle < 3.2 * EULConstants.SEC2MS;
             }
         }, new Conditional() {
             @Override
             public void init() {
+
+            }
+
+            @Override
+            public void setupStates(int[] linkedStates) {
                 this.linkedStates = new int[]{5};
             }
 
             @Override
-            public void check() {
-                if (elapsedTimeCycle < 3.8 * EULConstants.SEC2MS) {
-                    this.status = STATUS.FAILED;
-                } else {
-                    this.status = STATUS.PASSED;
-                }
+            public void execute() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return elapsedTimeCycle < 3.8 * EULConstants.SEC2MS;
             }
         }, new Conditional() {
             @Override
             public void init() {
+
+            }
+
+            @Override
+            public void setupStates(int[] linkedStates) {
                 this.linkedStates = new int[]{6};
             }
 
             @Override
-            public void check() {
-                if (elapsedTimeCycle < 4.2 * EULConstants.SEC2MS) {
-                    this.status = STATUS.FAILED;
-                } else {
-                    this.status = STATUS.PASSED;
-                }
+            public void execute() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return elapsedTimeCycle < 4.2 * EULConstants.SEC2MS;
             }
         }, new Conditional() {
             @Override
             public void init() {
+
+            }
+
+            @Override
+            public void setupStates(int[] linkedStates) {
                 this.linkedStates = new int[]{7};
             }
 
             @Override
-            public void check() {
-                if (elapsedTimeCycle < 4.6 * EULConstants.SEC2MS) {
-                    this.status = STATUS.FAILED;
-                } else {
-                    this.status = STATUS.PASSED;
-                }
+            public void execute() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return elapsedTimeCycle < 4.6 * EULConstants.SEC2MS;
             }
         }, new Conditional() {
             @Override
             public void init() {
+
+            }
+
+            @Override
+            public void setupStates(int[] linkedStates) {
                 this.linkedStates = new int[]{8};
             }
 
             @Override
-            public void check() {
-                if (elapsedTimeCycle < 5.5 * EULConstants.SEC2MS) {
-                    this.status = STATUS.FAILED;
-                } else {
-                    this.status = STATUS.PASSED;
-                }
+            public void execute() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return elapsedTimeCycle < 5.5 * EULConstants.SEC2MS;
             }
         }, new Conditional() {
             final boolean ranOnce = false;
 
             @Override
             public void init() {
+
+            }
+
+            @Override
+            public void setupStates(int[] linkedStates) {
                 this.linkedStates = new int[]{9};
             }
 
             @Override
-            public void check() {
-                if (!ranOnce) {
-                    this.status = STATUS.FAILED;
-                } else {
-                    this.status = STATUS.PASSED;
-                }
+            public void execute() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return !ranOnce;
             }
         }) {
             @Override
-            public void uInit() {
+            public void init() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public void loopInit() {
 
             }
         }, new Conditional() {
 
             final boolean ranOnce = false;
+
             @Override
             public void init() {
+
+            }
+
+            @Override
+            public void setupStates(int[] linkedStates) {
                 this.linkedStates = new int[]{10};
             }
 
             @Override
-            public void check() {
-                if (!ranOnce) {
-                    this.status = STATUS.FAILED;
-                } else {
-                    this.status = STATUS.PASSED;
-                }
+            public void execute() {
+
+            }
+
+            @Override
+            public void end() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return !ranOnce;
             }
         });
         //
