@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils.fileRW.main.writer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class WriterTemplate {
@@ -11,10 +12,21 @@ public abstract class WriterTemplate {
     public abstract List<WritableElement> translateToRow(List<?> elementList);
 
     public void writeToRow(int row, List<WritableElement> writableElements){
+        for (int i = this.bufferedElements.size() - 1; i < row; i++){
+            this.bufferedElements.add(new ArrayList<>());
+        }
         this.bufferedElements.get(row).addAll(writableElements);
     }
 
     public void writeToCoord(int x, int y, WritableElement writableElement){
+        for (int i = this.bufferedElements.size() - 1; i < y; i++){
+            this.bufferedElements.add(new ArrayList<>());
+        }
+
+        for (int i = this.bufferedElements.get(y).size() - 1; i < x; i++){
+            this.bufferedElements.add(new ArrayList<>());
+        }
+
         this.bufferedElements.get(y).add(x, writableElement);
     }
 
