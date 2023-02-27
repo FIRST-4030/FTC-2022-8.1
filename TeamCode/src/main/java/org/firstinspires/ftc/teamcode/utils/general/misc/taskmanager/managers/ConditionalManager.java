@@ -28,6 +28,7 @@ public class ConditionalManager implements Runnable{
         alwaysRun = () -> {};
 
         conditionalStack = new Stack<>();
+        states = new Vector<>();
         currentConditional = null;
     }
 
@@ -92,40 +93,40 @@ public class ConditionalManager implements Runnable{
         alwaysRun.run();
 
         if (!conditionalStack.empty()){
-            if (initFlag) {
-                currentConditional = conditionalStack.peek();
-                currentConditional.init();
-                currentConditional.setupStates(currentConditional.linkedStates);
+            if (initFlag) { //check if conditional needs to be initialized
+                currentConditional = conditionalStack.peek(); //take the ref
+                currentConditional.init(); //init
+                currentConditional.setupStates(currentConditional.linkedStates); //set up states
 
-                if(currentConditional.getClass().getSimpleName().equals(ParallelConditionalGroup.class.getSimpleName())){
-                    ParallelConditionalGroup group = (ParallelConditionalGroup) currentConditional;
-                    group.bindManager(this);
-                    currentConditional = group; //probably redundant
+                if(currentConditional instanceof ParallelConditionalGroup){ //reduces redundant method calls
+                    currentConditional.bindManager(this);
                 }
 
-                initFlag = false;
-                usesStatesFlag = currentConditional.linkedStates != null && currentConditional.linkedStates.length > 0;;
+                initFlag = false; //flag that it has been initialized
+                usesStatesFlag = currentConditional.linkedStates != null && currentConditional.linkedStates.length > 0; //check if we need to update states as well
             }
 
-            currentConditional.execute();
+            currentConditional.execute(); //runs code in execute
 
+            //JIT will optimize this, don't worry
             if (usesStatesFlag && currentConditional.linkedStates != null && currentConditional.linkedStates.length > 0){
                 for (int n: currentConditional.linkedStates) {
                     if (n >= 0 && n < states.size()) states.get(n).run();
                 }
             }
 
+            //
             if (currentConditional.isFinished()){
-                currentConditional.end();
-                conditionalStack.pop();
+                currentConditional.end(); //call end procedures
+                conditionalStack.pop(); //take out conditional permanently
 
-                initFlag = true;
+                initFlag = true; //reset initialization flag
             }
         }
     }
 
     @Override
-    public void run() {
+    public void run() { //able to be allocated to another thread
         while (!conditionalStack.empty()){
             this.execute();
         }

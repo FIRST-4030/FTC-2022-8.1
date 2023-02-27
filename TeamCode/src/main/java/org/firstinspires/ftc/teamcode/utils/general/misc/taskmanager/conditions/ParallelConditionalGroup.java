@@ -15,6 +15,7 @@ public class ParallelConditionalGroup extends Conditional{
         this.parallelizedConcurrentConditionals = new ConcurrentConditionalGroup(dupeStatesFlag, conditionals);
     }
 
+    @Override
     public void bindManager(ConditionalManager manager){
         this.manager = new ConditionalManager();
         this.manager.addStates(manager.getStates().toArray(new Runnable[0]));
