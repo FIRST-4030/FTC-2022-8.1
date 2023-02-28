@@ -38,7 +38,5 @@ public abstract class Conditional {
 
     public abstract boolean isFinished();
 
-    public void bindManager(ConditionalManager manager){
-
-    }
+    public void bindManager(ConditionalManager manager){}
 }

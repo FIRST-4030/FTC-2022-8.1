@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.managers;
 
+import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.conditions.ConcurrentConditionalGroup;
 import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.conditions.Conditional;
 import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.conditions.ParallelConditionalGroup;
 
@@ -98,7 +99,7 @@ public class ConditionalManager implements Runnable{
                 currentConditional.init(); //init
                 currentConditional.setupStates(currentConditional.linkedStates); //set up states
 
-                if(currentConditional instanceof ParallelConditionalGroup){ //reduces redundant method calls
+                if(currentConditional instanceof ConcurrentConditionalGroup || currentConditional instanceof ParallelConditionalGroup){ //reduces redundant method calls
                     currentConditional.bindManager(this);
                 }
 

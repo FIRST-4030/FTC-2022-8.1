@@ -8,17 +8,13 @@ public class ParallelConditionalGroup extends Conditional{
     private ConditionalManager manager;
 
     public ParallelConditionalGroup(Conditional... conditionals){
-        this(false, conditionals);
-    }
-
-    public ParallelConditionalGroup(boolean dupeStatesFlag, Conditional... conditionals){
-        this.parallelizedConcurrentConditionals = new ConcurrentConditionalGroup(dupeStatesFlag, conditionals);
+        this.parallelizedConcurrentConditionals = new ConcurrentConditionalGroup(conditionals);
     }
 
     @Override
     public void bindManager(ConditionalManager manager){
         this.manager = new ConditionalManager();
-        this.manager.addStates(manager.getStates().toArray(new Runnable[0]));
+        this.parallelizedConcurrentConditionals.bindManager(manager);
         this.manager.addConditional(parallelizedConcurrentConditionals);
     }
 
