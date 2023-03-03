@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.robot.powerplay2022.teleop.production;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.EULMathEx;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector2d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector3d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.misc.EULConstants;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.Globals;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.deprecated.movement.AnglePID;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.ColorView;
@@ -22,9 +22,9 @@ import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.product
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoConfig;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoFTC;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.conditions.Conditional;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.conditions.RepeatableConditional;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.managers.TaskManager;
+import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.taskmanager.conditions.Conditional;
+import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.taskmanager.conditions.RepeatableConditional;
+import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.taskmanager.managers.TaskManager;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;
 import org.firstinspires.ftc.teamcode.utils.sensors.color_range.RevColorRange;
 

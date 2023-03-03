@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.ext;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector2d;
 
 public class TFBoundingBox {
 

@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.misc.EULConstants;
 import org.firstinspires.ftc.teamcode.utils.actuators.ServoConfig;
 import org.firstinspires.ftc.teamcode.utils.general.misc.VirtualGearbox;
 

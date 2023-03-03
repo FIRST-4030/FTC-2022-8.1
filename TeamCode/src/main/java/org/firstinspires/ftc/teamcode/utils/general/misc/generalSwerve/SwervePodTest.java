@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.utils.general.misc.generalSwerve;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector2d;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.misc.InputAutoMapper;
 import org.firstinspires.ftc.teamcode.utils.gamepad.InputHandler;
 import org.firstinspires.ftc.teamcode.utils.momm.LoopUtil;

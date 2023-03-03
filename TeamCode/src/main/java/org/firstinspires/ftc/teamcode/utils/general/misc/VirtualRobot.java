@@ -2,15 +2,13 @@ package org.firstinspires.ftc.teamcode.utils.general.misc;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix2d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix3d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.matrices.Matrix3d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector2d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector3d;
 
 import java.util.HashMap;
 

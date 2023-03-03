@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.customDriver;
 
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix2d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULArrays;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.EULMathEx;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.matrices.Matrix2d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector2d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.misc.EULArrays;
 
 import java.util.Stack;
 

@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.utils.general.maths.integration.predefined;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector3d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.misc.EULConstants;
 
 public class SemiImplicitEulerIntegrator implements ImuIntegration{
 

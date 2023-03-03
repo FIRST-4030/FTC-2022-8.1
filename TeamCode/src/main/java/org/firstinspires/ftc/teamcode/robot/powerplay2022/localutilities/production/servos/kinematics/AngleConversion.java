@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.production.servos.kinematics;
 
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.EULMathEx;
 
 public class AngleConversion {
 

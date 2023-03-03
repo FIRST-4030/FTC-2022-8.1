@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.base.main.TFODBase;
 import org.firstinspires.ftc.teamcode.utils.cvision.tensorflow.deprecated.tfodohm.ODMain.CameraLens;
-import org.firstinspires.ftc.teamcode.utils.general.misc.taskmanager.managers.TaskManager;
+import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.taskmanager.managers.TaskManager;
 
 public class PowerPlayTFHandler {
     public TFODBase tfodBase;

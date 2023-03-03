@@ -13,12 +13,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix3d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix4d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector4d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.EULMathEx;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.matrices.Matrix3d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.matrices.Matrix4d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector2d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector3d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector4d;
 import org.firstinspires.ftc.teamcode.utils.general.maths.integration.predefined.accelintegration.AccelIntegratorSemiImplicitEuler;
 
 import java.util.HashMap;

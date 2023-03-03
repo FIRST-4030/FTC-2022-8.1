@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils.general.maths.misc;
 
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector2d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector2d;
 
 public class VectorAxis {
 

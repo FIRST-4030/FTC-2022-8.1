@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.deprec
 
 import com.sun.tools.javac.util.Pair;
 
-import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULArrays;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.misc.EULArrays;
 
 import java.util.Stack;
 

@@ -10,11 +10,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.EULMathEx;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix3d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix4d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector4d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.EULMathEx;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.matrices.Matrix3d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.matrices.Matrix4d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector3d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector4d;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.deprecated.movement.MecanumDriveState;
 import org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.deprecated.movement.MecanumDriveTrajectory;
 

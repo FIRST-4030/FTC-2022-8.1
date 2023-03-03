@@ -8,7 +8,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.misc.EULConstants;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.misc.EULConstants;
 import org.firstinspires.ftc.teamcode.utils.general.maths.integration.AccelerationIntegrationUtil;
 
 public class AccelIntegratorRK4 implements AccelerationIntegrationUtil {

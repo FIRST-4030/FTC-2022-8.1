@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.utils.general.misc;
 
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.matrices.Matrix4d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector3d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.Vector4d;
-import org.firstinspires.ftc.teamcode.extrautilslib.core.maths.vectors.quaternions.Quaternion;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.matrices.Matrix4d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector3d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.Vector4d;
+import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.maths.vectors.quaternions.Quaternion;
 
 public class Joint {
 
