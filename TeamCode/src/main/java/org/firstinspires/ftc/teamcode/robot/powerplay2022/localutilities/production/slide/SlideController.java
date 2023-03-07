@@ -72,7 +72,35 @@ public class SlideController {
         inUse = !(level == LEVEL.REST);
     }
 
+    public void update(int position){
+        rightEncoderPosition = right.getCurrentPosition();
 
+        switch (position){
+            case 0:
+                target = 0;
+                break;
+            case 1:
+                target = (540 / 3 - 50);
+                break;
+            case 2:
+                target = (540 / 3 + 235);
+                break;
+            case 3:
+                target = (540 / 3 + 290);
+                break;
+        }
+
+        double t = EULMathEx.doubleClamp(0, 1, (1-(Math.abs(target - rightEncoderPosition))/300d));
+        double p = Math.signum(target - rightEncoderPosition)*BiasMath.process(t);
+        double d = BiasMath.derivative(t);
+        powerOutput = 0.6 * p + 0.4 * d;
+        if((position == 0 && rightEncoderPosition < 5) || Math.abs(powerOutput) < 0.05){
+            powerOutput = 0;
+        }
+        //left.setPower(0);
+
+        inUse = position == 0;
+    }
 
 /*
     public void update(double deltaTime, LEVEL level, double slidePower){

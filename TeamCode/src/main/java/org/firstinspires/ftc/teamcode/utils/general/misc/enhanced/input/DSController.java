@@ -234,6 +234,24 @@ public class DSController implements Runnable{
         start = new Digital();
         guide = new Digital();
         back = new Digital();
+
+        digitalList = new Digital[]{
+                rightStickButton,
+                leftStickButton,
+                rightBumper,
+                leftBumper,
+                buttonA,
+                buttonB,
+                buttonX,
+                buttonY,
+                dPadUp,
+                dPadDown,
+                dPadLeft,
+                dPadRight,
+                start,
+                guide,
+                back
+        };
     }
 
     private void updateDigital(){
@@ -261,24 +279,6 @@ public class DSController implements Runnable{
         start.update(controller.start);
         guide.update(controller.guide);
         back.update(controller.back);
-
-        digitalList = new Digital[]{
-                rightStickButton,
-                leftStickButton,
-                rightBumper,
-                leftBumper,
-                buttonA,
-                buttonB,
-                buttonX,
-                buttonY,
-                dPadUp,
-                dPadDown,
-                dPadLeft,
-                dPadRight,
-                start,
-                guide,
-                back
-        };
     }
 
     public Analog[] getAnalogList(){

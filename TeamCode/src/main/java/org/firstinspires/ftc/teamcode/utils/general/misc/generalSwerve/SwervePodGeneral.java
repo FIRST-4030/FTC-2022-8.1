@@ -123,7 +123,6 @@ public class SwervePodGeneral extends CustomDrive {
     }
 
     public void writeToFile(String name){
-        dataFile.init();
         for(int i = 0; i<motorTicks.size(); i++){
             dataFile.writeToRow(i,  dataFile.translateToRow(Arrays.asList(motorTicks.get(i), potentiometerArray1.get(i), potentiometerArray2.get(i))));
         }
