@@ -38,6 +38,8 @@ public class NormalizedController {
 
     public void reset(){
         this.iErrorSum = 0;
+        this.savedTarget = 0;
+        this.savedCurrent = 0;
     }
 
     /**
