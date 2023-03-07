@@ -36,6 +36,14 @@ public class DSMasterController implements Runnable{
         return driver1;
     }
 
+    public DSController getDriver1(){
+        return driver1;
+    }
+
+    public DSController getDriver2(){
+        return driver2;
+    }
+
     public ConditionalManager getConditionalManager(){
         return conditionalManager;
     }

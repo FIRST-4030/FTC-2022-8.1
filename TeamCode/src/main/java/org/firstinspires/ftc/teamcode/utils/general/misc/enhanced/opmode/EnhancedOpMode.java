@@ -25,7 +25,7 @@ public abstract class EnhancedOpMode extends OpMode {
     public abstract void opSetupControllers(DSController driver1, DSController driver2);
     public abstract void opInitLoop();
     public abstract void opStart();
-    public abstract void opInput(double deltaTimeMS);
+    public abstract void opInput(DSController driver1, DSController driver2, double deltaTimeMS);
     public abstract void opUpdate(double deltaTimeMS);
     public abstract void opFixedUpdate(double deltaTimeMS);
     public abstract void opStop();
@@ -36,7 +36,7 @@ public abstract class EnhancedOpMode extends OpMode {
         this.masterController = new DSMasterController(this);
 
         this.opInit();
-        this.opSetupControllers(masterController.getController(DSMasterController.Driver.DRIVER1), masterController.getController(DSMasterController.Driver.DRIVER2));
+        this.opSetupControllers(masterController.getDriver1(), masterController.getDriver2());
     }
 
     @Override
@@ -66,7 +66,7 @@ public abstract class EnhancedOpMode extends OpMode {
         this.frameTime += this.deltaTimeMS;
 
         this.masterController.run();
-        opInput(this.deltaTimeMS);
+        opInput(this.masterController.getDriver1(), this.masterController.getDriver2(), this.deltaTimeMS);
 
         while (this.unprocessedTime >= this.updateCap){
             //everytime this loops, it will try to update as many times as what a perfect loop will update every second;

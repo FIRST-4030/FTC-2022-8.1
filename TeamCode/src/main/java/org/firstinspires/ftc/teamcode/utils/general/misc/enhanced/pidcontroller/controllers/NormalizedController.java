@@ -11,6 +11,8 @@ public class NormalizedController {
     private double lastTime, currTime;
     private double kP, kI, kD;
 
+    private double savedTarget, savedCurrent;
+
     public NormalizedController(double kP, double kI, double kD){
         this(kP, kI, kD, 0.2, 0.7);
     }
@@ -40,12 +42,32 @@ public class NormalizedController {
 
     /**
      * "It just works." - Todd Howard
+     * @return
+     */
+    public double seek(){
+        return seek(savedTarget, savedCurrent);
+    }
+
+    /**
+     * "It just works." - Todd Howard
+     * @param current
+     * @return
+     */
+    public double seek(double current){
+        return seek(savedTarget, current);
+    }
+
+
+    /**
+     * "It just works." - Todd Howard
      * @param target
      * @param current
      * @return
      */
     public double seek(double target, double current){
         double p, d;
+        savedTarget = target;
+        savedCurrent = current;
 
         currTime = Math.min(Math.max((target - current) / maxExpectedErrorValue, -1), 1); //Clamp normalized values to [-1, 1]
 
@@ -55,6 +77,8 @@ public class NormalizedController {
         //Traditional I term application used a left Riemann sum on the right and right Riemann sum on the left,
         //resulting in an underestimate of the actual integral all the time
         if (currTime < iErrorSumRadius) iErrorSum += normalizer.integral(Math.min(currTime, lastTime), Math.max(currTime, lastTime));
+
+        lastTime = currTime;
 
         return kP * p + kI * iErrorSum + kD * d; //Apply feedforward as a typical PID sum
     }

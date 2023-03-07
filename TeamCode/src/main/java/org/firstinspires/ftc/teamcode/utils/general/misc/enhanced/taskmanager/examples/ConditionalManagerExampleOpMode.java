@@ -44,7 +44,7 @@ public class ConditionalManagerExampleOpMode extends EnhancedOpMode {
     }
 
     @Override
-    public void opInput(double deltaTimeMS) {
+    public void opInput(DSController driver1, DSController driver2, double deltaTimeMS) {
 
     }
 
