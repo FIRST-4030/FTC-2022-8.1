@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utils.extrautilslib.core.misc.EULConstants;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.input.DSMaster
 public abstract class EnhancedOpMode extends OpMode {
 
     private DSMasterController masterController;
+    private DSController driver1, driver2;
 
     private double
             initializedTime,
@@ -19,7 +21,8 @@ public abstract class EnhancedOpMode extends OpMode {
             loopEndTime,
             unprocessedTime,
             frameTime, frames, fps,
-            updateCap = 30;
+            updateCap = 30,
+            firstLoopTime;
 
     public abstract void opInit();
     public abstract void opSetupControllers(DSController driver1, DSController driver2);
@@ -33,14 +36,22 @@ public abstract class EnhancedOpMode extends OpMode {
     @Override
     public void init() {
         this.initializedTime = System.currentTimeMillis();
+        this.firstLoopTime = System.currentTimeMillis();
+
         this.masterController = new DSMasterController(this);
+        this.driver1 = this.masterController.getDriver1();
+        this.driver2 = this.masterController.getDriver2();
 
         this.opInit();
-        this.opSetupControllers(masterController.getDriver1(), masterController.getDriver2());
+        this.opSetupControllers(driver1, driver2);
     }
 
     @Override
     public void start(){
+        double t = System.currentTimeMillis();
+        this.loopStartTime = t;
+        this.loopEndTime = t;
+        this.firstLoopTime = t;
         opStart();
     }
 
@@ -51,38 +62,42 @@ public abstract class EnhancedOpMode extends OpMode {
 
     @Override
     public void loop() {
-        this.loopStartTime = System.currentTimeMillis();
+
+        //record the start of a fresh loop
+        loopStartTime = System.currentTimeMillis();
 
         //calculate the difference of this loop's start time from the last loop's start time
-        this.deltaTimeMS = this.loopStartTime - this.loopEndTime;
+        deltaTimeMS = loopStartTime - loopEndTime;
 
         //set this loop's end time to the start
-        this.loopEndTime = this.loopStartTime;
+        loopEndTime = loopStartTime;
 
         //increment delta for accurate time keeping without constantly calling the loop_timer.milliseconds()
-        this.unprocessedTime += this.deltaTimeMS;
+        unprocessedTime += deltaTimeMS;
 
         //extra for logging additional data
-        this.frameTime += this.deltaTimeMS;
+        frameTime += deltaTimeMS;
 
-        this.masterController.run();
-        opInput(this.masterController.getDriver1(), this.masterController.getDriver2(), this.deltaTimeMS);
+        opInput(driver1, driver2, deltaTimeMS);
+        opUpdate(deltaTimeMS);
 
-        while (this.unprocessedTime >= this.updateCap){
+
+        while (unprocessedTime >= updateCap){
             //everytime this loops, it will try to update as many times as what a perfect loop will update every second;
             //this will limit the loop so it doesn't create an infinite loop and stall out the OpMode
-            this.unprocessedTime -= this.updateCap;
+            unprocessedTime -= updateCap;
 
-            if (this.frameTime >= 1.0){
+            if (frameTime >= 1.0){
                 //extra for logging additional data
-                this.frameTime = 0;
-                this.fps = frames;
-                this.frames = 0;
+                frameTime = 0;
+                fps = frames;
+                frames = 0;
 
-                opFixedUpdate(this.deltaTimeMS);
+                //pass in the delta time and current time for the abstract method to use
+                opFixedUpdate(updateCap * EULConstants.SEC2MS);
+
             }
         }
-        opUpdate(this.deltaTimeMS);
     }
 
     @Override
@@ -111,11 +126,24 @@ public abstract class EnhancedOpMode extends OpMode {
     }
 
     public double getElapsedTimeMS(){
-        return System.currentTimeMillis() - initializedTime;
+        return System.currentTimeMillis() - firstLoopTime;
     }
 
     public double getElapsedTimeSEC(){
         return getElapsedTimeMS() * EULConstants.MS2SEC;
+    }
+
+
+    public double getElapsedOpModeTimeNANO(){
+        return getElapsedOpModeTimeMS() * EULConstants.MS2NANO;
+    }
+
+    public double getElapsedOpModeTimeMS(){
+        return System.currentTimeMillis() - initializedTime;
+    }
+
+    public double getElapsedOpModeTimeSEC(){
+        return getElapsedOpModeTimeMS() * EULConstants.MS2SEC;
     }
 
     public void setFixedUpdateCap(int cap){

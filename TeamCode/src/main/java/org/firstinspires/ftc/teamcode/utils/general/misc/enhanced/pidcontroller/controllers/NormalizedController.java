@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.pidcontroller.controllers;
 
+import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.misc.IndentedToString;
 import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.pidcontroller.misc.ConvergenceFunction;
 
-public class NormalizedController {
+public class NormalizedController implements IndentedToString {
     private ConvergenceFunction normalizer;
 
     private double maxExpectedErrorValue;
@@ -123,5 +124,49 @@ public class NormalizedController {
 
     public void setMaxExpectedErrorValue(double maxExpectedErrorValue) {
         this.maxExpectedErrorValue = maxExpectedErrorValue;
+    }
+
+    public double getSavedTarget() {
+        return savedTarget;
+    }
+
+    public double getSavedCurrentError() {
+        return savedCurrent;
+    }
+
+    @Override
+    public String toString() {
+        return "NormalizedController{" + "\n\t" +
+                "maxExpectedErrorValue =" + maxExpectedErrorValue + "\n\t" +
+                ", iErrorSum =" + iErrorSum + "\n\t" +
+                ", iErrorSumRadius =" + iErrorSumRadius + "\n\t" +
+                ", lastTime =" + lastTime + "\n\t" +
+                ", currTime =" + currTime + "\n\t" +
+                ", kP =" + kP + "\n\t" +
+                ", kI =" + kI + "\n\t" +
+                ", kD =" + kD + "\n\t" +
+                ", savedTarget =" + savedTarget + "\n\t" +
+                ", savedCurrent =" + savedCurrent + "\n\t" +
+                "}";
+    }
+
+    @Override
+    public String toString(int indentation) {
+        StringBuilder tabs = new StringBuilder("\n");
+        for (int i = 0; i < indentation; i++) tabs.append("\t");
+
+        return tabs + "NormalizedController {" + "\n\t" + tabs +
+                "normalized =" + normalizer.toString(indentation) +
+                "maxExpectedErrorValue =" + maxExpectedErrorValue + "\n\t" + tabs +
+                ", iErrorSum =" + iErrorSum + "\n\t" + tabs +
+                ", iErrorSumRadius =" + iErrorSumRadius + "\n\t" + tabs +
+                ", lastTime =" + lastTime + "\n\t" + tabs +
+                ", currTime =" + currTime + "\n\t" + tabs +
+                ", kP =" + kP + "\n\t" + tabs +
+                ", kI =" + kI + "\n\t" + tabs +
+                ", kD =" + kD + "\n\t" + tabs +
+                ", savedTarget =" + savedTarget + "\n\t" + tabs +
+                ", savedCurrent =" + savedCurrent + "\n\t" + tabs +
+                "}";
     }
 }

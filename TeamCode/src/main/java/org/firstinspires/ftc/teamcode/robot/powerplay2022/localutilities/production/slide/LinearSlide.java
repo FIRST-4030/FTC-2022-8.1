@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robot.powerplay2022.localutilities.produc
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.pidcontroller.controllers.NormalizedController;
 import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.taskmanager.examples.MotorPIDCommand;
 import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.taskmanager.managers.ConditionalManager;
@@ -45,6 +46,10 @@ public class LinearSlide {
 
     public void runStates(){
         this.stateMachine.execute();
+    }
+
+    public void outputTelemetry(Telemetry telemetry){
+        telemetry.addData("\"PID\": ", normalizedController.toString());
     }
 
     public static class PowerPlayLS extends LinearSlide{

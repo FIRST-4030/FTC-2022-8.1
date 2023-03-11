@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.pidcontroller.misc;
 
-public class ConvergenceFunction {
+import org.firstinspires.ftc.teamcode.utils.general.misc.enhanced.misc.IndentedToString;
+
+public class ConvergenceFunction implements IndentedToString {
 
     private double k;
 
@@ -30,5 +32,21 @@ public class ConvergenceFunction {
 
     public double integral(double a, double b){
         return antiderivative(b) - antiderivative(a);
+    }
+
+    @Override
+    public String toString() {
+        return "ConvergenceFunction {" + "\n\t" +
+                "bias = " + k + "\n" +
+                "}";
+    }
+
+    @Override
+    public String toString(int indentation) {
+        StringBuilder tabs = new StringBuilder("\n");
+        for (int i = 0; i < indentation; i++) tabs.append("\t");
+        return tabs + "ConvergenceFunction {" + "\n\t" + tabs +
+                "bias = " + k + "\n" + tabs +
+                "}";
     }
 }
