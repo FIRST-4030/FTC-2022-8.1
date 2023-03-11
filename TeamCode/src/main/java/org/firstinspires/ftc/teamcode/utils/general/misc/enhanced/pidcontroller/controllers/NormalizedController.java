@@ -78,7 +78,7 @@ public class NormalizedController {
 
         //Traditional I term application used a left Riemann sum on the right and right Riemann sum on the left,
         //resulting in an underestimate of the actual integral all the time
-        if (currTime < iErrorSumRadius) iErrorSum += normalizer.integral(Math.min(currTime, lastTime), Math.max(currTime, lastTime));
+        if (currTime < iErrorSumRadius) iErrorSum += normalizer.integral(Math.min(currTime, 0), Math.max(currTime, 0));
 
         lastTime = currTime;
 
