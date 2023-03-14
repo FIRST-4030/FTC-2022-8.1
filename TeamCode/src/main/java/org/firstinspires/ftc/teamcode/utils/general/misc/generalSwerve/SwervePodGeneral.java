@@ -115,8 +115,8 @@ public class SwervePodGeneral extends CustomDrive {
     }
 
     public void calibrateTick(){
-        Objects.requireNonNull(motorMap.get("T")).setPower(-0.5);
-        Objects.requireNonNull(motorMap.get("S")).setPower(0.5);
+        Objects.requireNonNull(motorMap.get("T")).setPower(-0.05);
+        Objects.requireNonNull(motorMap.get("S")).setPower(0.05);
         potentiometerArray1.add(potentiometerMap.get("P1").getMV());
         potentiometerArray2.add(potentiometerMap.get("P2").getMV());
         motorTicks.add(motorMap.get("S").getCurrentPosition());

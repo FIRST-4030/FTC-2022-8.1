@@ -12,8 +12,8 @@ public class CodeWorkshopSlide extends OpMode {
     Gamepad userInterface;
 
     int slideLevel;
-    double slidePower;
 
+    double slidePower;
     @Override
     public void init() {
         slide = new SlideController(hardwareMap, "LSRM", false);
@@ -24,22 +24,20 @@ public class CodeWorkshopSlide extends OpMode {
 
     @Override
     public void loop() {
-        if (userInterface.x){
+        if(gamepad1.x){
             slideLevel = 1;
         }
-
-        if (userInterface.y){
+        if(gamepad1.y){
             slideLevel = 2;
         }
-        if (userInterface.b){
+        if(gamepad1.a){
             slideLevel = 3;
         }
-
-        if (userInterface.a){
+        if(gamepad1.b){
             slideLevel = 0;
         }
-
         slide.update(slideLevel);
         slide.setPower(slide.powerOutput);
     }
+
 }
