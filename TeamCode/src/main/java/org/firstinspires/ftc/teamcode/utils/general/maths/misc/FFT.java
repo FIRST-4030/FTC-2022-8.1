@@ -128,11 +128,11 @@ public class FFT {
                     double term = (-2 * Math.PI * k) / N;
                     double[] exp = Complex.multiplyAsComplex(Math.cos(term), Math.sin(term), oddReal, oddImaginary);
 
-                    output[evenIndex][1] = evenReal + exp[0];
-                    output[evenIndex][0] = evenImaginary + exp[1];
+                    output[evenIndex][0] = evenReal + exp[0];
+                    output[evenIndex][1] = evenImaginary + exp[1];
 
-                    output[oddIndex][1] = evenReal - exp[0];
-                    output[oddIndex][0] = evenImaginary - exp[1];
+                    output[oddIndex][0] = evenReal - exp[0];
+                    output[oddIndex][1] = evenImaginary - exp[1];
                 }
             }
         }
