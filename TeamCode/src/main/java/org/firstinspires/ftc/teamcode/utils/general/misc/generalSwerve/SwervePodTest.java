@@ -29,19 +29,21 @@ public class SwervePodTest extends LoopUtil {
         joystickRight = new Vector2d();
         driveRight = new SwervePodGeneral(hardwareMap, 1, 1);
         driveRight.mapMotors("p2m1", true, "p2m2", false, false);
+        driveRight.mapPotentiometers("pot2a", "pot2b", telemetry);
+
         startTimeInit = System.currentTimeMillis();
     }
 
     @Override
     public void opInitLoop() {
         if(System.currentTimeMillis() - startTimeInit < 30000){
-            driveLeft.calibrateTick();
+            driveRight.calibrateTick();
         }else{
-            driveLeft.update(new Vector2d(0, 0), false, 1);
+            driveRight.update(new Vector2d(0, 0), false, 1);
         }
-        telemetry.addData("MotorTickArray", driveLeft.motorTicks);
-        telemetry.addData("P1 Voltage", driveLeft.potentiometerMap.get("P1").getMV());
-        telemetry.addData("P1 Voltage", driveLeft.potentiometerMap.get("P2").getMV());
+        telemetry.addData("MotorTickArray", driveRight.motorTicks);
+        telemetry.addData("P1 Voltage", driveRight.potentiometerMap.get("P1").getMV());
+        telemetry.addData("P1 Voltage", driveRight.potentiometerMap.get("P2").getMV());
     }
 
     @Override

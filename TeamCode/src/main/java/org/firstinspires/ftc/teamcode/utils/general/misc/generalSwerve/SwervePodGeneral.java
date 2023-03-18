@@ -37,6 +37,10 @@ public class SwervePodGeneral extends CustomDrive {
     public ArrayList<Integer> motorTicks;
     protected FileRW dataFile;
 
+    private double MVPlaceholder1 = 0;
+    private double MVPlaceholder2 = 0;
+    private int samplesPerMove = 5;
+
     public SwervePodGeneral(HardwareMap hardwareMap, double turnCoefficient, double spinCoefficient){
         this.hardwareMap = hardwareMap;
         initImu();
@@ -115,10 +119,16 @@ public class SwervePodGeneral extends CustomDrive {
     }
 
     public void calibrateTick(){
-        Objects.requireNonNull(motorMap.get("T")).setPower(-0.05);
-        Objects.requireNonNull(motorMap.get("S")).setPower(0.05);
-        potentiometerArray1.add(potentiometerMap.get("P1").getMV());
-        potentiometerArray2.add(potentiometerMap.get("P2").getMV());
+        Objects.requireNonNull(motorMap.get("T")).setPower(-0.03);
+        Objects.requireNonNull(motorMap.get("S")).setPower(0.03);
+        for(int i = 0; i<samplesPerMove; i++){
+            MVPlaceholder1 += potentiometerMap.get("P1").getMV()/samplesPerMove;
+            MVPlaceholder2 += potentiometerMap.get("P2").getMV()/samplesPerMove;
+        }
+        potentiometerArray1.add(MVPlaceholder1);
+        potentiometerArray2.add(MVPlaceholder2);
+        MVPlaceholder1 = 0;
+        MVPlaceholder2 = 0;
         motorTicks.add(motorMap.get("S").getCurrentPosition());
     }
 
