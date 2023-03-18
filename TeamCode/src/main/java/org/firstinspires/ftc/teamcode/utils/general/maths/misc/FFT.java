@@ -96,10 +96,9 @@ public class FFT {
 
         double[][] output = new double[real.length][2];
 
-        double[] tempArr = new double[real.length];
-        System.arraycopy(real, 0, tempArr, 0, real.length);
-        real = imaginary;
-        imaginary = tempArr;
+        for (int i = 0; i < imaginary.length; i++) {
+            imaginary[i] *= -1;
+        }
 
         int bits = (int) (Math.log(real.length) / Math.log(2));
         for (int j = 1; j < real.length / 2; j++) {
@@ -126,7 +125,7 @@ public class FFT {
                     double oddReal = output[oddIndex][0];
                     double oddImaginary = output[oddIndex][1];
 
-                    double term = (2 * Math.PI * k) / N; //I believe this is the inverse term
+                    double term = (-2 * Math.PI * k) / N;
                     double[] exp = Complex.multiplyAsComplex(Math.cos(term), Math.sin(term), oddReal, oddImaginary);
 
                     output[evenIndex][1] = evenReal + exp[0];
@@ -137,6 +136,11 @@ public class FFT {
                 }
             }
         }
+
+        for (int i = 0; i < output.length; i++) {
+            output[i][1] *= -1;
+        }
+
         return output;
     }
 
