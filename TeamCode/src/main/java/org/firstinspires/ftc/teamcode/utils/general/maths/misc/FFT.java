@@ -154,6 +154,6 @@ public class FFT {
             imaginary[i] = input[i][1];
         }
 
-        return fftI(imaginary, real);
+        return ifftI(real, imaginary);
     }
 }
