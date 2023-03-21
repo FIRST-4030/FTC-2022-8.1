@@ -36,7 +36,7 @@ public class SwervePodTest extends LoopUtil {
 
     @Override
     public void opInitLoop() {
-        if(System.currentTimeMillis() - startTimeInit < 30000){
+        if(System.currentTimeMillis() - startTimeInit < 1000){
             driveRight.calibrateTick();
         }else{
             driveRight.update(new Vector2d(0, 0), false, 1);
@@ -48,7 +48,7 @@ public class SwervePodTest extends LoopUtil {
 
     @Override
     public void opStart() {
-        driveLeft.writeToFile("betterSwerveData.csv");
+        driveLeft.writeToFile("EncoderData.txt");
 
     }
 
