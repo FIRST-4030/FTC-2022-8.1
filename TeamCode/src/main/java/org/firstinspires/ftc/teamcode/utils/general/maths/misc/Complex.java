@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.utils.general.maths.misc;
 
-import org.firstinspires.ftc.robotcore.internal.network.RobotControllerPreference;
-
 import java.util.Locale;
 
 public class Complex {
@@ -40,6 +38,13 @@ public class Complex {
 
     public static double[] multiplyAsComplex(double realA, double imgA, double realB, double imgB){
         return new double[]{realA * realB - imgA * imgB, realA * imgB + imgA * realB};
+    }
+
+    public void conjugate(){
+        this.im *= -1;
+    }
+    public Complex getAsConjugate(){
+        return new Complex(re, -im);
     }
 
     @Override

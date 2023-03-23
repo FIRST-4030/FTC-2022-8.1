@@ -119,7 +119,7 @@ public class FileRW{
         if (!initialized) throw new RuntimeException("This class hasn't been initialized yet!");
 
         try{
-            BufferedWriter bw = new BufferedWriter(new FileWriter(writable));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(writable, false));
             List<String> strings = writer.getBufferAsStringRows();
 
             for (String s: strings) {
